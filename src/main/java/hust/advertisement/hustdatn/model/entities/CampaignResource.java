@@ -16,7 +16,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "\"CampaignResources\"", schema = "public")
+@Table(name = "CampaignResources", schema = "public")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,25 +24,25 @@ import java.util.UUID;
 @Builder
 public class CampaignResource {
 	@Id
-	@Column(name = "\"Id\"")
+	@Column(name = "Id")
 	private UUID id;
 	
-	@Column(name = "\"TenantId\"")
+	@Column(name = "TenantId")
 	private UUID tenantId;
 	
-	@Column(name = "\"ObjectId\"", length = 256, nullable = false)
+	@Column(name = "ObjectId", length = 256, nullable = false)
 	private String objectId;
 	
-	@Column(name = "\"MimeType\"", length = 256, nullable = false)
+	@Column(name = "MimeType", length = 256, nullable = false)
 	private String mimeType;
 	
-	@Column(name = "\"DisplaySecond\"", nullable = false)
+	@Column(name = "DisplaySecond", nullable = false)
 	private Integer displaySecond;
 	
-	@Column(name = "\"Order\"", nullable = false)
+	@Column(name = "Order", nullable = false)
 	private Integer order;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "\"CampaignId\"", nullable = false)
+	@JoinColumn(name = "CampaignId", nullable = false)
 	private Campaign campaign;
 }

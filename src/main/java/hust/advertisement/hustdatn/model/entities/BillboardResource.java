@@ -16,7 +16,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "\"BillboardResources\"", schema = "public")
+@Table(name = "BillboardResources", schema = "public")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,22 +24,22 @@ import java.util.UUID;
 @Builder
 public class BillboardResource {
 	@Id
-	@Column(name = "\"Id\"")
+	@Column(name = "Id")
 	private UUID id;
 	
-	@Column(name = "\"TenantId\"")
+	@Column(name = "TenantId")
 	private UUID tenantId;
 	
-	@Column(name = "\"ObjectId\"", length = 256, nullable = false)
+	@Column(name = "ObjectId", length = 256, nullable = false)
 	private String objectId;
 	
-	@Column(name = "\"MimeType\"", length = 256, nullable = false)
+	@Column(name = "MimeType", length = 256, nullable = false)
 	private String mimeType;
 	
-	@Column(name = "\"Order\"", nullable = false)
+	@Column(name = "Order", nullable = false)
 	private Integer order;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "\"BillboardId\"", nullable = false)
+	@JoinColumn(name = "BillboardId", nullable = false)
 	private Billboard billboard;
 }

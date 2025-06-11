@@ -16,7 +16,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "\"BillboardTags\"", schema = "public")
+@Table(name = "BillboardTags", schema = "public")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,16 +24,16 @@ import java.util.UUID;
 @Builder
 public class BillboardTag {
 	@Id
-	@Column(name = "\"Id\"")
+	@Column(name = "Id")
 	private UUID id;
 	
-	@Column(name = "\"TenantId\"")
+	@Column(name = "TenantId")
 	private UUID tenantId;
 	
-	@Column(name = "\"Tag\"", length = 256, nullable = false)
+	@Column(name = "Tag", length = 256, nullable = false)
 	private String tag;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "\"BillboardId\"", nullable = false)
+	@JoinColumn(name = "BillboardId", nullable = false)
 	private Billboard billboard;
 }
