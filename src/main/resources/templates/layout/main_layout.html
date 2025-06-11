@@ -6,27 +6,27 @@
     <meta charset="utf-8"/>
     <title></title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
-    <script th:src="@{/js/jquery-3.7.1.js}"></script>
-    <script th:src="@{/js/common.js}"></script>
+    <link th:href="@{/webjars/bootstrap/5.3.6/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}" rel="stylesheet">
+
 </head>
 <body>
-    <div class="layout-nav">
-        <div th:replace="~{layout/fragments/side_bar::sidebar}">
-        </div>
+    <div th:replace="~{layout/fragments/side_bar::sidebar}">
     </div>
-    <div class="layout-cont">
-        <div id="main">
-            <div class="container">
-                <div layout:fragment="content">
-                    <p style="font-size: 50px">MAIN LAYOUT CONTENT</p>
-                </div>
+    <div id="layoutSidenav">
+        <main>
+            <div layout:fragment="content">
+                <p style="font-size: 50px">MAIN LAYOUT CONTENT</p>
             </div>
-        </div>
-        <div id="footer">
             <div th:replace="~{layout/fragments/footer::footer}">
             </div>
-        </div>
+        </main>
     </div>
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.6/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+
     <th:block layout:fragment="script">
 
     </th:block>

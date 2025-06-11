@@ -1,24 +1,42 @@
 //overlay
 
+let sidebar;
+let toggleButton;
 
 $(document).ready(function() {
-    const $sidebar = $('.sidebar');
-    const $mainContent = $('.main-content');
+    toggleButton = $('#toggle-btn');
+    sidebar = $('#sidebar');
+});
+
+function toggleSidebar() {
+    console.log("Toggle sidebar clicked");
+    sidebar.toggleClass('close');
+    toggleButton.toggleClass('rotate');
+
+    closeAllSubMenus();
+}
 
 
-    $('#toggle-btn').click(function() {
-        $sidebar.toggleClass('collapsed');
-        $mainContent.toggleClass('expanded');
+function toggleSubMenu(buttonId) {
+    const button = $(`#${buttonId}`);
 
-        // Save state in localStorage
-        const isCollapsed = $sidebar.hasClass('collapsed');
-        localStorage.setItem('sidebarCollapsed', isCollapsed);
-    });
+    const subMenu = button.next('.sub-menu');
 
-    if (localStorage.getItem('sidebarCollapsed') === 'true') {
-        $sidebar.addClass('collapsed');
-        $mainContent.addClass('expanded');
+    if (!subMenu.hasClass('show')) {
+        closeAllSubMenus();
     }
 
-});
+    subMenu.toggleClass('show');
+    button.toggleClass('rotate');
+
+    if (sidebar.hasClass('close')) {
+        sidebar.toggleClass('close');
+        toggleButton.toggleClass('rotate');
+    }
+}
+
+function closeAllSubMenus() {
+    sidebar.find('.show').removeClass('show')
+        .prev().removeClass('rotate');
+}
 

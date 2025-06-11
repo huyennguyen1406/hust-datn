@@ -1,4 +1,4 @@
-package hust.advertisement.hustdatn.controller;
+package hust.advertisement.hustdatn.web.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
