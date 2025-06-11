@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+</head>
+
+<body>
+<div th:fragment="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h3 class="sidebar-header-text">Sidebar</h3>
+        <button id="toggle-btn">☰</button>
+    </div>
+    <ul class="sidebar-menu">
+        <li th:classappend="${#strings.equals(request.requestURI, '/')} ? 'active'">
+            <a href="/">
+                <i>📊</i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li th:classappend="${#strings.startsWith(request.requestURI, '/user')} ? 'active'">
+            <a href="/user">
+                <i>👥</i>
+                <span>Users</span>
+            </a>
+        </li>
+        <li th:classappend="${#strings.startsWith(request.requestURI, '/product')} ? 'active'">
+            <a href="/product">
+                <i>🛒</i>
+                <span>Products</span>
+            </a>
+        </li>
+        <li th:classappend="${#strings.startsWith(request.requestURI, '/setting')} ? 'active'">
+            <a href="/setting">
+                <i>⚙️</i>
+                <span>Settings</span>
+            </a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  layout:decorate="~{layout/main_nolayout.html}"
+  xmlns="http://www.w3.org/1999/html"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div id="member-wrap" class="member-wrap login">
+
+        <main class="main">
+          <div class="main-inner">
+            <section class="sec-member">
+              <div class="inner">
+                <div class="login-header">
+
+                  <div class="page-title">
+                    <h2 class="title">Login</h2>
+                  </div>
+                </div>
+
+                <div class="login-body">
+                  <form id="submitForm" action="#" autocomplete="off">
+                    <ul class="status-list">
+                      <li>
+                        <span class="status-label">Email</span>
+                        <div class="status-value">
+                          <input id="email" class="form-input full" placeholder="Email" />
+                          <div id="email-text">email-text</div>
+                        </div>
+                      </li>
+                      <li>
+                        <span class="status-label">Password</span>
+                        <div class="status-value">
+                          <input type="password" id="password" class="form-input full" placeholder="password" />
+                          <div id="password-text">password-text</div>
+                        </div>
+                      </li>
+                      <li class="login-option">
+                        <label class="form-checkbox">
+                          <input id="remember-check" type="checkbox" />
+                          <span class="text">Remember me</span>
+                        </label>
+                        <div class="find-info">
+                          <a href="find-password.html" class="text-primary">Forgot password?</a>
+                        </div>
+                      </li>
+                    </ul>
+
+                    <div class="btn-area">
+                      <button type="submit" class="btn btn-primary full">Submit</button>
+                      <a href="join.html" class="btn btn-normal full">Register</a>
+                    </div>
+                  </form>
+                </div>
+
+                <div id="main-footer">
+                  <p>
+                    <span>HUST 2025</span>
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
