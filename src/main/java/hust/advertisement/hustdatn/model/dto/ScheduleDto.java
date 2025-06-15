@@ -7,7 +7,6 @@ import java.util.UUID;
 @Data
 public class ScheduleDto {
 	private UUID id;
-	private UUID tenantId;
 	private UUID campaignId;
 	private UUID billboardId;
 	private LocalDateTime startTime;
@@ -15,6 +14,4 @@ public class ScheduleDto {
 	private Integer displayDay;
 	private Integer campaignAmount;
 	private Integer status;
-	private String campaignName;
-	private String billboardName;
 }

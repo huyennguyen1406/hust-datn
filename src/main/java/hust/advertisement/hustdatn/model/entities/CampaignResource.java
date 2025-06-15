@@ -3,6 +3,7 @@ package hust.advertisement.hustdatn.model.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -24,25 +25,22 @@ import java.util.UUID;
 @Builder
 public class CampaignResource {
 	@Id
-	@Column(name = "Id")
+	@GeneratedValue
 	private UUID id;
 	
-	@Column(name = "TenantId")
-	private UUID tenantId;
-	
-	@Column(name = "ObjectId", length = 256, nullable = false)
+	@Column(name = "object_id", nullable = false, length = 256)
 	private String objectId;
 	
-	@Column(name = "MimeType", length = 256, nullable = false)
+	@Column(name = "mime_type", nullable = false, length = 256)
 	private String mimeType;
 	
-	@Column(name = "DisplaySecond", nullable = false)
+	@Column(name = "display_second", nullable = false)
 	private Integer displaySecond;
 	
-	@Column(name = "Order", nullable = false)
+	@Column(name = "\"order\"", nullable = false)
 	private Integer order;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CampaignId", nullable = false)
+	@JoinColumn(name = "campaign_id", nullable = false)
 	private Campaign campaign;
 }

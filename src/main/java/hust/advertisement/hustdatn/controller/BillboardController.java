@@ -1,8 +1,10 @@
 package hust.advertisement.hustdatn.controller;
 
 import hust.advertisement.hustdatn.model.dto.BillboardDto;
+import hust.advertisement.hustdatn.model.entities.Billboard;
 import hust.advertisement.hustdatn.service.BillboardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,39 +25,37 @@ import java.util.UUID;
 public class BillboardController {
 	private final BillboardService billboardService;
 	
-	@Autowired
 	public BillboardController(BillboardService billboardService) {
 		this.billboardService = billboardService;
 	}
 	
-	@PostMapping
-	public ResponseEntity<BillboardDto> createBillboard(@Validated @RequestBody BillboardDto createDto) {
-		return ResponseEntity.ok(billboardService.createBillboard(createDto));
+	@GetMapping
+	public List<Billboard> getAllBillboards() {
+		return billboardService.getAllBillboards();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<BillboardDto> getBillboardById(@PathVariable UUID id) {
-		return ResponseEntity.ok(billboardService.getBillboardById(id));
+	public Billboard getBillboardById(@PathVariable UUID id) {
+		return billboardService.getBillboardById(id);
 	}
 	
-	@GetMapping("/tenant/{tenantId}")
-	public ResponseEntity<List<BillboardDto>> getBillboardsByTenantId(@PathVariable UUID tenantId) {
-		return ResponseEntity.ok(billboardService.getBillboardsByTenantId(tenantId));
-	}
-	
-	@GetMapping("/status/{status}")
-	public ResponseEntity<List<BillboardDto>> getBillboardsByStatus(@PathVariable Integer status) {
-		return ResponseEntity.ok(billboardService.getBillboardsByStatus(status));
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public Billboard createBillboard(@RequestBody Billboard billboard) {
+		return billboardService.createBillboard(billboard);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<BillboardDto> updateBillboard(@PathVariable UUID id, @Validated @RequestBody BillboardDto updateDto) {
-		return ResponseEntity.ok(billboardService.updateBillboard(id, updateDto));
+	public Billboard updateBillboard(
+			@PathVariable UUID id,
+			@RequestBody Billboard billboardUpdates
+	) {
+		return billboardService.updateBillboard(id, billboardUpdates);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteBillboard(@PathVariable UUID id) {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteBillboard(@PathVariable UUID id) {
 		billboardService.deleteBillboard(id);
-		return ResponseEntity.noContent().build();
 	}
 }

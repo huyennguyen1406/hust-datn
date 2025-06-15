@@ -1,6 +1,11 @@
 package hust.advertisement.hustdatn.controller;
 
+import hust.advertisement.hustdatn.model.entities.BillboardResource;
+import hust.advertisement.hustdatn.service.BillboardResourceService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,43 +14,59 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/billboard-resources")
+@RequestMapping("/api/campaigns/{campaignId}/resources")
+@RequiredArgsConstructor
 public class BillboardResourceController {
 	private final BillboardResourceService billboardResourceService;
 	
-	@Autowired
-	public BillboardResourceController(BillboardResourceService billboardResourceService) {
-		this.billboardResourceService = billboardResourceService;
+	@GetMapping
+	public List<BillboardResource> getResourcesByBillboard(@PathVariable UUID billboardId) {
+		return (List<BillboardResource>) billboardResourceService.getBillboardResourceById(billboardId);
+	}
+	
+	@GetMapping("/{resourceId}")
+	public BillboardResource getResource(
+			@PathVariable UUID billboardId,
+			@PathVariable UUID resourceId) {
+		return resourceService.getResourceById(billboardId, resourceId);
 	}
 	
 	@PostMapping
-	public ResponseEntity<BillboardResourceResponseDto> createBillboardResource(@Valid @RequestBody BillboardResourceCreateDto createDto) {
-		return ResponseEntity.ok(billboardResourceService.createBillboardResource(createDto));
+	@ResponseStatus(HttpStatus.CREATED)
+	public BillboardResource addResource(
+			@PathVariable UUID billboardId,
+			@RequestBody BillboardResource resource) {
+		return resourceService.addResourceToBillboard(billboardId, resource);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<BillboardResourceResponseDto> getBillboardResourceById(@PathVariable UUID id) {
-		return ResponseEntity.ok(billboardResourceService.getBillboardResourceById(id));
+	@PutMapping("/{resourceId}")
+	public BillboardResource updateResource(
+			@PathVariable UUID billboardId,
+			@PathVariable UUID resourceId,
+			@RequestBody BillboardResource resourceUpdates) {
+		return resourceService.updateResource(billboardId, resourceId, resourceUpdates);
 	}
 	
-	@GetMapping("/billboard/{billboardId}")
-	public ResponseEntity<List<BillboardResourceResponseDto>> getBillboardResourcesByBillboardId(@PathVariable UUID billboardId) {
-		return ResponseEntity.ok(billboardResourceService.getBillboardResourcesByBillboardId(billboardId));
+	@DeleteMapping("/{resourceId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void removeResource(
+			@PathVariable UUID billboardId,
+			@PathVariable UUID resourceId) {
+		resourceService.removeResource(billboardId, resourceId);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<BillboardResourceResponseDto> updateBillboardResource(@PathVariable UUID id, @Valid @RequestBody BillboardResourceUpdateDto updateDto) {
-		return ResponseEntity.ok(billboardResourceService.updateBillboardResource(id, updateDto));
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteBillboardResource(@PathVariable UUID id) {
-		billboardResourceService.deleteBillboardResource(id);
-		return ResponseEntity.noContent().build();
+	@PutMapping("/{resourceId}/order/{newOrder}")
+	public BillboardResource updateResourceOrder(
+			@PathVariable UUID billboardId,
+			@PathVariable UUID resourceId,
+			@PathVariable Integer newOrder) {
+		return resourceService.updateResourceOrder(billboardId, resourceId, newOrder);
 	}
 }

@@ -40,6 +40,6 @@ public class BillboardResource {
 	private Integer order;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "BillboardId", nullable = false)
+	@JoinColumn(name = "billboard_id")
 	private Billboard billboard;
 }

@@ -3,6 +3,7 @@ package hust.advertisement.hustdatn.model.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -24,16 +25,13 @@ import java.util.UUID;
 @Builder
 public class BillboardTag {
 	@Id
-	@Column(name = "Id")
+	@GeneratedValue
 	private UUID id;
 	
-	@Column(name = "TenantId")
-	private UUID tenantId;
-	
-	@Column(name = "Tag", length = 256, nullable = false)
+	@Column(nullable = false, length = 256)
 	private String tag;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "BillboardId", nullable = false)
+	@JoinColumn(name = "billboard_id", nullable = false)
 	private Billboard billboard;
 }

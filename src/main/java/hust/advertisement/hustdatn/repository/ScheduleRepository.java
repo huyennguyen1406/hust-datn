@@ -9,14 +9,8 @@ import java.util.List;
 import java.util.UUID;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, UUID> {
-	
 	List<Schedule> findByBillboardId(UUID billboardId);
-	
 	List<Schedule> findByCampaignId(UUID campaignId);
-	
-	List<Schedule> findByStartTimeBetweenAndBillboardId(
-			LocalDateTime start, LocalDateTime end, UUID billboardId);
-	
-	List<Schedule> findByStartTimeBetweenAndCampaignId(
-			LocalDateTime start, LocalDateTime end, UUID campaignId);
+	List<Schedule> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
+	List<Schedule> findByBillboardIdAndStartTimeBetween(UUID billboardId, LocalDateTime start, LocalDateTime end);
 }

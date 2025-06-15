@@ -15,6 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -120,10 +121,10 @@ public class Billboard {
 	private LocalDateTime deletionTime;
 	
 	@OneToMany(mappedBy = "billboard", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<BillboardResource> resources;
+	private List<BillboardResource> resources = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "billboard", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<BillboardTag> tags;
+	private List<BillboardTag> tags = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "billboard")
 	private List<Schedule> schedules;

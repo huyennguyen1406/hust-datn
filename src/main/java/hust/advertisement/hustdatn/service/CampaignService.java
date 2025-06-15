@@ -1,95 +1,72 @@
 package hust.advertisement.hustdatn.service;
 
 import hust.advertisement.hustdatn.model.dto.CampaignDto;
+import hust.advertisement.hustdatn.model.dto.CampaignRequestDto;
+import hust.advertisement.hustdatn.model.dto.CampaignResourceDto;
 import hust.advertisement.hustdatn.model.entities.Campaign;
+import hust.advertisement.hustdatn.model.entities.CampaignResource;
 import hust.advertisement.hustdatn.repository.CampaignRepository;
+import hust.advertisement.hustdatn.repository.CampaignResourceRepository;
+import hust.advertisement.hustdatn.repository.ScheduleRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
 public class CampaignService {
-	
 	private final CampaignRepository campaignRepository;
-	@Autowired
-    public CampaignService(CampaignRepository campaignRepository) {
-		this.campaignRepository = campaignRepository;
+	private final CampaignResourceRepository resourceRepository;
+	private final ScheduleRepository scheduleRepository;
+	
+	public List<Campaign> getAllCampaigns() {
+		return campaignRepository.findAll();
 	}
 	
-	public CampaignDto createCampaign(CampaignDto createDto) {
-		Campaign campaign = Campaign.builder()
-				.id(UUID.randomUUID())
-				.tenantId(createDto.getTenantId())
-				.name(createDto.getName())
-				.description(createDto.getDescription())
-				.status(createDto.getStatus())
-				.concurrencyStamp(UUID.randomUUID().toString())
-				.creationTime(LocalDateTime.now())
-				.isDeleted(false)
-				.build();
+	public Campaign getCampaignById(UUID id) {
+		return campaignRepository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Campaign not found"));
+	}
+	
+	public Campaign createCampaign(Campaign campaign) {
+		if (campaign.getResources() != null) {
+			campaign.getResources().forEach(res -> res.setCampaign(campaign));
+		}
+		return campaignRepository.save(campaign);
+	}
+	
+	public Campaign updateCampaign(UUID id, Campaign updates) {
+		Campaign existing = campaignRepository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Campaign not found"));
 		
-		campaign = campaignRepository.save(campaign);
-		return mapToResponseDto(campaign);
-	}
-	
-	public CampaignDto getCampaignById(UUID id) {
-		Campaign campaign = campaignRepository.findById(id)
-				.filter(c -> !c.getIsDeleted())
-				.orElseThrow(() -> new RuntimeException("Campaign not found or deleted"));
-		return mapToResponseDto(campaign);
-	}
-	
-	public List<CampaignDto> getCampaignsByTenantId(UUID tenantId) {
-		return campaignRepository.findByTenantIdAndIsDeletedFalse(tenantId)
-				.stream()
-				.map(this::mapToResponseDto)
-				.collect(Collectors.toList());
-	}
-	
-	public List<CampaignDto> getCampaignsByStatus(Integer status) {
-		return campaignRepository.findByStatusAndIsDeletedFalse(status)
-				.stream()
-				.map(this::mapToResponseDto)
-				.collect(Collectors.toList());
-	}
-	
-	public CampaignDto updateCampaign(UUID id, CampaignDto updateDto) {
-		Campaign campaign = campaignRepository.findById(id)
-				.filter(c -> !c.getIsDeleted())
-				.orElseThrow(() -> new RuntimeException("Campaign not found or deleted"));
+		if (updates.getName() != null) existing.setName(updates.getName());
+		if (updates.getDescription() != null) existing.setDescription(updates.getDescription());
+		if (updates.getStatus() != null) existing.setStatus(updates.getStatus());
 		
-		if (updateDto.getName() != null) campaign.setName(updateDto.getName());
-		if (updateDto.getDescription() != null) campaign.setDescription(updateDto.getDescription());
-		if (updateDto.getStatus() != null) campaign.setStatus(updateDto.getStatus());
-		campaign.setLastModificationTime(LocalDateTime.now());
-		campaign.setConcurrencyStamp(UUID.randomUUID().toString());
+		if (updates.getResources() != null) {
+			existing.getResources().clear();
+			updates.getResources().forEach(res -> {
+				res.setCampaign(existing);
+				existing.getResources().add(res);
+			});
+		}
 		
-		campaign = campaignRepository.save(campaign);
-		return mapToResponseDto(campaign);
+		return campaignRepository.save(existing);
 	}
 	
 	public void deleteCampaign(UUID id) {
-		Campaign campaign = campaignRepository.findById(id)
-				.filter(c -> !c.getIsDeleted())
-				.orElseThrow(() -> new RuntimeException("Campaign not found or deleted"));
-		campaign.setIsDeleted(true);
-		campaign.setDeletionTime(LocalDateTime.now());
-		campaignRepository.save(campaign);
-	}
-	
-	private CampaignDto mapToResponseDto(Campaign campaign) {
-		return CampaignDto.builder()
-				.id(campaign.getId())
-				.tenantId(campaign.getTenantId())
-				.name(campaign.getName())
-				.description(campaign.getDescription())
-				.status(campaign.getStatus())
-				.extraProperties(campaign.getExtraProperties())
-				.build();
+		if (!campaignRepository.existsById(id)) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Campaign not found");
+		}
+		campaignRepository.deleteById(id);
 	}
 }
