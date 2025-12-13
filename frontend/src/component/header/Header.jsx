@@ -1,58 +1,89 @@
+import { Link } from "@tanstack/react-router";
 import React from "react";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import PersonIcon from "@mui/icons-material/Person";
+import SearchIcon from "@mui/icons-material/Search";
+import logo from "../../assets/logo.png";
+import { useI18n } from "../../i18n/useI18n";
+
+const linkLeftSide = [
+  { key: "header_men", link: "/" },
+  { key: "header_women", link: "/" },
+  { key: "header_kids", link: "/" },
+];
+
+const linkRightSide = [
+  { key: "header_sale", link: "/" },
+  { key: "header_about", link: "/" },
+];
+
+const iconRightSide = [
+  {
+    link: "/",
+    icon: <SearchIcon fontSize="medium" className="hover:text-primary-hover transition-colors" />,
+    key: "Search",
+  },
+  {
+    link: "/",
+    icon: <PersonIcon fontSize="medium" className="hover:text-primary-hover transition-colors" />,
+    key: "Account",
+  },
+  {
+    link: "/",
+    icon: <ShoppingCartOutlinedIcon fontSize="medium" className="hover:text-primary-hover transition-colors" />,
+    key: "Cart",
+  },
+];
 
 const Header = () => {
+  const { lang, t, toggleLang } = useI18n();
+
   return (
-    <header className="bg-background-light/80 dark:bg-background-dark/80 sticky top-0 z-50 w-full border-b border-solid backdrop-blur-sm">
+    <header className="w-full border-b border-solid">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="border-border-light dark:border-border-dark flex h-16 items-center justify-between whitespace-nowrap md:h-20 lg:h-24">
+        <div className="flex h-16 items-center justify-between whitespace-nowrap md:h-20 lg:h-24">
           <nav className="hidden w-1/3 items-center gap-8 md:flex">
-            <a className="hover:text-primary text-lg leading-normal font-medium transition-colors" href="#">
-              Men
-            </a>
-            <a className="hover:text-primary text-lg leading-normal font-medium transition-colors" href="#">
-              Women
-            </a>
-            <a className="hover:text-primary text-lg leading-normal font-medium transition-colors" href="#">
-              Kids
-            </a>
+            {linkLeftSide.map((item) => (
+              <Link
+                to={item.link}
+                className="hover:text-primary-hover text-lg leading-normal font-medium transition-colors"
+                key={item.key}>
+                {t(item.key)}
+              </Link>
+            ))}
           </nav>
           <div className="flex w-1/3 justify-center">
             <a className="flex items-center gap-3" href="#">
-              <div className="text-primary size-10">
-                <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    clip-rule="evenodd"
-                    d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z"
-                    fill="currentColor"
-                    fill-rule="evenodd"></path>
-                  <path
-                    clip-rule="evenodd"
-                    d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z"
-                    fill="currentColor"
-                    fill-rule="evenodd"></path>
-                </svg>
-              </div>
+              <img src={logo} alt="Logo" className="max-h-16 w-auto object-contain md:max-h-20 lg:max-h-24" />
             </a>
           </div>
-          <div className="flex w-1/3 items-center justify-end gap-8">
-            <nav className="hidden items-center gap-8 md:flex">
-              <a className="hover:text-primary text-lg leading-normal font-medium transition-colors" href="#">
-                Sale
-              </a>
-              <a className="hover:text-primary text-lg leading-normal font-medium transition-colors" href="#">
-                About
-              </a>
+          <div className="flex w-1/3 items-center justify-end gap-2 lg:gap-4">
+            <nav className="hidden items-center md:flex md:gap-6 lg:gap-8">
+              {linkRightSide.map((item) => (
+                <Link
+                  className="hover:text-primary-hover text-lg leading-normal font-medium transition-colors"
+                  to={item.link}
+                  key={item.key}>
+                  {t(item.key)}
+                </Link>
+              ))}
             </nav>
-            <div className="flex gap-2">
-              <button className="flex h-10 w-10 max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/5">
-                <span className="material-symbols-outlined">search</span>
-              </button>
-              <button className="flex h-10 w-10 max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/5">
-                <span className="material-symbols-outlined">person</span>
-              </button>
-              <button className="flex h-10 w-10 max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg transition-colors hover:bg-black/5 dark:hover:bg-white/5">
-                <span className="material-symbols-outlined">shopping_cart</span>
-              </button>
+            <div className="flex gap-1 lg:gap-2">
+              {iconRightSide.map((item) => (
+                <Link
+                  className="flex h-10 w-10 max-w-[480px] items-center justify-center overflow-hidden"
+                  key={item.key}
+                  to={item.link}>
+                  {item.icon}
+                </Link>
+              ))}
+              <div className="flex h-10 w-10 max-w-[480px] items-center justify-center overflow-hidden">
+                <button
+                  onClick={() => toggleLang()}
+                  className="hover:text-primary-hover flex h-10 cursor-pointer items-center justify-center rounded-md px-3 text-sm font-medium transition-colors">
+                  {lang.toUpperCase()}
+                </button>
+              </div>
             </div>
           </div>
         </div>

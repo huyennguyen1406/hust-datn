@@ -7,7 +7,7 @@ const NotFound = () => {
         <div className="text-[10rem] leading-none font-black text-[#135bec]/20 select-none md:text-[14rem]">404</div>
       </div>
       <h1 className="-mt-10 mb-6 text-4xl leading-tight font-black tracking-[-0.033em] sm:text-5xl md:-mt-16 md:text-6xl">
-        Sole Lost?
+        Shoe Lost?
       </h1>
       <p className="text-text-light/80 dark:text-text-dark/80 mx-auto mb-10 max-w-xl text-lg">
         We couldn't find the page you were looking for. It seems like you've wandered off the beaten path. Check the URL
