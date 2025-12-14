@@ -10,7 +10,7 @@ const FooterSection = ({ data }) => {
       <h3 className="text-sm font-semibold tracking-wider uppercase">{t(data.keyTitle)}</h3>
       <ul className="mt-4 space-y-2 md:mt-2 md:space-y-1">
         {data.linkList.map((item) => (
-          <li>
+          <li key={item.keyLink}>
             <Link className="hover:text-primary-hover text-sm transition-colors" to={item.link}>
               {t(item.keyLink)}
             </Link>

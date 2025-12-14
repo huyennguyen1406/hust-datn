@@ -1,8 +1,8 @@
-import { Link } from "@tanstack/react-router";
 import React from "react";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { Link } from "@tanstack/react-router";
 import logo from "../../assets/logo.png";
 import { useI18n } from "../../i18n/useI18n";
 
@@ -10,12 +10,10 @@ const linkLeftSide = [
   { key: "header_men", link: "/" },
   { key: "header_women", link: "/" },
   { key: "header_kids", link: "/" },
+  { key: "header_sale", link: "/" },
 ];
 
-const linkRightSide = [
-  { key: "header_sale", link: "/" },
-  { key: "header_about", link: "/" },
-];
+const linkRightSide = [{ key: "header_about", link: "/" }];
 
 const iconRightSide = [
   {
@@ -41,27 +39,27 @@ const Header = () => {
   return (
     <header className="w-full border-b border-solid">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between whitespace-nowrap md:h-20 lg:h-24">
-          <nav className="hidden w-1/3 items-center gap-8 md:flex">
+        <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20 lg:h-24">
+          <nav className="hidden items-center gap-8 md:flex">
             {linkLeftSide.map((item) => (
               <Link
                 to={item.link}
-                className="hover:text-primary-hover text-lg leading-normal font-medium transition-colors"
+                className="hover:text-primary-hover text-center text-lg leading-normal font-medium transition-colors"
                 key={item.key}>
                 {t(item.key)}
               </Link>
             ))}
           </nav>
-          <div className="flex w-1/3 justify-center">
+          <div className="col-start-1 flex justify-center md:col-start-2">
             <a className="flex items-center gap-3" href="#">
               <img src={logo} alt="Logo" className="max-h-16 w-auto object-contain md:max-h-20 lg:max-h-24" />
             </a>
           </div>
-          <div className="flex w-1/3 items-center justify-end gap-2 lg:gap-4">
+          <div className="col-start-3 flex items-center justify-end gap-2 lg:gap-4">
             <nav className="hidden items-center md:flex md:gap-6 lg:gap-8">
               {linkRightSide.map((item) => (
                 <Link
-                  className="hover:text-primary-hover text-lg leading-normal font-medium transition-colors"
+                  className="hover:text-primary-hover text-center text-lg leading-normal font-medium transition-colors"
                   to={item.link}
                   key={item.key}>
                   {t(item.key)}
