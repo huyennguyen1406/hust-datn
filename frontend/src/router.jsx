@@ -5,6 +5,7 @@ import Account from "./page/account/Account";
 import Landing from "./page/landing/Landing";
 import Login from "./page/login/Login";
 import NotFound from "./page/notFound/NotFound";
+import Product from "./page/product/Product";
 import Search from "./page/search/Search";
 import { requireAuthLoader } from "./requireAuth";
 
@@ -48,6 +49,12 @@ export const searchRoute = createRoute({
   component: () => <Search />,
 });
 
+export const productRoute = createRoute({
+  getParentRoute: () => publicLayoutRoute,
+  path: "/product",
+  component: () => <Product />,
+});
+
 export const accountRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/account",
@@ -55,7 +62,7 @@ export const accountRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  publicLayoutRoute.addChildren([landingRoute, loginRoute, searchRoute]),
+  publicLayoutRoute.addChildren([landingRoute, loginRoute, searchRoute, productRoute]),
   userLayoutRoute.addChildren([accountRoute]),
 ]);
 

@@ -40,7 +40,7 @@ const Header = () => {
   const { lang, t, toggleLang } = useI18n();
 
   return (
-    <header className="w-full border-b border-solid">
+    <header className="w-full border-b border-solid border-gray-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20 lg:h-24">
           <nav className="hidden items-center gap-4 md:flex lg:gap-8">

@@ -33,7 +33,7 @@ const Footer = () => {
   const { t } = useI18n();
 
   return (
-    <footer className="hidden border-t md:block">
+    <footer className="hidden border-t border-gray-200 md:block">
       <div className="l:py-16 mx-auto max-w-7xl py-4 pt-2 lg:pt-4">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-5 md:gap-4 lg:grid-cols-5 lg:gap-8">
           <div className="col-span-1 hidden md:pl-6 lg:col-span-2 lg:block">

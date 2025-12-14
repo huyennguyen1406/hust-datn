@@ -1,7 +1,6 @@
 import React from "react";
 import StarRating from "../../../component/rating/StarRating";
-
-const formatPrice = (value) => new Intl.NumberFormat("vi-VN").format(value);
+import { formatPrice } from "../../../utility/format";
 
 const ProductCard = ({
   image,

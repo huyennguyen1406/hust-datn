@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import Pagination from "../../component/pagination/Pagination";
 import Banner from "./component/Banner";
 import ProductCard from "./component/ProductCard";
@@ -238,18 +239,20 @@ const Search = () => {
         {/* Products */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {mockData.map((item) => (
-            <ProductCard
-              image={item.image}
-              brand={item.brand}
-              isSale={item.isSale}
-              productName={item.productName}
-              description={item.description}
-              salePrice={item.salePrice}
-              normalPrice={item.normalPrice}
-              key={item.productId}
-              rating={item.rating}
-              reviewCount={item.reviewCount}
-            />
+            <Link to={`/product?id=${item.productId}`}>
+              <ProductCard
+                image={item.image}
+                brand={item.brand}
+                isSale={item.isSale}
+                productName={item.productName}
+                description={item.description}
+                salePrice={item.salePrice}
+                normalPrice={item.normalPrice}
+                key={item.productId}
+                rating={item.rating}
+                reviewCount={item.reviewCount}
+              />
+            </Link>
           ))}
         </div>
         {/* Pagination */}

@@ -26,7 +26,7 @@ const StarRating = ({ rating, reviewCount }) => {
       <span className="font-medium text-black">{rating.toFixed(1)}</span>
 
       {/* Review count */}
-      <span className="text-black/60">({reviewCount} reviews)</span>
+      {reviewCount && <span className="text-black/60">({reviewCount} reviews)</span>}
     </div>
   );
 };
