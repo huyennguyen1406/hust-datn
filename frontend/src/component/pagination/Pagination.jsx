@@ -82,7 +82,7 @@ const Pagination = ({
           <button
             disabled={page === 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border hover:bg-black/5 disabled:opacity-40">
+            className={`flex h-10 w-10 items-center justify-center rounded-lg border hover:bg-black/5 disabled:opacity-40 ${page === 1 ? "cursor-not-allowed" : "cursor-pointer"}`}>
             <ChevronLeftIcon fontSize="medium" />
           </button>
 
@@ -101,7 +101,7 @@ const Pagination = ({
               <button
                 key={p}
                 onClick={() => setPage(p)}
-                className={`flex h-10 w-10 items-center justify-center rounded-lg font-bold transition-colors ${
+                className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg font-bold transition-colors ${
                   isActive ? "bg-primary text-white" : "hover:bg-black/5"
                 }`}>
                 {p}
@@ -113,7 +113,7 @@ const Pagination = ({
           <button
             disabled={page === totalPage}
             onClick={() => setPage((p) => Math.min(totalPage, p + 1))}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border hover:bg-black/5 disabled:opacity-40">
+            className={`"lex h-10 w-10 items-center justify-center rounded-lg border hover:bg-black/5 disabled:opacity-40 ${page === totalPage ? "cursor-not-allowed" : "cursor-pointer"}`}>
             <ChevronRightIcon fontSize="medium" />
           </button>
         </nav>

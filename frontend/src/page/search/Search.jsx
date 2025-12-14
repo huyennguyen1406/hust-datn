@@ -154,7 +154,7 @@ const Search = () => {
   const category = search.category ?? "";
 
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(8);
   const [colorValue, setColorValue] = useState(null);
 
   const onCategoryChange = (e) => {
@@ -250,7 +250,7 @@ const Search = () => {
                         type="button"
                         aria-label={color.name}
                         onClick={() => setColorValue(color.value)}
-                        className={`h-7 w-7 rounded-sm border transition-all ${isActive ? "ring-primary ring-2 ring-offset-2" : ""} `}
+                        className={`h-7 w-7 cursor-pointer rounded-sm border transition-all ${isActive ? "ring-primary ring-2 ring-offset-2" : ""} `}
                         style={{ backgroundColor: color.hex }}
                       />
                     );
@@ -263,14 +263,14 @@ const Search = () => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-primary hover:bg-primary/90 flex h-11 max-w-[480px] min-w-[120px] items-center justify-center rounded-lg px-6 text-base font-bold tracking-[0.015em] text-white transition-colors">
+                className="bg-primary hover:bg-primary/90 flex h-11 max-w-[480px] min-w-[120px] cursor-pointer items-center justify-center rounded-lg px-6 text-base font-bold tracking-[0.015em] text-white transition-colors">
                 Search
               </button>
             </div>
           </form>
         </div>
 
-        <Banner image={bannerMock.image} title={bannerMock.title} description={bannerMock.description} />
+        {category && <Banner image={bannerMock.image} title={bannerMock.title} description={bannerMock.description} />}
 
         {/* Products */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
