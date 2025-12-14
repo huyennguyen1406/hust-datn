@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import Pagination from "../../component/pagination/Pagination";
+import { searchRoute } from "../../router";
 import Banner from "./component/Banner";
 import ProductCard from "./component/ProductCard";
 
@@ -119,11 +122,22 @@ const bannerMock = {
 };
 
 const brandMock = [
-  { value: "", name: "Select A Brand" },
   { value: "aura", name: "Aura" },
   { value: "nike", name: "Nike" },
   { value: "new_balance", name: "New Balance" },
+  { value: "puma", name: "Puma" },
+  { value: "reebok", name: "Reebok" },
 ];
+
+const categoryMock = [
+  { value: "men", name: "Mens's Footwear" },
+  { value: "women", name: "Women's Footwear" },
+  { value: "kids", name: "Kids' Collection" },
+  { value: "sales", name: "Sales" },
+  { value: "new_arrival", name: "New Arrivals" },
+];
+
+const sizeMock = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44];
 
 const COLORS = [
   { name: "White", value: "white", hex: "#ffffff" },
@@ -135,111 +149,133 @@ const COLORS = [
 ];
 
 const Search = () => {
+  const navigate = useNavigate();
+  const search = useSearch({ from: searchRoute.id });
+  const category = search.category ?? "";
+
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const [filterType, setFilterType] = useState("brand"); // "brand" | "color"
-  const [filterValue, setFilterValue] = useState(null);
+  const [colorValue, setColorValue] = useState(null);
 
-  const onFilterOptionChange = (e) => {
-    const nextType = e.target.value;
-    setFilterType(nextType);
-    setFilterValue(null); // reset value when switching type
+  const onCategoryChange = (e) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        category: e.target.value || undefined,
+      }),
+    });
   };
 
   return (
     <main>
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 md:py-12 lg:px-8">
-        <Banner image={bannerMock.image} title={bannerMock.title} description={bannerMock.description} />
-
         {/* Header */}
-        <div className="mb-6 grid grid-cols-[auto_auto] gap-4 sm:items-center lg:grid-cols-[1fr_auto_auto_auto]">
-          <h2 className="col-span-full text-2xl font-bold md:text-xl lg:col-span-1 lg:text-xl">Sale Items (12)</h2>
+        <div className="border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark mb-6 rounded-xl border p-6 sm:p-8">
+          <form className="flex flex-col gap-8">
+            {/* Keyword search */}
+            <div className="relative">
+              <SearchIcon fontSize="medium" className="absolute top-1/2 left-4 -translate-y-1/2" />
+              <input
+                id="keyword"
+                type="text"
+                placeholder="Search for shoes, brands, and more..."
+                className="border-border-light bg-background-light focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark h-14 w-full rounded-lg border pr-5 pl-12 text-lg transition-colors focus:ring-2 focus:outline-none"
+              />
+            </div>
 
-          <div className="col-span-2 grid grid-cols-[auto_1fr] items-center gap-2 md:col-span-1">
-            <label htmlFor="filter-type" className="text-sm font-medium sm:block">
-              Filter:
-            </label>
-
-            <div className="grid grid-cols-[120px_1fr] gap-2">
-              <select
-                id="filter-type"
-                className="focus:ring-primary/50 h-10 rounded-lg border px-2 text-sm focus:ring-2 focus:outline-none"
-                onChange={(e) => onFilterOptionChange(e)}>
-                <option value="brand">Brand</option>
-                <option value="color">Color</option>
-              </select>
-              {filterType === "brand" && (
+            {/* Filters */}
+            <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2">
+              {/* Category */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="category" className="text-base font-medium">
+                  Search by category
+                </label>
                 <select
-                  value={filterValue ?? ""}
-                  onChange={(e) => setFilterValue(e.target.value || null)}
-                  className="focus:ring-primary/50 h-10 min-w-40 rounded-lg border px-3 text-sm focus:ring-2 focus:outline-none">
-                  {brandMock.map((item) => (
-                    <option value={item.value} key={item.value}>
+                  id="category"
+                  value={category}
+                  onChange={(e) => onCategoryChange(e)}
+                  className="border-border-light bg-background-light focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
+                  <option value={""}>All Categories</option>
+                  {categoryMock.map((item) => (
+                    <option value={item.value} key={`category-${item.value}`}>
                       {item.name}
                     </option>
                   ))}
                 </select>
-              )}
-              {filterType === "color" && (
-                <div className="grid grid-cols-6 gap-2">
-                  {COLORS.map((color) => {
-                    const isActive = filterValue === color.value;
+              </div>
 
+              {/* Size */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="size" className="text-base font-medium">
+                  Search by size
+                </label>
+                <select
+                  id="size"
+                  className="border-border-light bg-background-light focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
+                  <option value={null}>Any Size</option>
+                  {sizeMock.map((item) => (
+                    <option value={item} key={`size-${item}`}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Brand */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="brand" className="text-base font-medium">
+                  Search by brand
+                </label>
+                <select
+                  id="brand"
+                  className="border-border-light bg-background-light focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
+                  <option value={null}>All Brands</option>
+                  {brandMock.map((item) => (
+                    <option value={item.value} key={`brand-${item.value}`}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Color */}
+              <div className="flex flex-col gap-2">
+                <label className="mb-1 block text-base font-medium">Search by color</label>
+                <div className="grid grid-cols-8 gap-3 pt-1 lg:grid-cols-12">
+                  {COLORS.map((color) => {
+                    const isActive = colorValue === color.value;
                     return (
                       <button
                         key={color.value}
                         type="button"
                         aria-label={color.name}
-                        onClick={() => setFilterValue(isActive ? null : color.value)}
+                        onClick={() => setColorValue(color.value)}
                         className={`h-7 w-7 rounded-sm border transition-all ${isActive ? "ring-primary ring-2 ring-offset-2" : ""} `}
                         style={{ backgroundColor: color.hex }}
                       />
                     );
                   })}
                 </div>
-              )}
+              </div>
             </div>
-          </div>
 
-          <div className="col-span-2 grid grid-cols-[auto_1fr] items-center gap-2 md:col-span-1">
-            <label htmlFor="sort" className="text-sm font-medium sm:block">
-              Sort by:
-            </label>
-            <select
-              id="sort"
-              className="focus:ring-primary/50 h-10 rounded-lg border px-3 text-sm focus:ring-2 focus:outline-none lg:pr-10">
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-              <option>Rating: High to Low</option>
-              <option>Rating: Low to High</option>
-            </select>
-          </div>
-
-          <div className="col-span-2 grid grid-cols-[auto_1fr] items-center gap-2 lg:col-span-1">
-            <label htmlFor="ai-search" className="text-sm font-medium sm:block">
-              Ask AI:
-            </label>
-
-            <input
-              id="ai-search"
-              type="text"
-              placeholder='e.g. "running shoes under 2 million"'
-              className="focus:ring-primary/50 h-10 min-w-[280px] rounded-lg border px-3 text-sm focus:ring-2 focus:outline-none"
-            />
-          </div>
+            {/* Submit */}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="bg-primary hover:bg-primary/90 flex h-11 max-w-[480px] min-w-[120px] items-center justify-center rounded-lg px-6 text-base font-bold tracking-[0.015em] text-white transition-colors">
+                Search
+              </button>
+            </div>
+          </form>
         </div>
-        <div className="mb-6 flex justify-center">
-          <button
-            type="button"
-            className="bg-primary hover:bg-primary/90 focus:ring-primary/50 h-10 cursor-pointer rounded-lg px-6 text-sm font-medium whitespace-nowrap text-white focus:ring-2 focus:outline-none">
-            Search
-          </button>
-        </div>
+
+        <Banner image={bannerMock.image} title={bannerMock.title} description={bannerMock.description} />
 
         {/* Products */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {mockData.map((item) => (
-            <Link to={`/product?id=${item.productId}`}>
+            <Link to={`/product?id=${item.productId}`} key={`product-${item.productId}`}>
               <ProductCard
                 image={item.image}
                 brand={item.brand}
@@ -264,7 +300,7 @@ const Search = () => {
           pageSize={pageSize}
           setPageSize={setPageSize}
           totalItems={100}
-          pageSizeOptions={[10, 20]}
+          pageSizeOptions={[8, 12]}
         />
       </div>
     </main>

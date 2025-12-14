@@ -90,7 +90,7 @@ const Landing = () => {
           <h2 className="text-3xl font-bold md:text-4xl">{t("landing_new_arrival_title")}</h2>
           <p className="mt-4 max-w-2xl text-white/90 md:text-lg">{t("landing_new_arrival_desc")}</p>
           <Link
-            to="/search?category=newArrival"
+            to="/search?category=new_arrival"
             className="text-text-light bg-primary hover:bg-primary-hover mt-8 inline-flex h-12 items-center rounded-lg px-5 font-bold transition">
             {t("landing_new_arrival_shop")}
           </Link>{" "}
