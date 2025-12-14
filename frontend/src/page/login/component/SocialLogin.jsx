@@ -15,13 +15,13 @@ const SocialLogin = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <button className="flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5">
-          <GoogleIcon fontSize="small" className="text-[#1877F2]" />
+        <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium">
+          <GoogleIcon fontSize="small" className="text-primary" />
           <span>Google</span>
         </button>
 
-        <button className="flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5">
-          <FacebookIcon fontSize="small" className="text-[#1877F2]" />
+        <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium">
+          <FacebookIcon fontSize="small" className="text-primary" />
           <span>Facebook</span>
         </button>
       </div>

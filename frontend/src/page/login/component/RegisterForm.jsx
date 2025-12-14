@@ -113,7 +113,9 @@ const RegisterForm = () => {
 
         <button
           type="submit"
-          className="bg-primary hover:bg-primary/90 mt-4 flex h-12 w-full max-w-[480px] min-w-[84px] items-center justify-center rounded-lg px-5 text-base font-bold text-white transition-colors">
+          aria-label="Register"
+          title="Register"
+          className="bg-primary hover:bg-primary/90 mt-4 flex h-12 w-full max-w-[480px] min-w-[84px] cursor-pointer items-center justify-center rounded-lg px-5 text-base font-bold text-white transition-colors">
           <span className="truncate">Register</span>
         </button>
       </form>

@@ -72,7 +72,9 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          className="bg-primary hover:bg-primary/90 mt-4 flex h-12 w-full items-center justify-center rounded-lg px-5 text-base font-bold text-white transition-colors">
+          aria-label="Login"
+          title="Login"
+          className="bg-primary hover:bg-primary/90 mt-4 flex h-12 w-full cursor-pointer items-center justify-center rounded-lg px-5 text-base font-bold text-white transition-colors">
           Login
         </button>
       </form>
