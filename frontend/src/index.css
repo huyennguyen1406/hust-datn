@@ -41,3 +41,17 @@ body,
   height: 100%;
   margin: 0;
 }
+
+/* Disable Edge / IE password reveal & clear buttons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Disable Chrome autofill credential button (safe) */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}

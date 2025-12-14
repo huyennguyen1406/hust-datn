@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Link } from "@tanstack/react-router";
 import logo from "../../assets/logo.png";
+import { isAuthenticated } from "../../auth";
 import { useI18n } from "../../i18n/useI18n";
 
 const linkLeftSide = [
@@ -22,7 +23,8 @@ const iconRightSide = [
     key: "Search",
   },
   {
-    link: "/",
+    link: "/login",
+    authLink: "/account",
     icon: <PersonIcon fontSize="medium" className="hover:text-primary-hover transition-colors" />,
     key: "Account",
   },
@@ -71,7 +73,7 @@ const Header = () => {
                 <Link
                   className="flex h-10 w-10 max-w-[480px] items-center justify-center overflow-hidden"
                   key={item.key}
-                  to={item.link}>
+                  to={item.key === "Account" ? (isAuthenticated() ? item.authLink : item.link) : item.link}>
                   {item.icon}
                 </Link>
               ))}
