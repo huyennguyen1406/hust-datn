@@ -8,17 +8,18 @@ import { isAuthenticated } from "../../auth";
 import { useI18n } from "../../i18n/useI18n";
 
 const linkLeftSide = [
-  { key: "header_men", link: "/" },
-  { key: "header_women", link: "/" },
-  { key: "header_kids", link: "/" },
-  { key: "header_sale", link: "/" },
+  { key: "header_home", link: "/" },
+  { key: "header_men", link: "/search?category=men" },
+  { key: "header_women", link: "/search?category=women" },
+  { key: "header_kids", link: "/search?category=kids" },
+  { key: "header_sale", link: "/search?category=sales" },
 ];
 
 const linkRightSide = [{ key: "header_about", link: "/" }];
 
 const iconRightSide = [
   {
-    link: "/",
+    link: "/search",
     icon: <SearchIcon fontSize="medium" className="hover:text-primary-hover transition-colors" />,
     key: "Search",
   },
@@ -42,7 +43,7 @@ const Header = () => {
     <header className="w-full border-b border-solid">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20 lg:h-24">
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-4 md:flex lg:gap-8">
             {linkLeftSide.map((item) => (
               <Link
                 to={item.link}

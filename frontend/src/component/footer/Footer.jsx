@@ -1,16 +1,16 @@
 import React from "react";
-import { useI18n } from "../../i18n/useI18n";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { useI18n } from "../../i18n/useI18n";
 import FooterSection from "./component/FooterLink";
 
 const shopSection = {
   classNameDiv: "col-span-1 md:col-start-2 lg:col-start-auto",
   keyTitle: "footer_shop",
   linkList: [
-    { keyLink: "footer_men", link: "/" },
-    { keyLink: "footer_women", link: "/" },
-    { keyLink: "footer_kids", link: "/" },
-    { keyLink: "footer_sales", link: "/" },
+    { keyLink: "footer_men", link: "/search?category=men" },
+    { keyLink: "footer_women", link: "/search?category=women" },
+    { keyLink: "footer_kids", link: "/search?category=kids" },
+    { keyLink: "footer_sales", link: "/search?category=sales" },
   ],
 };
 

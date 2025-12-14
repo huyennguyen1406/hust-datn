@@ -1,6 +1,7 @@
 export const messages = {
   en: {
     // Headers
+    header_home: "Home",
     header_men: "Men",
     header_women: "Women",
     header_kids: "Kids",
@@ -35,6 +36,7 @@ export const messages = {
   },
   vi: {
     // Headers
+    header_home: "Trang chủ",
     header_men: "Nam",
     header_women: "Nữ",
     header_kids: "Trẻ em",

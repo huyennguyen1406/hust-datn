@@ -5,6 +5,7 @@ import Account from "./page/account/Account";
 import Landing from "./page/landing/Landing";
 import Login from "./page/login/Login";
 import NotFound from "./page/notFound/NotFound";
+import Search from "./page/search/Search";
 import { requireAuthLoader } from "./requireAuth";
 
 export const rootRoute = createRootRoute({
@@ -41,6 +42,12 @@ export const loginRoute = createRoute({
   component: () => <Login />,
 });
 
+export const searchRoute = createRoute({
+  getParentRoute: () => publicLayoutRoute,
+  path: "/search",
+  component: () => <Search />,
+});
+
 export const accountRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/account",
@@ -48,7 +55,7 @@ export const accountRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  publicLayoutRoute.addChildren([landingRoute, loginRoute]),
+  publicLayoutRoute.addChildren([landingRoute, loginRoute, searchRoute]),
   userLayoutRoute.addChildren([accountRoute]),
 ]);
 

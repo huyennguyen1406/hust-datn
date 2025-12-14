@@ -5,23 +5,22 @@ import { useI18n } from "../../i18n/useI18n";
 const categoryList = [
   {
     label: "landing_cat_men",
-    link: "/",
+    link: "/search?category=men",
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAMI1iBkP5DaB8SQLiPTgHC20Z-HxqnVKrX584hWyJYJ79AaF0tVux87hVd7JVYT67T6ibukhZLEh-sq2nRHK3XfYoJ_J6eWSxfPl9IyA8fr1O4q893_P1TR9955_1B7ZtGecBiNqHthsdZws8VXcLzB77bsxvQZs9D6MHuqJhk86wPnnGr8vFEfoa6etZeKsxu6Vp2juU2mY7T5I_HCBhChl6rMY73y7sVWcgeyEdPe6VQWxV11w8TpCBN1Z2CnVLpKan76XGe0DEe",
   },
   {
     label: "landing_cat_women",
-    link: "/",
-
+    link: "/search?category=women",
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAz7SsmV5edyfPKxlKyXw-mu_SllDRl6A47Ok6fNxYZEWw_p2Q8dyh2O0R7v-wfuI8VpkbTfixjAQiBZDa7gipKuzdipxUTgM5eWNTyeT05bon5awMXUJCdG0XociuvQcZ8mIDHwcE6MVKTxBvkvwApI5uQztwPg0dR_eey6Rcu6APa0yxdN37SWxdw2QTs0wK4m_RTVxOw9QBQv3hB65WNGYL7JCRBWv4ejn9i7TrNlAGhwNXCEIKSG1ek6pqTPoopY-hJT5k_T730",
   },
   {
     label: "landing_cat_kids",
-    link: "/",
+    link: "/search?category=kids",
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAf96FvnLRFtdvRz-X_HZyQEGNHblilcxUthRrpyYmKL3EnoQLns3x5TZMg-OkEBJDWChoA6366JaI3hFad6103u7V7AKgrg0keZUN2ofLNMXXPprTVhhE5CDjryxtrCFRYZnZ0XZQwWb4B9N-hCGNeQY2UfZTisYjSMLhRDoGboX1PCkR_ub4WsRSPaLxSyXj_YBjSKomRnDQjx5noSjszMtlx-e6_tRlxgygBJ8bsew31sfhfRoOMf-mF6GQZ5413vs7Is5VLmmuv",
   },
   {
     label: "landing_cat_sales",
-    link: "/",
+    link: "/search?category=sales",
     img: "https://img.freepik.com/free-vector/flash-sale-shopping-poster-banner-with-flash-icon_87202-1259.jpg?t=st=1765609875~exp=1765613475~hmac=967969f0edc7044d01bcb270d8fcd3c322df2144bc6e69c70a7a2ea22d6f85ed&w=1480",
   },
 ];
@@ -38,9 +37,11 @@ const Landing = () => {
               {t("landing_intro_title")}
             </h1>
             <h2 className="z-1 max-w-md text-base leading-normal font-medium sm:text-lg">{t("landing_intro_desc")}</h2>
-            <button className="bg-primary hover:bg-primary/90 z-1 mb-4 flex h-12 max-w-[480px] min-w-[84px] items-center justify-center rounded-lg px-5 text-base font-bold text-white transition-colors md:mb-6">
+            <Link
+              to="/search"
+              className="bg-primary hover:bg-primary/90 z-1 mb-4 flex h-12 max-w-[480px] min-w-[84px] items-center justify-center rounded-lg px-5 text-base font-bold text-white transition-colors md:mb-6">
               {t("landing_intro_shop")}
-            </button>
+            </Link>
           </div>
 
           <div className="hidden aspect-square h-4/5 overflow-hidden rounded-xl md:w-full lg:block">
@@ -88,9 +89,11 @@ const Landing = () => {
           }}>
           <h2 className="text-3xl font-bold md:text-4xl">{t("landing_new_arrival_title")}</h2>
           <p className="mt-4 max-w-2xl text-white/90 md:text-lg">{t("landing_new_arrival_desc")}</p>
-          <button className="text-text-light bg-primary hover:bg-primary-hover mt-8 h-12 rounded-lg px-5 font-bold transition">
+          <Link
+            to="/search?category=newArrival"
+            className="text-text-light bg-primary hover:bg-primary-hover mt-8 inline-flex h-12 items-center rounded-lg px-5 font-bold transition">
             {t("landing_new_arrival_shop")}
-          </button>
+          </Link>{" "}
         </div>
       </div>
     </>
