@@ -30,10 +30,12 @@ const CartItem = ({
             <h3>{name}</h3>
 
             {onSale ? (
-              <div className="flex items-center gap-2">
-                <span className="text-text/60 line-through">{formatPrice(normalPrice)}</span>
-                <span className="text-primary font-bold">{formatPrice(salePrice)}</span>
-                <span className="bg-primary/10 text-primary inline-block rounded-full px-2 py-1 text-xs font-semibold">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm sm:flex-nowrap sm:text-base">
+                <span className="text-text/60 whitespace-nowrap line-through">{formatPrice(normalPrice)}</span>
+
+                <span className="text-primary font-bold whitespace-nowrap">{formatPrice(salePrice)}</span>
+
+                <span className="bg-primary/10 text-primary inline-block rounded-full px-2 py-0.5 text-xs font-semibold whitespace-nowrap">
                   {percentage.toFixed(0)}% Off
                 </span>
               </div>
