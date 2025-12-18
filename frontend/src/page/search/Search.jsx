@@ -170,7 +170,7 @@ const Search = () => {
     <main>
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 md:py-12 lg:px-8">
         {/* Header */}
-        <div className="border-border-light bg-card-light dark:border-border-dark dark:bg-card-dark mb-6 rounded-xl border p-6 sm:p-8">
+        <div className="mb-6 rounded-xl border p-6 sm:p-8">
           <form className="flex flex-col gap-8">
             {/* Keyword search */}
             <div className="relative">
@@ -179,7 +179,7 @@ const Search = () => {
                 id="keyword"
                 type="text"
                 placeholder="Search for shoes, brands, and more..."
-                className="border-border-light bg-background-light focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark h-14 w-full rounded-lg border pr-5 pl-12 text-lg transition-colors focus:ring-2 focus:outline-none"
+                className="focus:ring-primary/50 h-14 w-full rounded-lg border pr-5 pl-12 text-lg transition-colors focus:ring-2 focus:outline-none"
               />
             </div>
 
@@ -194,7 +194,7 @@ const Search = () => {
                   id="category"
                   value={category}
                   onChange={(e) => onCategoryChange(e)}
-                  className="border-border-light bg-background-light focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
+                  className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
                   <option value={""}>All Categories</option>
                   {categoryMock.map((item) => (
                     <option value={item.value} key={`category-${item.value}`}>
@@ -211,7 +211,7 @@ const Search = () => {
                 </label>
                 <select
                   id="size"
-                  className="border-border-light bg-background-light focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
+                  className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
                   <option value={null}>Any Size</option>
                   {sizeMock.map((item) => (
                     <option value={item} key={`size-${item}`}>
@@ -228,7 +228,7 @@ const Search = () => {
                 </label>
                 <select
                   id="brand"
-                  className="border-border-light bg-background-light focus:ring-primary/50 dark:border-border-dark dark:bg-background-dark h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
+                  className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
                   <option value={null}>All Brands</option>
                   {brandMock.map((item) => (
                     <option value={item.value} key={`brand-${item.value}`}>
