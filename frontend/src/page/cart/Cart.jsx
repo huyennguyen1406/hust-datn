@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "@tanstack/react-router";
 import { formatPrice } from "../../utility/format";
 import CartItem from "./component/CartItem";
 import VoucherItem from "./component/VoucherItem";
@@ -14,6 +15,7 @@ const itemList = [
     productId: "P1",
     name: "AeroRun Pro",
     brand: "Aura",
+    size: 42,
     onSale: false,
     percentage: null,
     normalPrice: 120000,
@@ -27,6 +29,7 @@ const itemList = [
     productId: "P2",
     name: "Urban Stride",
     brand: "Legacy",
+    size: 42,
     onSale: true,
     percentage: 25,
     normalPrice: 100000,
@@ -40,6 +43,7 @@ const itemList = [
     productId: "P3",
     name: "Summit Hiker",
     brand: "TrekReady",
+    size: 42,
     onSale: false,
     normalPrice: 150000,
     salePrice: null,
@@ -83,6 +87,7 @@ const Cart = () => {
                   productId={item.productId}
                   name={item.name}
                   brand={item.brand}
+                  size={item.size}
                   onSale={item.onSale}
                   percentage={item.percentage}
                   salePrice={item.salePrice}
@@ -140,9 +145,11 @@ const Cart = () => {
           </div>
 
           <div className="mt-8">
-            <button className="bg-primary hover:bg-primary/90 h-12 w-full rounded-lg text-lg font-bold text-white transition-colors">
+            <Link
+              to="/checkout"
+              className="bg-primary hover:bg-primary/90 flex h-12 w-full items-center justify-center rounded-lg text-lg font-bold text-white transition-colors">
               Proceed to Checkout
-            </button>
+            </Link>
           </div>
         </div>
       </div>

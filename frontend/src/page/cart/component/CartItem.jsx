@@ -6,6 +6,7 @@ const CartItem = ({
   productId,
   name,
   brand,
+  size,
   onSale,
   percentage,
   salePrice,
@@ -44,6 +45,7 @@ const CartItem = ({
             )}
           </div>
           <p className="text-text/60 mt-1 text-sm">{brand}</p>
+          <p className="text-text mt-1 mb-2 text-sm">Size: {size}</p>
         </div>
 
         <div className="flex items-end justify-between">
