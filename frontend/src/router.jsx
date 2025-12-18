@@ -2,6 +2,7 @@ import { Outlet } from "@tanstack/react-router";
 import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
 import Layout from "./Layout";
 import Account from "./page/account/Account";
+import Cart from "./page/cart/Cart";
 import Landing from "./page/landing/Landing";
 import Login from "./page/login/Login";
 import NotFound from "./page/notFound/NotFound";
@@ -55,6 +56,12 @@ export const productRoute = createRoute({
   component: () => <Product />,
 });
 
+export const cartRoute = createRootRoute({
+  getParentRoute: () => publicLayoutRoute,
+  path: "/cart",
+  component: () => <Cart />,
+});
+
 export const accountRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/account",
@@ -62,7 +69,7 @@ export const accountRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  publicLayoutRoute.addChildren([landingRoute, loginRoute, searchRoute, productRoute]),
+  publicLayoutRoute.addChildren([landingRoute, loginRoute, searchRoute, productRoute, cartRoute]),
   userLayoutRoute.addChildren([accountRoute]),
 ]);
 

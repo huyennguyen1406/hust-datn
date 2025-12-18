@@ -30,7 +30,7 @@ const iconRightSide = [
     key: "Account",
   },
   {
-    link: "/",
+    link: "/cart",
     icon: <ShoppingCartOutlinedIcon fontSize="medium" className="hover:text-primary-hover transition-colors" />,
     key: "Cart",
   },
