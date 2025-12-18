@@ -4,12 +4,6 @@ import { formatPrice } from "../../utility/format";
 import CartItem from "./component/CartItem";
 import VoucherItem from "./component/VoucherItem";
 
-const cartStateMock = [
-  { productId: "P1", quantity: 1 },
-  { productId: "P2", quantity: 1 },
-  { productId: "P3", quantity: 2 },
-];
-
 const itemList = [
   {
     productId: "P1",

@@ -57,12 +57,12 @@ const Checkout = () => {
   const [selectedPayment, setSelectedPayment] = useState(mockPaymentList[0].id);
 
   const shippingPrice = mockMethodList.find((m) => m.id === selectedDelivered)?.price ?? 0;
-  const total = priceInfo.totalPrice - priceInfo.voucherDiscount + shippingPrice;
+  const finalPrice = priceInfo.totalPrice - priceInfo.voucherDiscount + shippingPrice;
 
   const navigate = useNavigate();
   const onCompleteOrder = () => {
     if (selectedPayment === "cod") {
-      navigate({ to: "/confirm-order" });
+      navigate({ to: "/confirm" });
       return;
     }
 
@@ -149,11 +149,11 @@ const Checkout = () => {
 
             <div className="mt-4 flex justify-between border-t border-gray-200 pt-4 text-xl font-bold">
               <p>TOTAL</p>
-              <p>{formatPrice(total)}</p>
+              <p>{formatPrice(finalPrice)}</p>
             </div>
 
             <button
-              className="mt-6 h-12 w-full rounded-lg bg-blue-600 text-lg font-bold text-white transition-colors hover:bg-blue-700"
+              className="mt-6 h-12 w-full cursor-pointer rounded-lg bg-blue-600 text-lg font-bold text-white transition-colors hover:bg-blue-700"
               onClick={() => onCompleteOrder()}>
               COMPLETE ORDER
             </button>

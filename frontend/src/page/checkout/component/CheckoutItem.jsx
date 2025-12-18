@@ -2,7 +2,7 @@ const CheckoutItem = ({ item }) => {
   return (
     <li className="flex py-4">
       {/* Product image */}
-      <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-md border border-gray-200">
         <img src={item.image} alt={item.name} className="h-full w-full object-cover" loading="lazy" />
       </div>
 

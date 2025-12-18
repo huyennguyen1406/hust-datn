@@ -4,6 +4,7 @@ import Layout from "./Layout";
 import Account from "./page/account/Account";
 import Cart from "./page/cart/Cart";
 import Checkout from "./page/checkout/Checkout";
+import Confirm from "./page/confirm/Confirm";
 import Landing from "./page/landing/Landing";
 import Login from "./page/login/Login";
 import NotFound from "./page/notFound/NotFound";
@@ -69,6 +70,12 @@ export const checkoutRoute = createRootRoute({
   component: () => <Checkout />,
 });
 
+export const confirmRoute = createRootRoute({
+  getParentRoute: () => publicLayoutRoute,
+  path: "/confirm",
+  component: () => <Confirm />,
+});
+
 export const accountRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/account",
@@ -76,7 +83,15 @@ export const accountRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  publicLayoutRoute.addChildren([landingRoute, loginRoute, searchRoute, productRoute, cartRoute, checkoutRoute]),
+  publicLayoutRoute.addChildren([
+    landingRoute,
+    loginRoute,
+    searchRoute,
+    productRoute,
+    cartRoute,
+    checkoutRoute,
+    confirmRoute,
+  ]),
   userLayoutRoute.addChildren([accountRoute]),
 ]);
 
