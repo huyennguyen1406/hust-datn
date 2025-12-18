@@ -9,6 +9,7 @@ import Landing from "./page/landing/Landing";
 import Login from "./page/login/Login";
 import NotFound from "./page/notFound/NotFound";
 import Product from "./page/product/Product";
+import Qr from "./page/qr/Qr";
 import Search from "./page/search/Search";
 import { requireAuthLoader } from "./requireAuth";
 
@@ -76,6 +77,12 @@ export const confirmRoute = createRootRoute({
   component: () => <Confirm />,
 });
 
+export const qrRoute = createRootRoute({
+  getParentRoute: () => publicLayoutRoute,
+  path: "/qr-payment",
+  component: () => <Qr />,
+});
+
 export const accountRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/account",
@@ -91,6 +98,7 @@ const routeTree = rootRoute.addChildren([
     cartRoute,
     checkoutRoute,
     confirmRoute,
+    qrRoute,
   ]),
   userLayoutRoute.addChildren([accountRoute]),
 ]);
