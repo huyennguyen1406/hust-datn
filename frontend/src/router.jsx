@@ -7,6 +7,7 @@ import Cart from "./page/cart/Cart";
 import Checkout from "./page/checkout/Checkout";
 import Confirm from "./page/confirm/Confirm";
 import Contact from "./page/contact/Contact";
+import Faq from "./page/faq/Faq";
 import Landing from "./page/landing/Landing";
 import Login from "./page/login/Login";
 import NotFound from "./page/notFound/NotFound";
@@ -99,6 +100,12 @@ export const contactRoute = createRootRoute({
   component: () => <Contact />,
 });
 
+export const faqRoute = createRootRoute({
+  getParentRoute: () => publicLayoutRoute,
+  path: "/faq",
+  component: () => <Faq />,
+});
+
 export const accountRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/account",
@@ -129,6 +136,7 @@ const routeTree = rootRoute.addChildren([
     qrRoute,
     aboutRoute,
     contactRoute,
+    faqRoute,
   ]),
   userLayoutRoute.addChildren([accountRoute, orderHistoryRoute, orderDetailRoute]),
 ]);
