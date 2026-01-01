@@ -100,7 +100,7 @@ const Faq = () => {
               <button
                 type="button"
                 onClick={() => handleToggle(sectionIndex)}
-                className="flex w-full items-center justify-between py-5 text-left text-lg font-semibold uppercase">
+                className="flex w-full cursor-pointer items-center justify-between py-5 text-left text-lg font-semibold uppercase hover:bg-gray-100">
                 {section.title}
                 <KeyboardArrowDownIcon
                   className={`transition-transform duration-300 ease-in-out ${isOpen ? "rotate-180" : "rotate-0"}`}
