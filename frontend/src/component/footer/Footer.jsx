@@ -18,15 +18,15 @@ const companySection = {
   classNameDiv: "col-span-1",
   keyTitle: "footer_company",
   linkList: [
-    { keyLink: "footer_about", link: "/" },
-    { keyLink: "footer_contact", link: "/" },
+    { keyLink: "footer_about", link: "/about" },
+    { keyLink: "footer_contact", link: "/contact" },
   ],
 };
 
 const aboutSection = {
   classNameDiv: "col-span-1",
   keyTitle: "footer_support",
-  linkList: [{ keyLink: "footer_faqs", link: "/" }],
+  linkList: [{ keyLink: "footer_faqs", link: "/faq" }],
 };
 
 const Footer = () => {

@@ -1,6 +1,7 @@
 import { Outlet } from "@tanstack/react-router";
 import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
 import Layout from "./Layout";
+import About from "./page/about/About";
 import Account from "./page/account/Account";
 import Cart from "./page/cart/Cart";
 import Checkout from "./page/checkout/Checkout";
@@ -85,6 +86,12 @@ export const qrRoute = createRootRoute({
   component: () => <Qr />,
 });
 
+export const aboutRoute = createRootRoute({
+  getParentRoute: () => publicLayoutRoute,
+  path: "/about",
+  component: () => <About />,
+});
+
 export const accountRoute = createRoute({
   getParentRoute: () => userLayoutRoute,
   path: "/account",
@@ -113,6 +120,7 @@ const routeTree = rootRoute.addChildren([
     checkoutRoute,
     confirmRoute,
     qrRoute,
+    aboutRoute,
   ]),
   userLayoutRoute.addChildren([accountRoute, orderHistoryRoute, orderDetailRoute]),
 ]);

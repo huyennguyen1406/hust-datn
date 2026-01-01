@@ -15,7 +15,7 @@ const linkLeftSide = [
   { key: "header_sale", link: "/search?category=sales" },
 ];
 
-const linkRightSide = [{ key: "header_about", link: "/" }];
+const linkRightSide = [{ key: "header_about", link: "/about" }];
 
 const iconRightSide = [
   {
