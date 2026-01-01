@@ -1,7 +1,7 @@
 import React from "react";
 import DoneIcon from "@mui/icons-material/Done";
 import { Link } from "@tanstack/react-router";
-import { formatPrice } from "../../utility/format";
+import { extractDate, formatPrice } from "../../utility/format";
 import OrderItem from "./component/OrderItem";
 
 const itemList = [
@@ -39,7 +39,7 @@ const itemList = [
 
 const orderInfo = {
   orderNumber: "SS123456789",
-  deliverDate: "October 28, 2024",
+  deliverDate: "2025-10-28T00:00:00+07:00",
   totalPrice: 495000,
   voucherDiscount: 40000,
   shipping: 25000,
@@ -67,7 +67,7 @@ const Confirm = () => {
         </p>
 
         <p className="mt-2 text-sm text-gray-500">
-          Estimated Delivery Date: <span className="font-medium">{orderInfo.deliverDate}</span>
+          Estimated Delivery Date: <span className="font-medium">{extractDate(orderInfo.deliverDate)}</span>
         </p>
       </div>
 
