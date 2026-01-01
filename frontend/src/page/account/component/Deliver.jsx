@@ -28,7 +28,7 @@ const Deliver = () => {
               id="delivery-phone"
               name="delivery-phone"
               type="tel"
-              placeholder="+1 234 567 890"
+              placeholder="0123 456 789"
               className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
             />
           </div>
@@ -47,42 +47,85 @@ const Deliver = () => {
           />
         </div>
 
-        <div>
-          <label className="text-sm font-medium" htmlFor="delivery-address">
-            Address
-          </label>
-          <input
-            id="delivery-address"
-            name="delivery-address"
-            type="text"
-            placeholder="123 Main St"
-            className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
-          />
-        </div>
-
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className="text-sm font-medium" htmlFor="delivery-province">
-              Province
+              Unit
             </label>
             <input
               id="delivery-province"
               name="delivery-province"
               type="text"
-              placeholder="California"
+              placeholder="Can ho 201"
               className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
             />
           </div>
 
           <div>
             <label className="text-sm font-medium" htmlFor="delivery-district">
-              District
+              Street
             </label>
             <input
               id="delivery-district"
               name="delivery-district"
               type="text"
-              placeholder="Los Angeles"
+              placeholder="So 6, Duong Pham Hung"
+              className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label className="text-sm font-medium" htmlFor="delivery-province">
+              District
+            </label>
+            <input
+              id="delivery-province"
+              name="delivery-province"
+              type="text"
+              placeholder="Tu Liem"
+              className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium" htmlFor="delivery-district">
+              Province
+            </label>
+            <input
+              id="delivery-district"
+              name="delivery-district"
+              type="text"
+              placeholder="Ha Noi"
+              className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label className="text-sm font-medium" htmlFor="delivery-province">
+              Postal Code
+            </label>
+            <input
+              id="delivery-province"
+              name="delivery-province"
+              type="text"
+              placeholder="100000"
+              className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium" htmlFor="delivery-district">
+              Country
+            </label>
+            <input
+              id="delivery-district"
+              name="delivery-district"
+              type="text"
+              placeholder="Viet Nam"
               className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
             />
           </div>

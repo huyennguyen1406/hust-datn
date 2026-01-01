@@ -13,7 +13,7 @@ const OrderItem = ({ item }) => {
         </div>
       </div>
 
-      <p className="font-medium">{formatPrice(item.subTotal)}</p>
+      <p className="font-medium">Subtotal: {formatPrice(item.subTotal)}</p>
     </div>
   );
 };

@@ -8,6 +8,7 @@ import Confirm from "./page/confirm/Confirm";
 import Landing from "./page/landing/Landing";
 import Login from "./page/login/Login";
 import NotFound from "./page/notFound/NotFound";
+import OrderDetail from "./page/orderDetail/OrderDetail";
 import OrderHistory from "./page/orderHistory/OrderHistory";
 import Product from "./page/product/Product";
 import Qr from "./page/qr/Qr";
@@ -96,6 +97,12 @@ export const orderHistoryRoute = createRoute({
   component: () => <OrderHistory />,
 });
 
+export const orderDetailRoute = createRoute({
+  getParentRoute: () => userLayoutRoute,
+  path: "/account/order-history/$orderId",
+  component: () => <OrderDetail />,
+});
+
 const routeTree = rootRoute.addChildren([
   publicLayoutRoute.addChildren([
     landingRoute,
@@ -107,7 +114,7 @@ const routeTree = rootRoute.addChildren([
     confirmRoute,
     qrRoute,
   ]),
-  userLayoutRoute.addChildren([accountRoute, orderHistoryRoute]),
+  userLayoutRoute.addChildren([accountRoute, orderHistoryRoute, orderDetailRoute]),
 ]);
 
 export const router = createRouter({ routeTree });

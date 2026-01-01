@@ -6,8 +6,8 @@ import OrderInfo from "./component/OrderInfo";
 const mockData = [
   {
     orderNumber: "#SH123456789",
-    datePlaced: "2025-10-26T00:00:00+07:00",
-    totalAmount: 195000,
+    orderDate: "2025-10-26T00:00:00+07:00",
+    totalAmount: 480000,
     status: "Delivered",
     items: [
       {
@@ -30,11 +30,21 @@ const mockData = [
         image:
           "https://lh3.googleusercontent.com/aida-public/AB6AXuAKufOUK_Q-7yrNwZZJAfhGiBn5u6rz1jAD4iDMPbGhVL0KHu9ayUwLOnatEkT8wqWwEF6UXel6T0m4cKLs7RF3otbe4eMSVHsT9xiCOCv4T_YGgCeoGhovuUyIaGef12WaSuNU2OOSX_AtszfmWwEubp0raPBbRv7iaKiGv1nvLbGdYbmuc0HPgaivqPpGrSSJCiZvnFYSGVndzvAGX026cAi7jKbGdw4ctd5YggN3vmBy1MlKt9_2nuoNE4QP4EumqE_Et7WqT3-G",
       },
+      {
+        productId: "P3",
+        name: "Summit Hiker",
+        brand: "TrekReady",
+        size: 42,
+        quantity: 2,
+        subTotal: 300000,
+        image:
+          "https://lh3.googleusercontent.com/aida-public/AB6AXuAKufOUK_Q-7yrNwZZJAfhGiBn5u6rz1jAD4iDMPbGhVL0KHu9ayUwLOnatEkT8wqWwEF6UXel6T0m4cKLs7RF3otbe4eMSVHsT9xiCOCv4T_YGgCeoGhovuUyIaGef12WaSuNU2OOSX_AtszfmWwEubp0raPBbRv7iaKiGv1nvLbGdYbmuc0HPgaivqPpGrSSJCiZvnFYSGVndzvAGX026cAi7jKbGdw4ctd5YggN3vmBy1MlKt9_2nuoNE4QP4EumqE_Et7WqT3-G",
+      },
     ],
   },
   {
     orderNumber: "#SH123456777",
-    datePlaced: "2025-11-26T00:00:00+07:00",
+    orderDate: "2025-11-26T00:00:00+07:00",
     totalAmount: 375000,
     status: "Processing",
     items: [
@@ -62,7 +72,7 @@ const mockData = [
   },
   {
     orderNumber: "#SH123456888",
-    datePlaced: "2025-10-26T00:00:00+07:00",
+    orderDate: "2025-10-26T00:00:00+07:00",
     totalAmount: 240000,
     status: "Cancelled",
     items: [

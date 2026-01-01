@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Link } from "@tanstack/react-router";
 import { extractDate, formatPrice } from "../../../utility/format";
 import OrderItem from "./OrderItem";
 
@@ -28,12 +29,12 @@ const OrderInfo = ({ orderInfo }) => {
           </div>
 
           <div>
-            <p className="text-sm text-gray-500">Date Placed</p>
-            <p>{extractDate(orderInfo.datePlaced)}</p>
+            <p className="text-sm text-gray-500">Order Date</p>
+            <p>{extractDate(orderInfo.orderDate)}</p>
           </div>
 
           <div>
-            <p className="text-sm text-gray-500">Total Amount</p>
+            <p className="text-sm text-gray-500">Final Amount</p>
             <p>{formatPrice(orderInfo.totalAmount)}</p>
           </div>
         </div>
@@ -51,9 +52,11 @@ const OrderInfo = ({ orderInfo }) => {
           ))}
 
           <div className="flex justify-end pt-2">
-            <button className="bg-primary hover:bg-primary/90 inline-flex h-9 cursor-pointer items-center justify-center rounded-md px-4 text-sm font-semibold text-white transition-colors">
-              View Details
-            </button>
+            <Link to={`/account/order-history/${orderInfo.orderNumber.substring(1)}`}>
+              <button className="bg-primary hover:bg-primary/90 inline-flex h-9 cursor-pointer items-center justify-center rounded-md px-4 text-sm font-semibold text-white transition-colors">
+                View Details
+              </button>
+            </Link>
           </div>
         </div>
       </div>
