@@ -66,7 +66,10 @@ const mockUserReviews = [
 
 const mockData = {
   images: mockImageList,
-  brand: "AeroRun",
+  brand: {
+    id: "aura",
+    name: "AeroRun",
+  },
   productName: "AeroRun Pro",
   description: "Men's Running Shoe",
   isSale: true,
@@ -104,7 +107,9 @@ const Product = () => {
         {/* Info */}
         <div className="flex flex-col gap-8">
           <div>
-            <p className="text-primary text-lg font-medium">{mockData.brand}</p>
+            <Link className="text-primary text-lg font-medium" to={`/search?brand=${mockData.brand.id}`}>
+              {mockData.brand.name}
+            </Link>
             <h1 className="mt-1 text-4xl font-black sm:text-5xl">{mockData.productName}</h1>
             <div className="mt-4 flex items-baseline gap-4">
               {mockData.isSale ? (

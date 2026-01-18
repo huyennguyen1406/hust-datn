@@ -47,23 +47,10 @@ const Deliver = () => {
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <label className="text-sm font-medium" htmlFor="delivery-province">
-              Unit
-            </label>
-            <input
-              id="delivery-province"
-              name="delivery-province"
-              type="text"
-              placeholder="Can ho 201"
-              className="bg-background focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg border transition-colors focus:ring"
-            />
-          </div>
-
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-1">
           <div>
             <label className="text-sm font-medium" htmlFor="delivery-district">
-              Street
+              Address
             </label>
             <input
               id="delivery-district"
@@ -78,7 +65,7 @@ const Deliver = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className="text-sm font-medium" htmlFor="delivery-province">
-              District
+              Province
             </label>
             <input
               id="delivery-province"
@@ -91,7 +78,7 @@ const Deliver = () => {
 
           <div>
             <label className="text-sm font-medium" htmlFor="delivery-district">
-              Province
+              District
             </label>
             <input
               id="delivery-district"

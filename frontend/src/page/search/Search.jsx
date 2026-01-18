@@ -152,6 +152,7 @@ const Search = () => {
   const navigate = useNavigate();
   const search = useSearch({ from: searchRoute.id });
   const category = search.category ?? "";
+  const brand = search.brand ?? "";
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
@@ -162,6 +163,15 @@ const Search = () => {
       search: (prev) => ({
         ...prev,
         category: e.target.value || undefined,
+      }),
+    });
+  };
+
+  const onBrandChange = (e) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        brand: e.target.value || undefined,
       }),
     });
   };
@@ -228,8 +238,10 @@ const Search = () => {
                 </label>
                 <select
                   id="brand"
+                  value={brand}
                   className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
-                  <option value={null}>All Brands</option>
+                  onChange={(e) => onBrandChange(e)}
+                  <option value={""}>All Brands</option>
                   {brandMock.map((item) => (
                     <option value={item.value} key={`brand-${item.value}`}>
                       {item.name}

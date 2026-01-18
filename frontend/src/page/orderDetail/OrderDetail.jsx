@@ -72,13 +72,11 @@ const mockData = {
     phone: "0901 234 567",
   },
   deliveryMethod: {
-    id: "standard",
     name: "Standard Shipping",
     estimatedDelivery: "2025-11-02T00:00:00+07:00",
     price: 25000,
   },
   paymentMethod: {
-    id: "cod",
     name: "Direct payment on delivery",
   },
 };
