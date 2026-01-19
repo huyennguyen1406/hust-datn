@@ -1,210 +1,214 @@
-import React from 'react';
-import { useState } from 'react';
-
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, InputBase } from '@mui/material';
-import MultiSelectFields from './component/MultiSelectFields';
-import Pagination from './component/Pagination';
-import StatusBadge from './component/StatusBadge';
-
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import React from "react";
+import { useState } from "react";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import {
+  Box,
+  Button,
+  InputBase,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import Pagination from "../../components/pagination/Pagination";
+import { useI18n } from "../../i18n/useI18n";
+import FilterRow from "./component/FilterRow";
+import StatusBadge from "./component/StatusBadge";
 
 /** Sample data */
 const rows = [
-	{ id: '#1024', name: 'Project Alpha', category: 'Web Development', status: 'Active', date: '2023-10-26' },
-	{ id: '#1025', name: 'Marketing Campaign Q4', category: 'Marketing', status: 'Pending', date: '2023-10-25' },
-	{ id: '#1026', name: 'Mobile App Redesign', category: 'Design', status: 'Active', date: '2023-10-22' },
-	{ id: '#1027', name: 'API Integration', category: 'Backend', status: 'Archived', date: '2023-09-15' },
-	{ id: '#1028', name: 'Server Migration', category: 'Infrastructure', status: 'Active', date: '2023-10-28' },
+  { id: "#1024", name: "Project Alpha", category: "Web Development", status: "Active", date: "2023-10-26" },
+  { id: "#1025", name: "Marketing Campaign Q4", category: "Marketing", status: "Pending", date: "2023-10-25" },
+  { id: "#1026", name: "Mobile App Redesign", category: "Design", status: "Active", date: "2023-10-22" },
+  { id: "#1027", name: "API Integration", category: "Backend", status: "Archived", date: "2023-09-15" },
+  { id: "#1028", name: "Server Migration", category: "Infrastructure", status: "Active", date: "2023-10-28" },
 ];
 
-export default function Management({ title, description }) {
-	const [currentPage, setCurrentPage] = useState(1);
+const createFilter = () => ({
+  id: crypto.randomUUID(),
+  field: "name",
+  operator: "equals",
+  value: "",
+});
 
-	return (
-		<main className='flex-1 flex flex-col overflow-hidden'>
-			<header className='flex justify-between items-center p-8 pb-0'>
-				<div>
-					<h1 className='text-3xl font-bold text-gray-900'>{title}</h1>
-					<p className='text-gray-600 mt-1'>{description}</p>
-				</div>
+const OPERATION_TYPES = [
+  { label: "AND", value: "AND" },
+  { label: "OR", value: "OR" },
+];
 
-				<div className='flex items-center gap-4'>
-					<button className='flex items-center gap-2 px-4 py-2 bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 transition-colors'>
-						<span className='material-symbols-outlined'>add</span>
-						<span className='text-white font-semibold'>New Entity</span>
-					</button>
-					<button className='flex items-center gap-2 px-4 py-2 bg-indigo-600 rounded-lg shadow-sm hover:bg-indigo-700 transition-colors'>
-						<span className='material-symbols-outlined'>add</span>
-						<span className='text-white font-semibold'>Import from csv</span>
-					</button>
-				</div>
-			</header>
+/** Custom renderer per column */
+const columnRenderers = {
+  status: (value) => <StatusBadge status={value} />,
+};
 
-			<div className='p-8 flex-1 overflow-y-auto'>
-				<div className='bg-white rounded-lg shadow-md overflow-hidden'>
-					<div className='p-4 bg-white border-b border-gray-200'>
-						<div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-start'>
-							<div>
-								<label className='block text-sm font-medium text-gray-700 mb-1' htmlFor='select-fields'>
-									Select Fields
-								</label>
-								<div className='gap-2'>
-									<MultiSelectFields />
-								</div>
-								<button className='mt-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition'>
-									<span>Apply</span>
-								</button>
-							</div>
+/** Default cell renderer */
+const renderCell = (row, column) => {
+  const value = row[column];
 
-							<div className='md:col-span-2'>
-								<label className='block text-sm font-medium text-gray-700 mb-1'>Filter by Field</label>
-								<div className='space-y-3 mb-2'>
-									<div className='flex items-center gap-2'>
-										<select className='w-1/4 h-8 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-indigo-500 focus:border-indigo-500'>
-											<option>Name</option>
-											<option>Category</option>
-											<option>Status</option>
-											<option>ID</option>
-										</select>
-										<select className='w-1/4 h-8 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-indigo-500 focus:border-indigo-500'>
-											<option>equals</option>
-											<option>contains</option>
-										</select>
-										<input
-											className='w-1/2 h-8  px-3 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-indigo-500 focus:border-indigo-500'
-											placeholder='Enter value...'
-										/>
+  if (columnRenderers[column]) {
+    return columnRenderers[column](value, row);
+  }
 
-										<button className='h-8 w-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-100 text-gray-500'>
-											<span className='material-symbols-outlined text-lg'>remove</span>
-										</button>
-									</div>
-								</div>
-								<div className='space-y-3 mb-2'>
-									<div className='flex items-center gap-2'>
-										<select className='w-1/4 h-8 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-indigo-500 focus:border-indigo-500'>
-											<option>Name</option>
-											<option>Category</option>
-											<option>Status</option>
-											<option>ID</option>
-										</select>
-										<select className='w-1/4 h-8 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-indigo-500 focus:border-indigo-500'>
-											<option>equals</option>
-											<option>contains</option>
-										</select>
-										<input
-											className='w-1/2 h-8 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-indigo-500 focus:border-indigo-500'
-											placeholder='Enter value...'
-										/>
+  return <span className="text-gray-800">{value}</span>;
+};
 
-										<button className='h-8 w-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-100 text-gray-500'>
-											<span className='material-symbols-outlined text-lg'>remove</span>
-										</button>
-									</div>
-								</div>
-								<button className='mt-3 flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-700'>
-									<span className='material-symbols-outlined text-lg'>add_circle</span>
-									<span>Add Filter</span>
-								</button>
-							</div>
-						</div>
-					</div>
+export default function Management({
+  title,
+  description,
+  columns = ["id", "name", "category", "status", "date"],
+  data = rows,
+}) {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [filters, setFilters] = useState([createFilter()]);
+  const [operationType, setOperationType] = useState("AND");
 
-					{/* Table: use MUI Table components but style via Tailwind (light) */}
-					<TableContainer component={Box}>
-						<Table className='min-w-full text-sm text-left text-gray-600' aria-label='entities table'>
-							<TableHead>
-								<TableRow className='text-xs text-gray-700 uppercase bg-gray-50'>
-									<TableCell className='px-6 py-3'>
-										<div className='flex items-center'>
-											ID
-											<button className='ml-1 text-gray-400 hover:text-gray-600'>
-												<span className='material-symbols-outlined text-sm'>unfold_more</span>
-											</button>
-										</div>
-									</TableCell>
-									<TableCell className='px-6 py-3'>
-										<div className='flex items-center'>
-											Name
-											<button className='ml-1 text-gray-400 hover:text-gray-600'>
-												<span className='material-symbols-outlined text-sm'>unfold_more</span>
-											</button>
-										</div>
-									</TableCell>
-									<TableCell className='px-6 py-3'>
-										<div className='flex items-center'>
-											Category
-											<button className='ml-1 text-gray-400 hover:text-gray-600'>
-												<span className='material-symbols-outlined text-sm'>unfold_more</span>
-											</button>
-										</div>
-									</TableCell>
-									<TableCell className='px-6 py-3'>
-										<div className='flex items-center'>
-											Status
-											<button className='ml-1 text-gray-400 hover:text-gray-600'>
-												<span className='material-symbols-outlined text-sm'>unfold_more</span>
-											</button>
-										</div>
-									</TableCell>
-									<TableCell className='px-6 py-3'>
-										<div className='flex items-center'>
-											Last Updated
-											<button className='ml-1 text-gray-400 hover:text-gray-600'>
-												<span className='material-symbols-outlined text-sm'>unfold_more</span>
-											</button>
-										</div>
-									</TableCell>
-									<TableCell className='px-6 py-3 text-right'>Actions</TableCell>
-								</TableRow>
-							</TableHead>
+  const { t } = useI18n();
 
-							<TableBody>
-								{rows.map((r, idx) => {
-									const last = idx === rows.length - 1;
-									return (
-										<TableRow key={r.id} hover className={`${last ? '' : 'border-b'} bg-white hover:bg-gray-50`}>
-											<TableCell component='th' scope='row' className='px-6 py-4 font-medium text-gray-900'>
-												{r.id}
-											</TableCell>
-											<TableCell className='px-6 py-4 text-gray-800'>{r.name}</TableCell>
-											<TableCell className='px-6 py-4 text-gray-800'>{r.category}</TableCell>
-											<TableCell className='px-6 py-4'>
-												<StatusBadge status={r.status} />
-											</TableCell>
-											<TableCell className='px-6 py-4 text-gray-600'>{r.date}</TableCell>
-											<TableCell className='px-6 py-4 text-right'>
-												<button className='text-indigo-600 hover:underline'>Edit</button>
-												<button className='text-red-600 hover:underline ml-4'>Delete</button>
-											</TableCell>
-										</TableRow>
-									);
-								})}
-							</TableBody>
-						</Table>
-					</TableContainer>
+  const updateFilter = (updated) => {
+    setFilters((prev) => prev.map((f) => (f.id === updated.id ? updated : f)));
+  };
 
-					<nav aria-label='Table navigation' className='flex items-center justify-between p-4 bg-white border-t border-gray-200'>
-						<div className='text-sm font-normal text-gray-600'>
-							<span>Size: </span>
-							<select
-								className='h-8 px-3 rounded-lg border border-gray-300 bg-white text-gray-700 focus:ring-indigo-500 focus:border-indigo-500'
-								id='select-fields'
-							>
-								<option>10</option>
-								<option>20</option>
-								<option>30</option>
-								<option>40</option>
-							</select>
-						</div>
-						<div className='text-sm font-normal text-gray-600'>
-							Showing <span className='font-semibold text-gray-900'>1-5</span> of{' '}
-							<span className='font-semibold text-gray-900'>100</span>
-						</div>
-						<Pagination totalPages={10} page={currentPage} onChange={setCurrentPage} />
-					</nav>
-				</div>
-			</div>
-		</main>
-	);
+  const removeFilter = (id) => {
+    setFilters((prev) => prev.filter((f) => f.id !== id));
+  };
+
+  const addFilter = () => {
+    setFilters((prev) => [...prev, createFilter()]);
+  };
+
+  return (
+    <main className="flex flex-1 flex-col overflow-hidden">
+      <header className="flex items-center justify-between p-8 pb-0">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
+          <p className="mt-1 text-gray-600">{description}</p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button className="flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 shadow-sm transition-colors hover:bg-indigo-700">
+            <AddCircleIcon className="text-white" fontSize="medium" />
+            <span className="font-semibold text-white">New Entity</span>
+          </button>
+          <button className="flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 shadow-sm transition-colors hover:bg-indigo-700">
+            <AddCircleIcon className="text-white" fontSize="medium" />
+            <span className="font-semibold text-white">Import from csv</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="flex-1 overflow-y-auto p-8">
+        <div className="overflow-hidden rounded-lg bg-white shadow-md">
+          <div className="border-b border-gray-200 bg-white p-4">
+            <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-3">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700">Operation Type</label>
+                <div className="mb-2 space-y-3">
+                  <select
+                    value={operationType}
+                    onChange={(e) => setOperationType(e.target.value)}
+                    className="h-10 min-w-[140px] rounded-lg border border-gray-300 bg-white px-3 text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                    {OPERATION_TYPES.map((op) => (
+                      <option key={op.value} value={op.value}>
+                        {op.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button className="mt-2 cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700">
+                  <span>Apply</span>
+                </button>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="mb-1 block text-sm font-medium text-gray-700">Filter by Field</label>
+                <div className="mb-2 space-y-3">
+                  {filters.map((filter) => (
+                    <FilterRow
+                      key={filter.id}
+                      filter={filter}
+                      onChange={updateFilter}
+                      onRemove={removeFilter}
+                      columnList={columns.map((col) => {
+                        return {
+                          label: col.charAt(0).toUpperCase() + col.slice(1).toLowerCase(),
+                          value: col,
+                        };
+                      })}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  className="mt-3 flex cursor-pointer items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-700"
+                  onClick={() => addFilter()}>
+                  <AddCircleOutlineIcon fontSize="small" className="text-indigo-600" />
+                  <span>Add Filter</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <TableContainer component={Box}>
+            <Table className="min-w-full text-left text-sm text-gray-600" aria-label="entities table">
+              <TableHead>
+                <TableRow className="bg-gray-50 text-xs text-gray-700 uppercase">
+                  {columns.map((col) => {
+                    return (
+                      <TableCell className="px-6 py-3">
+                        <div className="flex items-center">
+                          {t(col)}
+                          <button className="ml-1 text-gray-400 hover:text-gray-600"></button>
+                        </div>
+                      </TableCell>
+                    );
+                  })}
+
+                  <TableCell className="px-6 py-3 text-right">{t("actions")}</TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {data.map((row, idx) => {
+                  const last = idx === rows.length - 1;
+                  return (
+                    <TableRow key={row.id} hover className={`${last ? "" : "border-b"} bg-white hover:bg-gray-50`}>
+                      {columns.map((col, colIndex) => (
+                        <TableCell
+                          key={col}
+                          component={colIndex === 0 ? "th" : "td"}
+                          scope={colIndex === 0 ? "row" : undefined}
+                          className={`px-6 py-4 ${colIndex === 0 ? "font-medium text-gray-900" : ""}`}>
+                          {renderCell(row, col)}
+                        </TableCell>
+                      ))}
+
+                      <TableCell className="px-6 py-4 text-right">
+                        <button className="cursor-pointer text-indigo-600 hover:underline">Edit</button>
+                        <button className="ml-4 cursor-pointer text-red-600 hover:underline">Delete</button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPage={5}
+            className="p-4"
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            totalItems={32}
+            pageSizeOptions={[5, 10, 20]}
+          />
+        </div>
+      </div>
+    </main>
+  );
 }

@@ -16,6 +16,7 @@ import OrderHistory from "./page/orderHistory/OrderHistory";
 import Product from "./page/product/Product";
 import Qr from "./page/qr/Qr";
 import Search from "./page/search/Search";
+import Wishlist from "./page/wishlist/Wishlist";
 import { requireAuthLoader } from "./requireAuth";
 
 export const rootRoute = createRootRoute({
@@ -124,6 +125,12 @@ export const orderDetailRoute = createRoute({
   component: () => <OrderDetail />,
 });
 
+export const wishlistRoute = createRoute({
+  getParentRoute: () => userLayoutRoute,
+  path: "/wishlist",
+  component: () => <Wishlist />,
+});
+
 const routeTree = rootRoute.addChildren([
   publicLayoutRoute.addChildren([
     landingRoute,
@@ -138,7 +145,7 @@ const routeTree = rootRoute.addChildren([
     contactRoute,
     faqRoute,
   ]),
-  userLayoutRoute.addChildren([accountRoute, orderHistoryRoute, orderDetailRoute]),
+  userLayoutRoute.addChildren([accountRoute, orderHistoryRoute, orderDetailRoute, wishlistRoute]),
 ]);
 
 export const router = createRouter({ routeTree });

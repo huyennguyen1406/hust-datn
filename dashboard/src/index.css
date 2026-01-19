@@ -1,24 +1,60 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/forms";
 
+@theme {
+  /* ===== Brand / Primary (PURPLE) ===== */
+  --color-primary: #7c3aed;
+  --color-primary-hover: #6d28d9;
+  --color-primary-soft: #f3e8ff;
+
+  /* ===== Secondary (optional) ===== */
+  --color-secondary: #f3e9dc;
+  --color-secondary-hover: #eadcc9;
+  --color-secondary-soft: #faf5ef;
+
+  /* ===== Neutral UI (BLACK / WHITE) ===== */
+  --color-background: #ffffff;
+  --color-card: #ffffff;
+  --color-border: #e5e7eb;
+
+  --color-text: #0d121b;
+  --color-text-muted: #6b7280;
+
+  /* ===== Typography ===== */
+
+  /* ===== Radius ===== */
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+}
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  overflow: hidden;
 }
 
-/* map the custom background utility */
-.bg-background-light {
-    background-color: #f6f6f8;
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
 }
 
-.bg-background-dark {
-    background-color: #101622;
+/* Disable Edge / IE password reveal & clear buttons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
 }
 
+/* Disable Chrome autofill credential button (safe) */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
 
-.material-symbols-outlined {
-    font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24;
+.apexcharts-tooltip * {
+  color: #0f172a !important;
+  /* text-gray-900 */
 }

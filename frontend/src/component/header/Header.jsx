@@ -1,4 +1,5 @@
 import React from "react";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -33,6 +34,11 @@ const iconRightSide = [
     link: "/cart",
     icon: <ShoppingCartOutlinedIcon fontSize="medium" className="hover:text-primary-hover transition-colors" />,
     key: "Cart",
+  },
+  {
+    link: "/wishlist",
+    icon: <FavoriteIcon fontSize="medium" className="hover:text-primary-hover transition-colors" />,
+    key: "Wishlist",
   },
 ];
 
