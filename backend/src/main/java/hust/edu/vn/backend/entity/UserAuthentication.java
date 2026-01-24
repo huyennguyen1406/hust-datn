@@ -1,5 +1,6 @@
 package hust.edu.vn.backend.entity;
 
+import hust.edu.vn.backend.constant.SecurityConstant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -9,6 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,9 +23,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
-@Entity(name = "user_authentication")
+@Entity
+@Table(name = "user_authentication")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -53,4 +59,16 @@ public class UserAuthentication {
     @LastModifiedDate
     @Column(name = "modified_at")
     private Instant modifiedAt;
+
+    @PrePersist
+    @PreUpdate
+    private void syncProviderUserId() {
+        if (Objects.equals(SecurityConstant.LOCAL, provider)
+                && providerUserId == null
+                && user != null
+                && user.getId() != null) {
+
+            this.providerUserId = user.getId().toString();
+        }
+    }
 }

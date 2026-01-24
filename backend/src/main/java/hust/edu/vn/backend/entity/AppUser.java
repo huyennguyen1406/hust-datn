@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +26,8 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "app_user")
+@Entity
+@Table(name = "app_user")
 @Getter
 @Setter
 @NoArgsConstructor
