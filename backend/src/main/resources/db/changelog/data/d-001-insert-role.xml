@@ -1,0 +1,27 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+    <changeSet id="d001-insert-role" author="huyennguyen1406">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM role WHERE name IN ('admin','staff','user')
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="role">
+            <column name="name" value="admin"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="staff"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="user"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
+
+

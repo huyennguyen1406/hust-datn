@@ -3,11 +3,11 @@ services:
     image: postgres:15
     container_name: postgres_db
     environment:
-      POSTGRES_USER: postgres   
-      POSTGRES_PASSWORD: postgrespass
+      POSTGRES_DB: nova_shoe
+      POSTGRES_USER:    
+      POSTGRES_PASSWORD: 
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db-init:/docker-entrypoint-initdb.d:ro
     ports:
       - "5432:5432"
 

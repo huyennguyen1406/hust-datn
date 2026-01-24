@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="003-create-user-info" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="app_user"/>
+                </not>
+                <not>
+                    <tableExists tableName="user_authentication"/>
+                </not>
+                <not>
+                    <tableExists tableName="app_user"/>
+                </not>
+                <not>
+                    <tableExists tableName="role"/>
+                </not>
+            </and>
+        </preConditions>
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+        <createTable tableName="app_user">
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="email" type="nvarchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="first_name" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_name" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="image_link" type="nvarchar(2000)"/>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="modified_at" type="timestamp"/>
+
+            <column name="modified_by" type="uuid"/>
+        </createTable>
+        <createTable tableName="user_authentication">
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="provider" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="provider_user_id" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="password" type="nvarchar(255)"/>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="modified_at" type="timestamp"/>
+        </createTable>
+        <createTable tableName="role">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="varchar(45)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="user_role">
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="role_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="user_authentication"
+                baseColumnNames="user_id"
+                referencedTableName="app_user"
+                referencedColumnNames="id"
+                constraintName="fk_user_auth_user"/>
+
+        <addUniqueConstraint
+                tableName="user_authentication"
+                columnNames="provider,provider_user_id"
+                constraintName="uk_provider_user"/>
+
+        <addPrimaryKey
+                tableName="user_role"
+                columnNames="user_id,role_id"
+                constraintName="pk_user_role"/>
+
+        <addForeignKeyConstraint
+                baseTableName="user_role"
+                baseColumnNames="user_id"
+                referencedTableName="app_user"
+                referencedColumnNames="id"
+                constraintName="fk_user_role_user"/>
+
+        <addForeignKeyConstraint
+                baseTableName="user_role"
+                baseColumnNames="role_id"
+                referencedTableName="role"
+                referencedColumnNames="id"
+                constraintName="fk_user_role_role"/>
+
+    </changeSet>
+
+</databaseChangeLog>
