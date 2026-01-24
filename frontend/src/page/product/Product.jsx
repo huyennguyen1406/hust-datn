@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link } from "@tanstack/react-router";
 import Pagination from "../../component/pagination/Pagination";
 import StarRating from "../../component/rating/StarRating";
@@ -86,6 +88,8 @@ const Product = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [commentPage, setCommentPage] = useState(1);
   const [commentPageSize, setCommentPageSize] = useState(5);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
   return (
     <div className="mx-auto max-w-7xl py-4 sm:px-6 md:py-8">
       <div className="flex flex-wrap gap-2 p-4">
@@ -110,7 +114,20 @@ const Product = () => {
             <Link className="text-primary text-lg font-medium" to={`/search?brand=${mockData.brand.id}`}>
               {mockData.brand.name}
             </Link>
-            <h1 className="mt-1 text-4xl font-black sm:text-5xl">{mockData.productName}</h1>
+            <div className="mt-1 flex items-center gap-3">
+              <h1 className="text-4xl font-black sm:text-5xl">{mockData.productName}</h1>
+
+              <button
+                onClick={() => setIsWishlisted((prev) => !prev)}
+                className="group flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100"
+                aria-label="Toggle wishlist">
+                {isWishlisted ? (
+                  <FavoriteIcon className="text-red-500 transition-transform group-hover:scale-110" />
+                ) : (
+                  <FavoriteBorderIcon className="text-gray-500 transition-transform group-hover:scale-110 group-hover:text-red-500" />
+                )}
+              </button>
+            </div>
             <div className="mt-4 flex items-baseline gap-4">
               {mockData.isSale ? (
                 <>
