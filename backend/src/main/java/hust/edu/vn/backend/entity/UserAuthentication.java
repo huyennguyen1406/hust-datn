@@ -1,6 +1,6 @@
 package hust.edu.vn.backend.entity;
 
-import hust.edu.vn.backend.constant.SecurityConstant;
+import hust.edu.vn.backend.security.constant.SecurityConstant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

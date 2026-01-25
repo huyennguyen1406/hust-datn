@@ -1,4 +1,4 @@
-package hust.edu.vn.backend.config;
+package hust.edu.vn.backend.entity;
 
 import hust.edu.vn.backend.utility.ContextUtility;
 import org.springframework.context.annotation.Bean;

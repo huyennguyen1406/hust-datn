@@ -1,35 +1,36 @@
-package hust.edu.vn.backend.config;
+package hust.edu.vn.backend.security.service;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.server.PathContainer;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
 
 import java.util.List;
 
-@Component
-public class AdminApiMatcher implements RequestMatcher {
-    private static final PathPatternParser PARSER = new PathPatternParser();
+public abstract class AbstractApiMatcher implements RequestMatcher {
+    protected static final PathPatternParser PARSER = new PathPatternParser();
 
-    private static final List<String> ADMIN_API_PATHS = List.of("/api/v1/admin/master-data");
+    private List<PathPattern> patterns;
 
-    private List<PathPattern> adminPattern;
+    /**
+     * Subclasses only need to provide their API paths
+     */
+    protected abstract List<String> getApiPaths();
 
     @PostConstruct
     protected void init() {
-        adminPattern = ADMIN_API_PATHS.stream()
+        patterns = getApiPaths().stream()
                 .map(PARSER::parse)
                 .toList();
     }
-
 
     @Override
     public boolean matches(HttpServletRequest request) {
         String requestPath = request.getRequestURI();
         String contextPath = request.getContextPath();
+
         if (contextPath != null && !contextPath.isEmpty() && requestPath.startsWith(contextPath)) {
             requestPath = requestPath.substring(contextPath.length());
             if (requestPath.isEmpty()) {
@@ -39,7 +40,7 @@ public class AdminApiMatcher implements RequestMatcher {
 
         PathContainer pathContainer = PathContainer.parsePath(requestPath);
 
-        for (PathPattern pattern : adminPattern) {
+        for (PathPattern pattern : patterns) {
             if (pattern.matches(pathContainer)) {
                 return true;
             }

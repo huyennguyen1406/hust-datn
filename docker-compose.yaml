@@ -10,7 +10,18 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+  redis:
+    image: redis:8.4.0-alpine
+    container_name: redis_local
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
 
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
     driver: local

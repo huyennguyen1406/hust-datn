@@ -1,4 +1,4 @@
-package hust.edu.vn.backend.dto.request;
+package hust.edu.vn.backend.dto.admin.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

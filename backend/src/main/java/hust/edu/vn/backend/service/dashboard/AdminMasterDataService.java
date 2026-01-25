@@ -1,8 +1,8 @@
-package hust.edu.vn.backend.service.admin;
+package hust.edu.vn.backend.service.dashboard;
 
-import hust.edu.vn.backend.constant.SecurityConstant;
-import hust.edu.vn.backend.dto.common.Message;
-import hust.edu.vn.backend.dto.request.CreateAdminRequest;
+import hust.edu.vn.backend.security.constant.SecurityConstant;
+import hust.edu.vn.backend.dto.common.response.Message;
+import hust.edu.vn.backend.dto.admin.request.CreateAdminRequest;
 import hust.edu.vn.backend.entity.AppUser;
 import hust.edu.vn.backend.entity.Role;
 import hust.edu.vn.backend.entity.UserAuthentication;
@@ -26,12 +26,12 @@ public class AdminMasterDataService {
     private final PasswordEncoder passwordEncoder;
 
     public Message createAdmin(CreateAdminRequest request) {
-        boolean existAdmin = appUserRepository.existsByRoleName("admin");
+        boolean existAdmin = appUserRepository.existsByRoleName("dashboard");
         if (existAdmin) {
             throw ApiStatusException.badRequest("Admin user already exists", "ERR_ADMIN_EXISTS");
         }
 
-        Role adminRole = roleRepository.findByName("admin")
+        Role adminRole = roleRepository.findByName("dashboard")
                 .orElseThrow(() -> ApiStatusException.internalServerError("Admin role not found", "ERR_ROLE_NOT_FOUND"));
 
         AppUser appUser = new AppUser()

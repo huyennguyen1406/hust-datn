@@ -1,8 +1,8 @@
-package hust.edu.vn.backend.controller.admin;
+package hust.edu.vn.backend.controller.dashboard;
 
-import hust.edu.vn.backend.dto.common.Message;
-import hust.edu.vn.backend.dto.request.CreateAdminRequest;
-import hust.edu.vn.backend.service.admin.AdminMasterDataService;
+import hust.edu.vn.backend.dto.common.response.Message;
+import hust.edu.vn.backend.dto.admin.request.CreateAdminRequest;
+import hust.edu.vn.backend.service.dashboard.AdminMasterDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/admin/master-data")
+@RequestMapping("/api/v1/dashboard/master-data")
 @RequiredArgsConstructor
 public class AdminMasterDataController {
     private final AdminMasterDataService adminMasterDataService;
