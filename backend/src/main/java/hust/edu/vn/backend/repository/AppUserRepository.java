@@ -31,5 +31,16 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
             @Param("roleNames") Collection<String> roleNames
     );
 
-    Optional<AppUser> findByEmail(String email);
+    @Query("""
+        SELECT u
+        FROM AppUser u
+        JOIN FETCH u.roles r
+        WHERE u.id = :userId
+    """)
+    Optional<AppUser> findByIdWithRole(@Param("userId") UUID userId);
+
+    Optional<AppUser> findByEmailAndRoles_NameIn(
+            String email,
+            Collection<String> roleNames
+    );
 }

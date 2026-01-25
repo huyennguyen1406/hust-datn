@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface EncryptionService {
     JwtData createTokenWithUserInfo(AppUser user);
     UUID verifyAccessToken(String accessToken);
+    UUID verifyRefreshToken(String refreshToken);
 }

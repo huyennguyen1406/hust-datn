@@ -1,6 +1,7 @@
 package hust.edu.vn.backend.security.config;
 
 import hust.edu.vn.backend.security.filter.DashboardFilter;
+import hust.edu.vn.backend.security.filter.LoginEntryPoint;
 import hust.edu.vn.backend.security.service.DashboardApiMatcher;
 import hust.edu.vn.backend.security.service.PublicApiMatcher;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -64,7 +65,7 @@ public class SecurityBean {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain publicSecurityChain(HttpSecurity http, PublicApiMatcher publicApiMatcher,
+    public SecurityFilterChain publicSecurityChain(HttpSecurity http, PublicApiMatcher publicApiMatcher, LoginEntryPoint loginEntryPoint,
                                                    @Qualifier("corsAllOrigin") CorsConfigurationSource source) {
 
         http.securityMatcher(publicApiMatcher)
@@ -72,6 +73,9 @@ public class SecurityBean {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(loginEntryPoint)
+                )
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
         return http.build();
@@ -80,6 +84,7 @@ public class SecurityBean {
     @Bean
     @Order(2)
     public SecurityFilterChain dashboardSecurityFilterChain(HttpSecurity http, DashboardApiMatcher dashboardApiMatcher, DashboardFilter dashboardFilter,
+                                                            LoginEntryPoint loginEntryPoint,
                                                             @Qualifier("corsAllOrigin") CorsConfigurationSource source) {
 
         http.securityMatcher(dashboardApiMatcher)
@@ -89,7 +94,10 @@ public class SecurityBean {
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(dashboardFilter, ExceptionTranslationFilter.class);
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(loginEntryPoint)
+                )
+                .addFilterAfter(dashboardFilter, ExceptionTranslationFilter.class);
         return http.build();
     }
 

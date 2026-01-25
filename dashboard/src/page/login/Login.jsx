@@ -1,14 +1,28 @@
 // src/components/Login.jsx
 import React from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import GppGoodOutlinedIcon from "@mui/icons-material/GppGoodOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { login } from "../../api/authApi";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
   const navigate = useNavigate(); // <-- call hook at top-level
+
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      localStorage.setItem("access_token", data.accessToken);
+      localStorage.setItem("refresh_token", data.refreshToken);
+      navigate({ to: "/products" });
+    },
+  });
 
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -16,8 +30,9 @@ export default function Login() {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("auth_token", "auth_token");
-    navigate({ to: "/products" });
+    const email = emailRef.current?.value;
+    const password = passwordRef.current?.value;
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -49,8 +64,9 @@ export default function Login() {
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-300">Username</label>
                   <input
-                    type="text"
-                    placeholder="Enter your username"
+                    ref={emailRef}
+                    type="email"
+                    placeholder="Enter your email"
                     className="w-full rounded-lg border border-[#19303a] bg-[#071928] px-4 py-3 text-slate-100 placeholder:text-slate-500 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                   />
                 </div>
@@ -59,6 +75,7 @@ export default function Login() {
                   <label className="mb-2 block text-sm font-medium text-slate-300">Password</label>
                   <div className="relative">
                     <input
+                      ref={passwordRef}
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       className="w-full rounded-lg border border-[#19303a] bg-[#071928] px-4 py-3 pr-12 text-slate-100 placeholder:text-slate-500 focus:ring-2 focus:ring-blue-600 focus:outline-none"
@@ -68,10 +85,15 @@ export default function Login() {
                       aria-label={showPassword ? "Hide password" : "Show password"}
                       className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400"
                       onClick={() => togglePassword()}>
-                      {showPassword ? <VisibilityOffIcon fontSize="large" /> : <VisibilityIcon fontSize="large" />}
+                      {showPassword ? <VisibilityOffIcon fontSize="medium" /> : <VisibilityIcon fontSize="medium" />}
                     </button>
                   </div>
                 </div>
+                {loginMutation.isError && (
+                  <p className="text-sm text-red-500">
+                    {loginMutation.error?.response?.data?.detail || "Login failed. Please try again."}
+                  </p>
+                )}
 
                 <button
                   type="submit"

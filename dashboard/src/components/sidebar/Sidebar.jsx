@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import FolderIcon from "@mui/icons-material/Folder";
 import IncompleteCircleIcon from "@mui/icons-material/IncompleteCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import LogoutIcon from "@mui/icons-material/Logout";
-import TableRowsIcon from "@mui/icons-material/TableRows";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
+import "../../api/authApi";
+import { logout } from "../../api/authApi";
+import { getUserInfo } from "../../api/userApi";
 import { useI18n } from "../../i18n/useI18n";
 
 export default function Sidebar() {
@@ -112,10 +114,25 @@ export default function Sidebar() {
     },
   ];
 
+  const { data: user, isLoading } = useQuery({
+    queryKey: ["user-info"],
+    queryFn: getUserInfo,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSettled: () => {
+      // Always clear tokens (even if API fails)
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      navigate({ to: "/" });
+    },
+  });
+
   const handleOnLogout = (e) => {
     e.preventDefault();
-    localStorage.removeItem("auth_token");
-    navigate({ to: "/" });
+    logoutMutation.mutate();
   };
 
   return (
@@ -175,15 +192,24 @@ export default function Sidebar() {
 
       <div className="border-t border-gray-200 px-4 py-4">
         <div className="flex items-center gap-3">
-          <img
-            alt="User avatar"
-            className="h-10 w-10 rounded-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa0Pw-zeDBa5teSCOmHBpM-kchB9C1W9lE4HpMTnONGDCb8wpaWtjrxwnwXoc53zXo-RaGz5e6s2nTHxSVExlOGr9CCVvckNlLFIxY9u5BW5iRAzmMKQG1MD55nO2-SEFCmKFA43Z3sn9ybeFTGAwYxldxo41MFDdL4_sxd45jOTxaf70Ab32xCPJriZcyZi37T2tgV9JuF6Kd1SAGvk35bOFEqg_w1kh-EeM-XcjU_EADfblRZQX7RMpgPJ-EjZfXaXL5Ibxtf6CR"
-          />
-          <div>
-            <p className="text-sm font-semibold text-gray-900">Alex Johnson</p>
-            <p className="text-xs text-gray-500">alex.j@example.com</p>
-          </div>
+          {isLoading ? (
+            <IncompleteCircleIcon fontSize="large" className="text-gray-400" />
+          ) : (
+            <>
+              <img
+                alt="User avatar"
+                className="h-10 w-10 rounded-full object-cover"
+                src={
+                  user?.imageLink ??
+                  "https://lh3.googleusercontent.com/aida-public/AB6AXuAa0Pw-zeDBa5teSCOmHBpM-kchB9C1W9lE4HpMTnONGDCb8wpaWtjrxwnwXoc53zXo-RaGz5e6s2nTHxSVExlOGr9CCVvckNlLFIxY9u5BW5iRAzmMKQG1MD55nO2-SEFCmKFA43Z3sn9ybeFTGAwYxldxo41MFDdL4_sxd45jOTxaf70Ab32xCPJriZcyZi37T2tgV9JuF6Kd1SAGvk35bOFEqg_w1kh-EeM-XcjU_EADfblRZQX7RMpgPJ-EjZfXaXL5Ibxtf6CR"
+                }
+              />
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{`${user?.firstName} ${user?.lastName}`}</p>
+                <p className="text-xs text-gray-500">{user?.email}</p>
+              </div>
+            </>
+          )}
           <button
             className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-transparent text-gray-700 transition-colors hover:bg-indigo-600 hover:text-white focus:outline-none"
             onClick={handleOnLogout}>

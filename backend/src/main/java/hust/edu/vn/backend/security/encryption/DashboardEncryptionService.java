@@ -9,6 +9,7 @@ import hust.edu.vn.backend.security.config.DashboardSecurityProperties;
 import hust.edu.vn.backend.security.constant.SecurityConstant;
 import hust.edu.vn.backend.security.dto.JwtData;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -27,6 +28,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
+
+import static hust.edu.vn.backend.security.constant.SecurityConstant.ERROR_CODE_JWT_EXPIRED;
 
 
 @Service
@@ -61,7 +64,7 @@ public class DashboardEncryptionService implements EncryptionService {
 
     @Override
     public JwtData createTokenWithUserInfo(AppUser user) {
-        return new JwtData(generateAccessToken(user), generateRefreshToken(user));
+        return new JwtData(generateAccessToken(user), generateRefreshToken(user), dashboardSecurityProperties.getAccessTokenExpiration(), dashboardSecurityProperties.getRefreshTokenExpiration());
     }
 
 
@@ -73,7 +76,8 @@ public class DashboardEncryptionService implements EncryptionService {
                 .subject(user.getId().toString())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(expireTime))
-                .audience().add("nova-admin-site").and()
+                .issuer(dashboardSecurityProperties.getIssuer())
+                .audience().add(dashboardSecurityProperties.getAudience()).and()
                 .claim(TYPE, REFRESH_TOKEN)
                 .signWith(secretKey)
                 .compact();
@@ -81,14 +85,15 @@ public class DashboardEncryptionService implements EncryptionService {
 
     private String generateAccessToken(AppUser user){
         Instant now = Instant.now();
-        Instant expireTime = now.plus(dashboardSecurityProperties.getRefreshTokenExpiration(), ChronoUnit.SECONDS);
+        Instant expireTime = now.plus(dashboardSecurityProperties.getAccessTokenExpiration(), ChronoUnit.SECONDS);
 
         return Jwts.builder()
                 // standard claims
                 .subject(user.getId().toString())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(expireTime))
-                .audience().add("nova-admin-site").and()
+                .issuer(dashboardSecurityProperties.getIssuer())
+                .audience().add(dashboardSecurityProperties.getAudience()).and()
                 .claim("email", user.getEmail())
                 .claim("role", user.getRoles().stream().map(Role::getName).toList())
                 .claim("firstName", user.getFirstName())
@@ -100,31 +105,47 @@ public class DashboardEncryptionService implements EncryptionService {
 
     @Override
     public UUID verifyAccessToken(String accessToken) {
+        return getUuid(accessToken, ACCESS_TOKEN);
+    }
+
+    @Override
+    public UUID verifyRefreshToken(String refreshToken) {
+        return getUuid(refreshToken, REFRESH_TOKEN);
+    }
+
+    private UUID getUuid(String jwtToken, String tokenType) {
         JwtParser parser = Jwts.parser()
                 .verifyWith(secretKey)
                 .build();
         Jws<Claims> jws;
         try {
-            jws = parser.parseSignedClaims(accessToken);
+            jws = parser.parseSignedClaims(jwtToken);
+        } catch (ExpiredJwtException expiredException) {
+            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, ERROR_CODE_JWT_EXPIRED);
         } catch (Exception ex) {
             log.warn(ex.getMessage());
-            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, SecurityConstant.ERROR_CODE_BAD_CREDENTIAL);
+            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, "ERR_INVALID_JWT");
         }
 
         String alg = jws.getHeader().getAlgorithm();
         if (!Objects.equals(alg, "HS512")) {
-            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, SecurityConstant.ERROR_CODE_BAD_CREDENTIAL);
+            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, "ERR_INVALID_JWT_ALGORITHM");
         }
 
         Claims claims = jws.getPayload();
-        Date exp = claims.getExpiration();
-        if (Objects.isNull(exp) || exp.before(new Date())) {
-            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, SecurityConstant.ERROR_CODE_BAD_CREDENTIAL);
-        }
 
         String type = claims.get(TYPE, String.class);
-        if (!Objects.equals(type, ACCESS_TOKEN)) {
-            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, SecurityConstant.ERROR_CODE_BAD_CREDENTIAL);
+        if (!Objects.equals(type, tokenType)) {
+            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, "ERR_JWT_INVALID_TYPE");
+        }
+
+        String issuer = claims.getIssuer();
+        if (!Objects.equals(issuer, dashboardSecurityProperties.getIssuer())) {
+            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, "ERR_JWT_INVALID_ISS");
+        }
+
+        if (!claims.getAudience().contains(dashboardSecurityProperties.getAudience())) {
+            throw ApiStatusException.unauthorized(SecurityConstant.ERROR_MESSAGE_BAD_CREDENTIAL, "ERR_JWT_INVALID_AUD");
         }
 
         String subject = claims.getSubject();

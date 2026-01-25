@@ -16,6 +16,6 @@ public class SecurityConstant {
     public static final String ERROR_CODE_EMAIL_PASSWORD_INVALID = "ERR-EMAIL-PASSWORD-INVALID";
     public static final String ERROR_CODE_AUTHENTICATION_NOT_FOUND = "ERR-AUTHENTICATION-NOT-FOUND";
     public static final String ERROR_CODE_USER_NOT_FOUND = "ERR-USER-NOT-FOUND";
-    public static final String ERROR_CODE_BAD_CREDENTIAL = "ERR-BAD-CREDENTIAL";
+    public static final String ERROR_CODE_JWT_EXPIRED = "ERR-JWT-EXPIRED";
     public static final String ERROR_CODE_INVALID_SECURITY_SETUP = "ERR-INVALID-SECURITY-SETUP";
 }

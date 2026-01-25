@@ -1,10 +1,7 @@
 // src/RequireAuth.jsx
 import React, { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
-
-export function isAuthenticated() {
-  return !!localStorage.getItem("auth_token");
-}
+import { isAuthenticated } from "./utility/isAuthenticated";
 
 export default function RequireAuth({ children }) {
   const navigate = useNavigate();
