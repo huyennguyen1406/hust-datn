@@ -95,7 +95,11 @@ export default function Management({
           </button>
           <button className="flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 shadow-sm transition-colors hover:bg-indigo-700">
             <AddCircleIcon className="text-white" fontSize="medium" />
-            <span className="font-semibold text-white">Import from csv</span>
+            <span className="font-semibold text-white">Download template</span>
+          </button>
+          <button className="flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 shadow-sm transition-colors hover:bg-indigo-700">
+            <AddCircleIcon className="text-white" fontSize="medium" />
+            <span className="font-semibold text-white">Import from CSV</span>
           </button>
         </div>
       </header>
