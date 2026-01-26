@@ -27,6 +27,7 @@ export const messages = {
     banners: "Banners",
     sales: "Sales",
     vouchers: "Vouchers",
+    brands: "Brands",
 
     // User Data Sidebar Items
     users: "Users",
@@ -74,6 +75,7 @@ export const messages = {
     shop_contact: "Liên hệ cửa hàng",
 
     // Management Data Sidebar Items
+    brands: "Nhãn hàng",
     categories: "Phân loại",
     products: "Sản phẩm",
     banners: "Banner",

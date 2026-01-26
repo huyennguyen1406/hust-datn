@@ -51,23 +51,23 @@ export default function Sidebar() {
       children: [
         { label: "districts", to: "/districts", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
         { label: "provinces", to: "/provinces", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
-        {
-          label: "delivery_methods",
-          to: "/delivery-methods",
-          icon: <FolderIcon fontSize="small" className="text-gray-500" />,
-        },
-        {
-          label: "payment_methods",
-          to: "/payment-methods",
-          icon: <FolderIcon fontSize="small" className="text-gray-500" />,
-        },
-        { label: "faqs", to: "/faqs", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
-        { label: "about_us", to: "/about-us", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
-        {
-          label: "shop_contact",
-          to: "/shop-contacts",
-          icon: <FolderIcon fontSize="small" className="text-gray-500" />,
-        },
+        // {
+        //   label: "delivery_methods",
+        //   to: "/delivery-methods",
+        //   icon: <FolderIcon fontSize="small" className="text-gray-500" />,
+        // },
+        // {
+        //   label: "payment_methods",
+        //   to: "/payment-methods",
+        //   icon: <FolderIcon fontSize="small" className="text-gray-500" />,
+        // },
+        // { label: "faqs", to: "/faqs", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
+        // { label: "about_us", to: "/about-us", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
+        // {
+        //   label: "shop_contact",
+        //   to: "/shop-contacts",
+        //   icon: <FolderIcon fontSize="small" className="text-gray-500" />,
+        // },
       ],
     },
     {
@@ -76,10 +76,11 @@ export default function Sidebar() {
       stateHook: setManagementOpen,
       paths: managementPaths,
       children: [
+        { label: "brands", to: "/brands", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
         { label: "categories", to: "/categories", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
         { label: "products", to: "/products", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
-        { label: "banners", to: "/banners", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
-        { label: "sales", to: "/sale-offers", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
+        // { label: "banners", to: "/banners", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
+        // { label: "sales", to: "/sale-offers", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
         { label: "vouchers", to: "/vouchers", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
       ],
     },
@@ -90,8 +91,8 @@ export default function Sidebar() {
       paths: userPaths,
       children: [
         { label: "users", to: "/users", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
-        { label: "orders", to: "/orders", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
-        { label: "reviews", to: "/reviews", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
+        // { label: "orders", to: "/orders", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
+        // { label: "reviews", to: "/reviews", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
       ],
     },
     {
@@ -100,11 +101,11 @@ export default function Sidebar() {
       stateHook: setStatisticOpen,
       paths: statisticPaths,
       children: [
-        {
-          label: "user_statistic",
-          to: "/user-statistic",
-          icon: <FolderIcon fontSize="small" className="text-gray-500" />,
-        },
+        // {
+        //   label: "user_statistic",
+        //   to: "/user-statistic",
+        //   icon: <FolderIcon fontSize="small" className="text-gray-500" />,
+        // },
         {
           label: "sales_statistic",
           to: "/sales-statistic",

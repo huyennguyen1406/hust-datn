@@ -59,44 +59,50 @@ export const provincesRoute = createRoute({
   ),
 });
 
-export const deliveryMethodsRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/delivery-methods",
-  component: () => <Management title={"Delivery Methods"} description={"Manage all delivery methods"} />,
-});
+// export const deliveryMethodsRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/delivery-methods",
+//   component: () => <Management title={"Delivery Methods"} description={"Manage all delivery methods"} />,
+// });
 
-export const paymentMethodsRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/payment-methods",
-  component: () => (
-    <Management
-      title={"Payment Methods"}
-      description={"Manage all payment methods"}
-      columns={MOCK_DATA_PAYMENT_METHOD.columns}
-      data={MOCK_DATA_PAYMENT_METHOD.data}
-    />
-  ),
-});
+// export const paymentMethodsRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/payment-methods",
+//   component: () => (
+//     <Management
+//       title={"Payment Methods"}
+//       description={"Manage all payment methods"}
+//       columns={MOCK_DATA_PAYMENT_METHOD.columns}
+//       data={MOCK_DATA_PAYMENT_METHOD.data}
+//     />
+//   ),
+// });
 
-export const faqsRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/faqs",
-  component: () => <Management title={"Faqs"} description={"Manage all faqs"} />,
-});
+// export const faqsRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/faqs",
+//   component: () => <Management title={"Faqs"} description={"Manage all faqs"} />,
+// });
 
-export const aboutUsRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/about-us",
-  component: () => <Management title={"About Us"} description={"Manage about us"} />,
-});
+// export const aboutUsRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/about-us",
+//   component: () => <Management title={"About Us"} description={"Manage about us"} />,
+// });
 
-export const shopContactsRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/shop-contacts",
-  component: () => <Management title={"Shop Contacts"} description={"Manage all shop contacts"} />,
-});
+// export const shopContactsRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/shop-contacts",
+//   component: () => <Management title={"Shop Contacts"} description={"Manage all shop contacts"} />,
+// });
 
 // Management data routes
+
+export const brandsRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/brands",
+  component: () => <Management title={"Brands"} description={"Manage all brands"} />,
+});
 
 export const categoriesRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
@@ -110,17 +116,17 @@ export const productsRoute = createRoute({
   component: () => <Management title={"Products"} description={"Manage all products"} />,
 });
 
-export const bannersRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/banners",
-  component: () => <Management title={"Banners"} description={"Manage all banners"} />,
-});
+// export const bannersRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/banners",
+//   component: () => <Management title={"Banners"} description={"Manage all banners"} />,
+// });
 
-export const saleOffersRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/sale-offers",
-  component: () => <Management title={"Sale Offers"} description={"Manage all sale offers"} />,
-});
+// export const saleOffersRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/sale-offers",
+//   component: () => <Management title={"Sale Offers"} description={"Manage all sale offers"} />,
+// });
 
 export const vouchersRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
@@ -136,24 +142,24 @@ export const usersRoute = createRoute({
   component: () => <Management title={"Users"} description={"Manage all users"} />,
 });
 
-export const ordersRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/orders",
-  component: () => <Management title={"Orders"} description={"Manage all orders"} />,
-});
+// export const ordersRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/orders",
+//   component: () => <Management title={"Orders"} description={"Manage all orders"} />,
+// });
 
-export const reviewsRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/reviews",
-  component: () => <Management title={"Reviews"} description={"Manage all reviews"} />,
-});
+// export const reviewsRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/reviews",
+//   component: () => <Management title={"Reviews"} description={"Manage all reviews"} />,
+// });
 
 // Statistic routes
-export const userStatisticRoute = createRoute({
-  getParentRoute: () => appLayoutRoute,
-  path: "/user-statistic",
-  component: () => <Statistic />,
-});
+// export const userStatisticRoute = createRoute({
+//   getParentRoute: () => appLayoutRoute,
+//   path: "/user-statistic",
+//   component: () => <Statistic />,
+// });
 
 export const salesStatisticRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
@@ -166,20 +172,21 @@ const routeTree = rootRoute.addChildren([
   appLayoutRoute.addChildren([
     districtsRoute,
     provincesRoute,
-    deliveryMethodsRoute,
-    paymentMethodsRoute,
-    faqsRoute,
-    aboutUsRoute,
-    shopContactsRoute,
+    // deliveryMethodsRoute,
+    // paymentMethodsRoute,
+    // faqsRoute,
+    // aboutUsRoute,
+    // shopContactsRoute,
+    brandsRoute,
     categoriesRoute,
     productsRoute,
-    bannersRoute,
-    saleOffersRoute,
+    // bannersRoute,
+    // saleOffersRoute,
     vouchersRoute,
     usersRoute,
-    ordersRoute,
-    reviewsRoute,
-    userStatisticRoute,
+    // ordersRoute,
+    // reviewsRoute,
+    // userStatisticRoute,
     salesStatisticRoute,
   ]),
 ]);

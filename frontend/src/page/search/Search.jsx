@@ -247,6 +247,7 @@ const Search = () => {
                 <select
                   id="size"
                   className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none"
+                  value={size}
                   onChange={onSizeChange}>
                   <option value={null}>Any Size</option>
                   {sizeMock.map((item) => (
