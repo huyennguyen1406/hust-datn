@@ -153,16 +153,18 @@ const Search = () => {
   const search = useSearch({ from: searchRoute.id });
   const category = search.category ?? "";
   const brand = search.brand ?? "";
+  const size = search.size ?? "";
+  const color = search.color ?? "";
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
-  const [colorValue, setColorValue] = useState(null);
 
   const onCategoryChange = (e) => {
     navigate({
       search: (prev) => ({
         ...prev,
         category: e.target.value || undefined,
+        page: undefined,
       }),
     });
   };
@@ -172,6 +174,29 @@ const Search = () => {
       search: (prev) => ({
         ...prev,
         brand: e.target.value || undefined,
+        page: undefined,
+      }),
+    });
+  };
+
+  const onSizeChange = (e) => {
+    const value = e.target.value;
+
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        size: value ? Number(value) : undefined,
+        page: undefined,
+      }),
+    });
+  };
+
+  const onColorChange = (value) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        color: value || undefined,
+        page: undefined,
       }),
     });
   };
@@ -221,7 +246,8 @@ const Search = () => {
                 </label>
                 <select
                   id="size"
-                  className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
+                  className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none"
+                  onChange={onSizeChange}>
                   <option value={null}>Any Size</option>
                   {sizeMock.map((item) => (
                     <option value={item} key={`size-${item}`}>
@@ -239,8 +265,8 @@ const Search = () => {
                 <select
                   id="brand"
                   value={brand}
-                  className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
                   onChange={(e) => onBrandChange(e)}
+                  className="focus:ring-primary/50 h-11 w-full rounded-lg border px-3 transition-colors focus:ring-2 focus:outline-none">
                   <option value={""}>All Brands</option>
                   {brandMock.map((item) => (
                     <option value={item.value} key={`brand-${item.value}`}>
@@ -254,16 +280,19 @@ const Search = () => {
               <div className="flex flex-col gap-2">
                 <label className="mb-1 block text-base font-medium">Search by color</label>
                 <div className="grid grid-cols-8 gap-3 pt-1 lg:grid-cols-12">
-                  {COLORS.map((color) => {
-                    const isActive = colorValue === color.value;
+                  {COLORS.map((c) => {
+                    const isActive = color === c.value;
+
                     return (
                       <button
-                        key={color.value}
+                        key={c.value}
                         type="button"
-                        aria-label={color.name}
-                        onClick={() => setColorValue(color.value)}
-                        className={`h-7 w-7 cursor-pointer rounded-sm border transition-all ${isActive ? "ring-primary ring-2 ring-offset-2" : ""} `}
-                        style={{ backgroundColor: color.hex }}
+                        aria-label={c.name}
+                        onClick={() => onColorChange(isActive ? undefined : c.value)}
+                        className={`h-7 w-7 rounded-sm border transition-all ${
+                          isActive ? "ring-primary ring-2 ring-offset-2" : ""
+                        }`}
+                        style={{ backgroundColor: c.hex }}
                       />
                     );
                   })}
