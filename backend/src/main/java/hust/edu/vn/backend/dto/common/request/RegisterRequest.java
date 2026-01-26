@@ -16,10 +16,10 @@ import lombok.experimental.Accessors;
 public class RegisterRequest {
     @NotBlank(message = "First name is required")
     private String firstName;
-    @NotBlank(message = "First name is required")
+    @NotBlank(message = "Last name is required")
     private String lastName;
     @Email(message = "Email must be a valid email address")
     private String email;
-    @NotBlank(message = "First name is required")
+    @NotBlank(message = "Password is required")
     private String password;
 }

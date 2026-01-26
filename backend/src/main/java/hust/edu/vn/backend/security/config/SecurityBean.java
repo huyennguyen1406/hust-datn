@@ -2,8 +2,10 @@ package hust.edu.vn.backend.security.config;
 
 import hust.edu.vn.backend.security.filter.DashboardFilter;
 import hust.edu.vn.backend.security.filter.LoginEntryPoint;
+import hust.edu.vn.backend.security.filter.StoreFilter;
 import hust.edu.vn.backend.security.service.DashboardApiMatcher;
 import hust.edu.vn.backend.security.service.PublicApiMatcher;
+import hust.edu.vn.backend.security.service.StoreApiMatcher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("DuplicatedCode")
 @Configuration
 public class SecurityBean {
     @Bean
@@ -50,6 +53,13 @@ public class SecurityBean {
         return reg;
     }
 
+    @Bean
+    public FilterRegistrationBean<StoreFilter> disableStoreFilterRegistration(StoreFilter filter) {
+        FilterRegistrationBean<StoreFilter> reg = new FilterRegistrationBean<>(filter);
+        reg.setEnabled(false);
+        return reg;
+    }
+
     @Bean("corsAllOrigin")
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -65,7 +75,9 @@ public class SecurityBean {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain publicSecurityChain(HttpSecurity http, PublicApiMatcher publicApiMatcher, LoginEntryPoint loginEntryPoint,
+    public SecurityFilterChain publicSecurityChain(HttpSecurity http,
+                                                   PublicApiMatcher publicApiMatcher,
+                                                   LoginEntryPoint loginEntryPoint,
                                                    @Qualifier("corsAllOrigin") CorsConfigurationSource source) {
 
         http.securityMatcher(publicApiMatcher)
@@ -83,7 +95,9 @@ public class SecurityBean {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain dashboardSecurityFilterChain(HttpSecurity http, DashboardApiMatcher dashboardApiMatcher, DashboardFilter dashboardFilter,
+    public SecurityFilterChain dashboardSecurityFilterChain(HttpSecurity http,
+                                                            DashboardApiMatcher dashboardApiMatcher,
+                                                            DashboardFilter dashboardFilter,
                                                             LoginEntryPoint loginEntryPoint,
                                                             @Qualifier("corsAllOrigin") CorsConfigurationSource source) {
 
@@ -101,21 +115,25 @@ public class SecurityBean {
         return http.build();
     }
 
-//    @Bean
-//    @Order(3)
-//    public SecurityFilterChain apiSecurityChain(HttpSecurity http,
-//                                                UserManager userManager,
-//                                                UserFilter userFilter,
-//                                                @Qualifier("corsAllOrigin") CorsConfigurationSource source) throws Exception {
-//        http.csrf(AbstractHttpConfigurer::disable)
-//                .cors(cors -> cors.configurationSource(source))
-//                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().authenticated()
-//                )
-//                .authenticationManager(userManager)
-//                .addFilterBefore(userFilter, ExceptionTranslationFilter.class);
-//
-//        return http.build();
-//    }
+    @Bean
+    @Order(3)
+    public SecurityFilterChain storeSecurityFilterChain(HttpSecurity http,
+                                                            StoreApiMatcher storeApiMatcher,
+                                                            StoreFilter storeFilter,
+                                                            LoginEntryPoint loginEntryPoint,
+                                                            @Qualifier("corsAllOrigin") CorsConfigurationSource source) {
+
+        http.securityMatcher(storeApiMatcher)
+                .cors(cors -> cors.configurationSource(source))
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(loginEntryPoint)
+                )
+                .addFilterAfter(storeFilter, ExceptionTranslationFilter.class);
+        return http.build();
+    }
 }

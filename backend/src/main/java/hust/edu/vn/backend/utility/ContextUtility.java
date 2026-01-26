@@ -24,9 +24,13 @@ public class ContextUtility {
 
         if (principal instanceof UserPrincipal userPrincipal){
             return userPrincipal.getId();
-        } else {
-            throw ApiStatusException.internalServerError(ERROR_MESSAGE_INVALID_SECURITY_SETUP, "PRINCIPAL_NOT_USER");
         }
+
+        if ("anonymousUser".equals(principal)){
+            return SYSTEM_UUID;
+        }
+
+        throw ApiStatusException.internalServerError(ERROR_MESSAGE_INVALID_SECURITY_SETUP, "PRINCIPAL_NOT_USER");
     }
 
     public String getEmail(){
