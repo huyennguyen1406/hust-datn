@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="006-create-product-image" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <not>
+                <tableExists tableName="product_image"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product_image">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="product_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_link" type="nvarchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addDefaultValue
+                tableName="product_image"
+                columnName="id"
+                defaultValueComputed="uuid_generate_v4()"/>
+
+        <addForeignKeyConstraint
+                baseTableName="product_image"
+                baseColumnNames="product_id"
+                referencedTableName="product"
+                referencedColumnNames="id"
+                constraintName="fk_product_image_product"/>
+
+
+    </changeSet>
+
+</databaseChangeLog>

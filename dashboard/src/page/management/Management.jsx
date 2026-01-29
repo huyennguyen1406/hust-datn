@@ -1,18 +1,7 @@
-import React from "react";
 import { useState } from "react";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import {
-  Box,
-  Button,
-  InputBase,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import Pagination from "../../components/pagination/Pagination";
 import { useI18n } from "../../i18n/useI18n";
 import FilterRow from "./component/FilterRow";
@@ -177,7 +166,7 @@ export default function Management({
 
               <TableBody>
                 {data.map((row, idx) => {
-                  const last = idx === rows.length - 1;
+                  const last = idx === data.length - 1;
                   return (
                     <TableRow key={row.id} hover className={`${last ? "" : "border-b"} bg-white hover:bg-gray-50`}>
                       {columns.map((col, colIndex) => (

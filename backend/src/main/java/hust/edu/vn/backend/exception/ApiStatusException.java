@@ -31,4 +31,8 @@ public class ApiStatusException extends RuntimeException {
     public static ApiStatusException badGateway(String message, String systemCode) {
         return new ApiStatusException(HttpStatus.BAD_GATEWAY, "Bad Gateway", message, systemCode);
     }
+
+    public static ApiStatusException conflict(String message, String systemCode) {
+        return new ApiStatusException(HttpStatus.CONFLICT, "Conflict", message, systemCode);
+    }
 }

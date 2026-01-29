@@ -4,6 +4,8 @@ export const messages = {
     id: "ID",
     select_all: "Select All",
     actions: "Actions",
+    contains: "contains",
+    equals: "equals",
 
     // Sidebar
     sidebar_title: "Admin Panel",
@@ -34,6 +36,10 @@ export const messages = {
     orders: "Orders",
     reviews: "Reviews",
 
+    // Brand Screen
+    brandName: "Brand Name",
+    modifiedDate: "Modified Date",
+
     // Statistic Sidebar Items
     user_statistic: "User Statistic",
     sales_statistic: "Sales Statistic",
@@ -57,6 +63,8 @@ export const messages = {
     id: "ID",
     select_all: "Chọn tất cả",
     actions: "Hành động",
+    contains: "chứa",
+    equals: "bằng",
 
     // Sidebar
     sidebar_title: "Trang Quản Trị",
@@ -94,6 +102,10 @@ export const messages = {
     // Province
     province_name_en: "Tên (Tiếng Anh)",
     province_name_vi: "Tên (Tiếng Việt)",
+
+    // Brand Screen
+    brandName: "Tên nhãn hiệu",
+    modifiedDate: "Ngày cập nhật",
 
     //Sale statistic:
     sale_total_revenue: "Tổng doanh thu trong kỳ",

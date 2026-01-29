@@ -38,3 +38,19 @@ security:
     refresh-token-expiration: ${dashboard-refresh-token-expiration}
     issuer: nova-shoe-backend
     audience: nova-shoe-dashboard
+
+  store:
+    secret: ${store-jwt-secret}
+    access-token-expiration: ${store-access-token-expiration}
+    refresh-token-expiration: ${store-refresh-token-expiration}
+    issuer: nova-shoe-backend
+    audience: nova-shoe-store
+
+cloudflare:
+  r2:
+    access-key: ${cloudflare-r2-access-key}
+    secret-key: ${cloudflare-r2-secret-key}
+    account-id: ${cloudflare-r2-account-id}
+    bucketName: ${cloudflare-r2-bucket-name}
+    public-url: ${cloudflare-r2-public-url}
+    region: ${cloudflare-r2-region}

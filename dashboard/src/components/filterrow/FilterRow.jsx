@@ -1,18 +1,7 @@
-import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useI18n } from "../../../i18n/useI18n";
+import { useI18n } from "../../i18n/useI18n";
 
-const FilterRow = ({
-  filter,
-  onChange,
-  onRemove,
-  columnList = [
-    { value: "name", label: "Name" },
-    { value: "category", label: "Category" },
-    { value: "status", label: "Status" },
-    { value: "id", label: "ID" },
-  ],
-}) => {
+const FilterRow = ({ filter, onChange, onRemove, columnList }) => {
   const update = (key, value) => {
     onChange({ ...filter, [key]: value });
   };
@@ -39,8 +28,8 @@ const FilterRow = ({
         value={filter.operator}
         onChange={(e) => update("operator", e.target.value)}
         className="h-10 min-w-[120px] rounded-lg border border-gray-300 bg-white px-3 text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
-        <option value="equals">equals</option>
-        <option value="contains">contains</option>
+        <option value="equals">{t("equals")}</option>
+        <option value="contains">{t("contains")}</option>
       </select>
 
       {/* Value */}

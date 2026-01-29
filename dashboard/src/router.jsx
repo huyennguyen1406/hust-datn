@@ -1,15 +1,16 @@
 // router.jsx
-import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
-import { Outlet } from "@tanstack/react-router";
+import { Outlet, createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
 import { PublicLayout } from "./PublicLayout.jsx";
 import RequireAuth from "./RequireAuth.jsx";
+import { managementApi } from "./api/managementApi.js";
 import { AppLayout } from "./layout/AppLayout.jsx";
+import Brand from "./page/brand/Brand.jsx";
+import BrandForm from "./page/brand/BrandForm.jsx";
 import Login from "./page/login/Login.jsx";
 import Management from "./page/management/Management.jsx";
 import NotFound from "./page/notfound/NotFound.jsx";
 import SaleStatistic from "./page/saleStatistic/SaleStatistic.jsx";
-import Statistic from "./page/statistic/Statistic.jsx";
-import { MOCK_DATA_PAYMENT_METHOD, MOCK_DATA_PROVINCE } from "./router_mock_data.js";
+import { MOCK_DATA_PROVINCE } from "./router_mock_data.js";
 
 export const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -101,7 +102,25 @@ export const provincesRoute = createRoute({
 export const brandsRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/brands",
-  component: () => <Management title={"Brands"} description={"Manage all brands"} />,
+  component: () => <Brand />,
+});
+
+// Brand create
+export const brandCreateRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/brands/create",
+  component: () => <BrandForm mode="create" />,
+});
+
+// Brand edit
+export const brandEditRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/brands/$id/edit",
+  loader: async ({ params }) => {
+    return managementApi.getBrandById(params.id);
+  },
+  gcTime: 0,
+  component: () => <BrandForm mode="edit" />,
 });
 
 export const categoriesRoute = createRoute({
@@ -178,6 +197,8 @@ const routeTree = rootRoute.addChildren([
     // aboutUsRoute,
     // shopContactsRoute,
     brandsRoute,
+    brandCreateRoute,
+    brandEditRoute,
     categoriesRoute,
     productsRoute,
     // bannersRoute,

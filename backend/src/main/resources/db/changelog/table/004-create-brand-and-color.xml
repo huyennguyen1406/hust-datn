@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="004-create-brand-and-color" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="product_color"/>
+                </not>
+                <not>
+                    <tableExists tableName="brand"/>
+                </not>
+
+            </and>
+        </preConditions>
+        <createTable tableName="brand">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="brand_name" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="timestamp"/>
+            <column name="modified_by" type="uuid"/>
+        </createTable>
+
+        <createTable tableName="product_color">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="hex_code" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_en" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_vi" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addDefaultValue
+                tableName="brand"
+                columnName="id"
+                defaultValueComputed="uuid_generate_v4()"/>
+
+        <addDefaultValue
+                tableName="product_color"
+                columnName="id"
+                defaultValueComputed="uuid_generate_v4()"/>
+    </changeSet>
+
+</databaseChangeLog>

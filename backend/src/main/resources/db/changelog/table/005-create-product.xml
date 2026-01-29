@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="005-create-product" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="product"/>
+                </not>
+                <not>
+                    <tableExists tableName="product_detail"/>
+                </not>
+            </and>
+        </preConditions>
+        <createTable tableName="product">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name_en" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name_vi" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="brand_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="timestamp"/>
+            <column name="modified_by" type="uuid"/>
+        </createTable>
+
+        <createTable tableName="product_detail">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="product_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="color_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_at" type="timestamp"/>
+            <column name="modified_by" type="uuid"/>
+        </createTable>
+
+        <addDefaultValue
+                tableName="product"
+                columnName="id"
+                defaultValueComputed="uuid_generate_v4()"/>
+
+        <addDefaultValue
+                tableName="product_detail"
+                columnName="id"
+                defaultValueComputed="uuid_generate_v4()"/>
+
+        <addForeignKeyConstraint
+                baseTableName="product"
+                baseColumnNames="brand_id"
+                referencedTableName="brand"
+                referencedColumnNames="id"
+                constraintName="fk_product_brand"/>
+
+        <addForeignKeyConstraint
+                baseTableName="product_detail"
+                baseColumnNames="product_id"
+                referencedTableName="product"
+                referencedColumnNames="id"
+                constraintName="fk_product_detail_product"/>
+
+        <addForeignKeyConstraint
+                baseTableName="product_detail"
+                baseColumnNames="color_id"
+                referencedTableName="product_color"
+                referencedColumnNames="id"
+                constraintName="fk_product_detail_color"/>
+
+        <addUniqueConstraint
+                tableName="product_detail"
+                columnNames="product_id,size,color_id"
+                constraintName="uk_product_size_color"/>
+
+        <createIndex tableName="product_detail" indexName="idx_product_detail_stock">
+            <column name="product_id"/>
+            <column name="quantity"/>
+        </createIndex>
+
+
+    </changeSet>
+
+</databaseChangeLog>
