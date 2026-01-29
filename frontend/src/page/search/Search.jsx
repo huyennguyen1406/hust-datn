@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link } from "@tanstack/react-router";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import Pagination from "../../component/pagination/Pagination";
 import { searchRoute } from "../../router";
-import Banner from "./component/Banner";
+import BannerCarousel from "./component/BannerCarousel";
 import ProductCard from "./component/ProductCard";
 
 const mockData = [
@@ -114,12 +113,24 @@ const mockData = [
   },
 ];
 
-const bannerMock = {
-  image:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBLxYLvi42XqX2EKwq5mSJBlgOpeTuerWyUPbQsTbYJ1GkYjvbT5dxdT1au9lDZmS7-JC3r-K2WYFGUqfzTVy-7JZ9sVK9QhX451utfdLsrKkYHAyhNghslE1YJUigTM2KnJ3_8Y8Q5yjwL27Bou_gi11Qkm-JnK1shYD9XLdEJ43vdUsiHRjguaUZrhlYCG4JmWBatJkyD7Vu5LnNoQiha3iLscx9G-W9o7Ytg_TrZd7cYw0hZvzjeEk2ku5mENbYLURSwf1FdYxQ3",
-  title: "Christmas Sale",
-  description: "Unwrap incredible deals on your favorite styles. Up to 50% off on selected items. Don't miss out!",
-};
+const bannerList = [
+  {
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBLxYLvi42XqX2EKwq5mSJBlgOpeTuerWyUPbQsTbYJ1GkYjvbT5dxdT1au9lDZmS7-JC3r-K2WYFGUqfzTVy-7JZ9sVK9QhX451utfdLsrKkYHAyhNghslE1YJUigTM2KnJ3_8Y8Q5yjwL27Bou_gi11Qkm-JnK1shYD9XLdEJ43vdUsiHRjguaUZrhlYCG4JmWBatJkyD7Vu5LnNoQiha3iLscx9G-W9o7Ytg_TrZd7cYw0hZvzjeEk2ku5mENbYLURSwf1FdYxQ3",
+    title: "Christmas Sale",
+    description: "Up to 50% off selected items",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1528701800489-20be8a8e5c5b",
+    title: "New Arrivals",
+    description: "Fresh drops for the new season",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+    title: "Running Essentials",
+    description: "Built for speed & comfort",
+  },
+];
 
 const brandMock = [
   { value: "aura", name: "Aura" },
@@ -312,7 +323,7 @@ const Search = () => {
           </form>
         </div>
 
-        {category && <Banner image={bannerMock.image} title={bannerMock.title} description={bannerMock.description} />}
+        {category && <BannerCarousel banners={bannerList} />}
 
         {/* Products */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">

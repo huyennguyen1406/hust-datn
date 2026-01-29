@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="008-create-category" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="category" />
+                </not>
+                <not>
+                    <tableExists tableName="category_banner" />
+                </not>
+                <not>
+                    <tableExists tableName="category_product" />
+                </not>
+            </and>
+        </preConditions>
+        <createTable tableName="category">
+            <column name="id" type="uuid" defaultValueComputed="UUID_GENERATE_V4()">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name_en" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name_vi" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="modified_at" type="timestamp"/>
+            <column name="modified_by" type="nvarchar(255)"/>
+        </createTable>
+
+        <createTable tableName="category_product">
+            <column name="id" type="uuid" defaultValueComputed="UUID_GENERATE_V4()">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="category_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="product_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="category_product"
+                baseColumnNames="category_id"
+                referencedTableName="category"
+                referencedColumnNames="id"
+                constraintName="fk_category_product_category"/>
+
+        <addForeignKeyConstraint
+                baseTableName="category_product"
+                baseColumnNames="product_id"
+                referencedTableName="product"
+                referencedColumnNames="id"
+                constraintName="fk_category_product_product"/>
+
+        <createTable tableName="category_banner">
+            <column name="id" type="uuid" defaultValueComputed="UUID_GENERATE_V4()">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="category_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="image_link" type="nvarchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="title_en" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="title_vi" type="nvarchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="description_en" type="nvarchar(255)"/>
+            <column name="description_vi" type="nvarchar(255)"/>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="modified_at" type="timestamp"/>
+            <column name="modified_by" type="nvarchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="category_banner"
+                baseColumnNames="category_id"
+                referencedTableName="category"
+                referencedColumnNames="id"
+                constraintName="fk_category_banner_category"/>
+
+    </changeSet>
+
+</databaseChangeLog>

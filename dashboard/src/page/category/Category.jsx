@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -12,20 +13,25 @@ import { buildBrandQueryParams } from "./helper";
 
 /* ------------------ constants ------------------ */
 
-const BRAND_COLUMNS = ["brandName", "modifiedDate"];
+const CATEGORY_COLUMNS = ["nameEn", "nameVi", "modifiedDate"];
+
+const CATEGORY_FILTER = [{ value: "nameEn" }, { value: "nameVi" }];
 
 const createFilter = () => ({
   id: crypto.randomUUID(),
-  field: "brandName",
+  field: "nameEn",
   operator: "equals",
   value: "",
 });
 
-const combination = "OR";
+const COMBINATION_TYPE = [
+  { label: "AND", value: "AND" },
+  { label: "OR", value: "OR" },
+];
 
 /* ------------------ component ------------------ */
 
-export default function Brand() {
+export default function Category() {
   const { t } = useI18n();
   const navigate = useNavigate();
 
@@ -33,6 +39,7 @@ export default function Brand() {
     page: 1,
     pageSize: 10,
     filters: [createFilter()],
+    combination: "OR",
   });
 
   const [draftFilters, setDraftFilters] = useState([createFilter()]);
@@ -44,7 +51,7 @@ export default function Brand() {
       buildBrandQueryParams({
         page: queryState.page,
         pageSize: queryState.pageSize,
-        combination,
+        combination: queryState.combination,
         filters: queryState.filters,
       }),
     [queryState]
@@ -53,12 +60,12 @@ export default function Brand() {
   /* ------------------ query ------------------ */
 
   const { data, isLoading } = useQuery({
-    queryKey: ["brands", queryParams],
-    queryFn: () => managementApi.getBrands(queryParams),
+    queryKey: ["categories", queryParams],
+    queryFn: () => managementApi.getCategories(queryParams),
     keepPreviousData: true,
   });
 
-  const brands = data?.data ?? [];
+  const categories = data?.data ?? [];
 
   /* ------------------ filter handlers ------------------ */
 
@@ -83,14 +90,20 @@ export default function Brand() {
     }));
   };
 
+  const handleCombinationSelect = (e) =>
+    setQueryState((prev) => ({
+      ...prev,
+      combination: e.target.value,
+    }));
+
   const handleNewBrandClick = (e) => {
     e.preventDefault();
-    navigate({ to: "/brands/create" });
+    navigate({ to: "/categories/create" });
   };
 
   const handleEditClick = (id) => {
     navigate({
-      to: "/brands/$id/edit",
+      to: "/categories/$id/edit",
       params: { id },
     });
   };
@@ -100,7 +113,6 @@ export default function Brand() {
   const deleteMutation = useMutation({
     mutationFn: (id) => managementApi.deleteBrand(id),
     onSuccess: () => {
-      // refresh brand list after delete
       queryClient.invalidateQueries({ queryKey: ["brands"] });
     },
     onError: (error) => {
@@ -123,15 +135,15 @@ export default function Brand() {
       {/* ---------- header ---------- */}
       <header className="flex items-center justify-between p-8 pb-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Brand</h1>
-          <p className="mt-1 text-gray-600">Brand Management</p>
+          <h1 className="text-3xl font-bold text-gray-900">Category</h1>
+          <p className="mt-1 text-gray-600">Category Management</p>
         </div>
 
         <button
           onClick={(e) => handleNewBrandClick(e)}
           className="flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 shadow-sm hover:bg-indigo-700">
           <AddCircleIcon className="text-white" />
-          <span className="font-semibold text-white">{t("newBrand")}</span>
+          <span className="font-semibold text-white">{t("newCategory")}</span>
         </button>
       </header>
 
@@ -139,42 +151,60 @@ export default function Brand() {
       <div className="flex-1 overflow-y-auto p-8">
         <div className="overflow-hidden rounded-lg bg-white shadow-md">
           {/* ---------- filters ---------- */}
-          <div className="border-b border-gray-200 p-4">
-            <label className="mb-1 block text-sm font-medium text-gray-700">Filter by Field (OR)</label>
+          {/* -------- Operation Type -------- */}
+          <div className="grid grid-cols-1 items-start gap-4 py-2 md:grid-cols-3">
+            <div className="pl-3">
+              <label className="mb-1 block text-sm font-medium text-gray-700">Operation Type</label>
 
-            <div className="space-y-3">
-              {draftFilters.map((filter) => (
-                <FilterRow
-                  key={filter.id}
-                  filter={filter}
-                  onChange={updateFilter}
-                  onRemove={removeFilter}
-                  columnList={[{ value: "brandName", label: "Brand Name" }]}
-                />
-              ))}
+              <div className="mb-2 space-y-3">
+                <select
+                  value={queryParams.combination}
+                  onChange={handleCombinationSelect}
+                  className="h-10 min-w-[140px] rounded-lg border border-gray-300 bg-white px-3 text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
+                  {COMBINATION_TYPE.map((op) => (
+                    <option key={op.value} value={op.value}>
+                      {op.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <button
+                onClick={onApply}
+                className="mt-2 cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700">
+                <span>Apply</span>
+              </button>
             </div>
 
-            <div className="mt-4 flex items-center gap-4">
-              <button
-                onClick={addFilter}
-                className="cursor-pointer text-sm font-medium text-indigo-600 hover:underline">
-                + Add Filter
-              </button>
+            {/* -------- Filter by Field -------- */}
+            <div className="md:col-span-2">
+              <label className="mb-1 block text-sm font-medium text-gray-700">Filter by Field</label>
+
+              <div className="mb-2 space-y-3">
+                {draftFilters.map((filter) => (
+                  <FilterRow
+                    key={filter.id}
+                    filter={filter}
+                    onChange={updateFilter}
+                    onRemove={removeFilter}
+                    columnList={CATEGORY_FILTER}
+                  />
+                ))}
+              </div>
 
               <button
-                onClick={(e) => onApply(e)}
-                className="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
-                Apply
+                onClick={addFilter}
+                className="mt-3 flex cursor-pointer items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-700">
+                <AddCircleOutlineIcon fontSize="small" className="text-indigo-600" />
+                <span>Add Filter</span>
               </button>
             </div>
           </div>
-
           {/* ---------- table ---------- */}
           <TableContainer component={Box}>
             <Table className="min-w-full text-sm text-gray-600">
               <TableHead>
                 <TableRow className="bg-gray-50 text-xs text-gray-700 uppercase">
-                  {BRAND_COLUMNS.map((col) => (
+                  {CATEGORY_COLUMNS.map((col) => (
                     <TableCell key={col} className="px-6 py-3">
                       {t(col)}
                     </TableCell>
@@ -185,18 +215,20 @@ export default function Brand() {
 
               <TableBody>
                 {/* ---------- empty state ---------- */}
-                {!isLoading && brands.length === 0 && (
+                {!isLoading && categories.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={BRAND_COLUMNS.length + 1} className="px-6 py-6 text-center text-gray-500">
+                    <TableCell colSpan={CATEGORY_COLUMNS.length + 1} className="px-6 py-6 text-center text-gray-500">
                       No record found
                     </TableCell>
                   </TableRow>
                 )}
 
                 {/* ---------- data rows ---------- */}
-                {brands.map((row, idx) => (
-                  <TableRow key={row.id} hover className={idx !== brands.length - 1 ? "border-b" : ""}>
-                    <TableCell className="px-6 py-4">{row.brandName}</TableCell>
+                {categories.map((row, idx) => (
+                  <TableRow key={row.id} hover className={idx !== categories.length - 1 ? "border-b" : ""}>
+                    <TableCell className="px-6 py-4">{row.nameEn}</TableCell>
+                    <TableCell className="px-6 py-4">{row.nameVi}</TableCell>
+
                     <TableCell className="px-6 py-4">{extractDate(row.modifiedAt)}</TableCell>
 
                     <TableCell className="px-6 py-4 text-right">

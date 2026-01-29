@@ -2,7 +2,10 @@ package hust.edu.vn.backend.controller.dashboard;
 
 import hust.edu.vn.backend.dto.admin.request.BrandCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.BrandUpdateRequest;
+import hust.edu.vn.backend.dto.admin.request.CategoryCreateRequest;
 import hust.edu.vn.backend.dto.admin.response.BrandResponse;
+import hust.edu.vn.backend.dto.admin.response.CategoryDetailResponse;
+import hust.edu.vn.backend.dto.admin.response.CategoryResponse;
 import hust.edu.vn.backend.dto.common.response.PaginationResponse;
 import hust.edu.vn.backend.service.dashboard.ManagementDataService;
 import lombok.RequiredArgsConstructor;
@@ -88,6 +91,59 @@ public class ManagementDataController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteBrand(@PathVariable String id) {
         managementDataService.deleteBrand(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/categories")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<PaginationResponse<CategoryResponse>> getAllCategories(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "fields", required = false) List<String> fields,
+            @RequestParam(value = "operations", required = false) List<String> operations,
+            @RequestParam(value = "values", required = false) List<String> values,
+            @RequestParam(value = "combination", defaultValue = "AND") String combination
+    ) {
+        PaginationResponse<CategoryResponse> response = managementDataService.getAllCategory(page, pageSize, fields, operations, values, combination);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/categories/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<CategoryDetailResponse> getCategoryById(
+            @PathVariable String id) {
+        CategoryDetailResponse response = managementDataService.getCategoryById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/categories", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<CategoryDetailResponse> createCategory(
+            @RequestPart("category") CategoryCreateRequest request,
+            @RequestPart(value = "bannerImages", required = false) List<MultipartFile> bannerImages
+    ) {
+        CategoryDetailResponse response = managementDataService.createCategory(request, bannerImages);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PatchMapping(
+            path = "/categories/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<CategoryDetailResponse> updateCategory(
+            @PathVariable String id,
+            @RequestPart("category") CategoryCreateRequest request,
+            @RequestPart(value = "bannerImages", required = false) List<MultipartFile> bannerImages
+    ) {
+        CategoryDetailResponse response = managementDataService.updateCategory(id, request, bannerImages);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/categories/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteCategory(@PathVariable String id) {
+        managementDataService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 

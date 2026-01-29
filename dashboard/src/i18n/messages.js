@@ -6,6 +6,10 @@ export const messages = {
     actions: "Actions",
     contains: "contains",
     equals: "equals",
+    edit: "Edit",
+    delete: "Delete",
+    nameEn: "Name (English)",
+    nameVi: "Name (Vietnamese)",
 
     // Sidebar
     sidebar_title: "Admin Panel",
@@ -39,6 +43,10 @@ export const messages = {
     // Brand Screen
     brandName: "Brand Name",
     modifiedDate: "Modified Date",
+    newBrand: "New Brand",
+
+    //Category Screen
+    newCategory: "New Category",
 
     // Statistic Sidebar Items
     user_statistic: "User Statistic",
@@ -65,6 +73,10 @@ export const messages = {
     actions: "Hành động",
     contains: "chứa",
     equals: "bằng",
+    edit: "Sửa",
+    delete: "Xoá",
+    nameEn: "Tiếng Anh",
+    nameVi: "Tiếng Việt",
 
     // Sidebar
     sidebar_title: "Trang Quản Trị",
@@ -106,6 +118,10 @@ export const messages = {
     // Brand Screen
     brandName: "Tên nhãn hiệu",
     modifiedDate: "Ngày cập nhật",
+    newBrand: "Thêm Nhãn Hiệu",
+
+    //Category Screen
+    newCategory: "Thêm phân loại",
 
     //Sale statistic:
     sale_total_revenue: "Tổng doanh thu trong kỳ",

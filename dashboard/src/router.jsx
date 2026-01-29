@@ -6,6 +6,8 @@ import { managementApi } from "./api/managementApi.js";
 import { AppLayout } from "./layout/AppLayout.jsx";
 import Brand from "./page/brand/Brand.jsx";
 import BrandForm from "./page/brand/BrandForm.jsx";
+import Category from "./page/category/Category.jsx";
+import CategoryForm from "./page/category/CategoryForm.jsx";
 import Login from "./page/login/Login.jsx";
 import Management from "./page/management/Management.jsx";
 import NotFound from "./page/notfound/NotFound.jsx";
@@ -105,14 +107,13 @@ export const brandsRoute = createRoute({
   component: () => <Brand />,
 });
 
-// Brand create
+// Brands
 export const brandCreateRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/brands/create",
   component: () => <BrandForm mode="create" />,
 });
 
-// Brand edit
 export const brandEditRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/brands/$id/edit",
@@ -123,10 +124,28 @@ export const brandEditRoute = createRoute({
   component: () => <BrandForm mode="edit" />,
 });
 
+// Categories
+
 export const categoriesRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/categories",
-  component: () => <Management title={"Categories"} description={"Manage all categories"} />,
+  component: () => <Category />,
+});
+
+export const categoryCreateRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/categories/create",
+  component: () => <CategoryForm mode="create" />,
+});
+
+// Brand edit
+export const categoryEditRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/categories/$id/edit",
+  loader: async ({ params }) => {
+    return managementApi.getCategoriesById(params.id);
+  },
+  component: ({ loaderData }) => <CategoryForm mode="edit" category={loaderData} />,
 });
 
 export const productsRoute = createRoute({
@@ -200,6 +219,8 @@ const routeTree = rootRoute.addChildren([
     brandCreateRoute,
     brandEditRoute,
     categoriesRoute,
+    categoryCreateRoute,
+    categoryEditRoute,
     productsRoute,
     // bannersRoute,
     // saleOffersRoute,

@@ -10,8 +10,6 @@ const Pagination = ({
   pageSizeOptions = [5, 10, 20, 50],
   className = "",
 }) => {
-  if (totalPage <= 1 && !pageSize) return null;
-
   const pages = [];
 
   const startPage = Math.max(2, page - 1);
