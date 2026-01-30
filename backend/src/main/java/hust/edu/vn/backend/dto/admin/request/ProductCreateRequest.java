@@ -23,7 +23,7 @@ public class ProductCreateRequest {
     @NotNull
     private Integer price;
 
-    private List<UUID> categoryIds;
+    private List<String> categoryList;
 
 
 }

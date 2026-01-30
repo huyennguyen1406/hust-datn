@@ -82,4 +82,16 @@ export const managementApi = {
   deleteProduct: (id) => {
     return axiosClient.delete(`/dashboard/management-data/products/${id}`);
   },
+
+  getProductColors: () => {
+    return axiosClient.get("/dashboard/management-data/products-color");
+  },
+
+  getProductDetail: (productId) => {
+    return axiosClient.get(`/dashboard/management-data/products/${productId}/details`);
+  },
+
+  updateProductDetail: async (productId, payload) => {
+    return axiosClient.post(`/dashboard/management-data/products/${productId}/details`, payload);
+  },
 };

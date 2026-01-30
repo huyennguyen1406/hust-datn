@@ -3,19 +3,27 @@ package hust.edu.vn.backend.service.dashboard;
 import hust.edu.vn.backend.constant.ErrorConstant;
 import hust.edu.vn.backend.dto.admin.request.FilterRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductCreateRequest;
+import hust.edu.vn.backend.dto.admin.request.ProductInfoDetailUpdateRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductUpdateRequest;
+import hust.edu.vn.backend.dto.admin.response.ProductColorResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductDetailResponse;
+import hust.edu.vn.backend.dto.admin.response.ProductInfoDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductResponse;
 import hust.edu.vn.backend.dto.common.response.PaginationResponse;
 import hust.edu.vn.backend.entity.Brand;
 import hust.edu.vn.backend.entity.Category;
 import hust.edu.vn.backend.entity.Product;
+import hust.edu.vn.backend.entity.ProductColor;
+import hust.edu.vn.backend.entity.ProductDetail;
 import hust.edu.vn.backend.entity.ProductImage;
 import hust.edu.vn.backend.exception.ApiStatusException;
 import hust.edu.vn.backend.repository.BrandRepository;
 import hust.edu.vn.backend.repository.CategoryRepository;
+import hust.edu.vn.backend.repository.ProductColorRepository;
+import hust.edu.vn.backend.repository.ProductDetailRepository;
 import hust.edu.vn.backend.repository.ProductRepository;
 import hust.edu.vn.backend.repository.specification.ProductSpecification;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +36,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("DuplicatedCode")
@@ -41,6 +52,8 @@ public class ManagementProductService {
     private final ProductRepository productRepository;
     private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductColorRepository productColorRepository;
+    private final ProductDetailRepository productDetailRepository;
 
     private List<FilterRequest> buildFilters(List<String> fields, List<String> operations, List<String> values) {
         List<FilterRequest> filters = new ArrayList<>();
@@ -126,7 +139,10 @@ public class ManagementProductService {
                 ApiStatusException.notFound(ErrorConstant.ERROR_MESSAGE_BRAND_NOT_FOUND, ErrorConstant.ERROR_CODE_BRAND_NOT_FOUND)
         );
 
-        Set<Category> categoryList = new HashSet<>(categoryRepository.findAllById(request.getCategoryIds()));
+        List<UUID> categoryIds = request.getCategoryList().stream()
+                .map(UUID::fromString)
+                .toList();
+        Set<Category> categoryList = new HashSet<>(categoryRepository.findAllById(categoryIds));
 
         List<ProductImage> imageList = new ArrayList<>(productImages.size());
 
@@ -256,6 +272,7 @@ public class ManagementProductService {
 
     }
 
+    @Transactional
     public void deleteProduct(String id) {
         UUID productId = UUID.fromString(id);
         Product existedProduct = productRepository.findById(productId)
@@ -263,6 +280,99 @@ public class ManagementProductService {
                         ApiStatusException.notFound(ErrorConstant.ERROR_MESSAGE_PRODUCT_NOT_FOUND, ErrorConstant.ERROR_CODE_PRODUCT_NOT_FOUND)
                 );
 
+        productDetailRepository.deleteByProductId(productId);
+
         productRepository.delete(existedProduct);
+    }
+
+    public List<ProductColorResponse> getAllProductColors() {
+        return productColorRepository.findAll().stream().map(entity -> new ProductColorResponse()
+                .setColorId(entity.getId().toString())
+                .setHexCode(entity.getHexCode())
+        ).toList();
+    }
+
+    public List<ProductInfoDetailResponse> getProductInfoDetails(String id) {
+        List<ProductDetail> productDetailList = productDetailRepository.findByProductIdWithColor(UUID.fromString(id));
+        return productDetailList.stream().map(entity -> new ProductInfoDetailResponse()
+                .setProductDetailId(entity.getId().toString())
+                .setSize(entity.getSize())
+                .setColorId(entity.getColor().getId().toString())
+                .setColorCode(entity.getColor().getHexCode())
+                .setQuantity(entity.getQuantity())
+        ).toList();
+    }
+
+    @Transactional
+    public List<ProductInfoDetailResponse> updateProductInfoDetail(String id, ProductInfoDetailUpdateRequest request) {
+        UUID productId = UUID.fromString(id);
+
+        Product product = productRepository.findById(productId).orElseThrow(() ->
+                ApiStatusException.notFound(
+                            ErrorConstant.ERROR_MESSAGE_PRODUCT_NOT_FOUND,
+                            ErrorConstant.ERROR_CODE_PRODUCT_NOT_FOUND)
+        );
+
+
+        List<ProductDetail> existingList =
+                productDetailRepository.findByProductIdWithColor(productId);
+
+        List<ProductColor> allColors = productColorRepository.findAll();
+        Map<UUID, ProductColor> colorMap = allColors.stream()
+                .collect(Collectors.toMap(ProductColor::getId, Function.identity()));
+
+        // Map existing by ID
+        Map<UUID, ProductDetail> existingMap = existingList.stream()
+                .collect(Collectors.toMap(ProductDetail::getId, Function.identity()));
+
+        List<ProductDetail> toSave = new ArrayList<>();
+        Set<UUID> incomingIds = new HashSet<>();
+
+        for (ProductInfoDetailUpdateRequest.Dto dto : request.getDataList()) {
+            ProductDetail detail;
+
+            // UPDATE
+            if (dto.getProductDetailId() != null) {
+                UUID detailId = UUID.fromString(dto.getProductDetailId());
+                incomingIds.add(detailId);
+
+                detail = existingMap.get(detailId);
+                if (detail == null) {
+                    throw ApiStatusException.badRequest("Product detail not found", "ERR_PRODUCT_DETAIL_NOT_FOUND");
+                }
+            }
+            // INSERT
+            else {
+                detail = new ProductDetail();
+                detail.setProduct(product);
+                ProductColor color = colorMap.get(UUID.fromString(dto.getColorId()));
+                if (Objects.isNull(color)){
+                    throw ApiStatusException.badRequest("Product color not found", "ERR_COLOR_NOT_FOUND");
+                }
+                detail.setColor(color);
+            }
+
+            detail.setSize(dto.getSize());
+            detail.setQuantity(dto.getQuantity());
+
+            toSave.add(detail);
+        }
+
+        // DELETE removed rows
+        List<ProductDetail> toDelete = existingList.stream()
+                .filter(d -> !incomingIds.contains(d.getId()))
+                .toList();
+
+        productDetailRepository.deleteAll(toDelete);
+        productDetailRepository.saveAll(toSave);
+
+        return toSave.stream().map(entity -> new ProductInfoDetailResponse()
+                .setProductDetailId(entity.getId().toString())
+                .setSize(entity.getSize())
+                .setColorId(entity.getColor().getId().toString())
+                .setColorCode(entity.getColor().getHexCode())
+                .setQuantity(entity.getQuantity())
+        ).toList();
+
     }
 }

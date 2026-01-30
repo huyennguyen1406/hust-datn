@@ -17,9 +17,21 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     FROM Product p
     LEFT JOIN FETCH p.brand
     LEFT JOIN FETCH p.categories
-    LEFT JOIN FETCH p.images
     WHERE p.id = :id
-    """)
-    Optional<Product> findByIdWithAllRelations(@Param("id") UUID id);
+""")
+    Optional<Product> findByIdWithCategories(@Param("id") UUID id);
 
+    @Query("""
+    SELECT DISTINCT p
+    FROM Product p
+    LEFT JOIN FETCH p.images
+    WHERE p = :product
+    """)
+    Product fetchImages(@Param("product") Product product);
+
+    default Optional<Product> findByIdWithAllRelations(UUID id) {
+        Optional<Product> product = findByIdWithCategories(id);
+        product.ifPresent(this::fetchImages);
+        return product;
+    }
 }

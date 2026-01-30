@@ -1,9 +1,11 @@
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLoaderData, useNavigate } from "@tanstack/react-router";
 import { managementApi } from "../../api/managementApi";
 import { useI18n } from "../../i18n/useI18n";
 import { formatPrice } from "../../utility/format";
+import ProductInfo from "./ProductInfo.jsx";
 
 export default function ProductForm({
   mode, // "create" | "edit"
@@ -13,6 +15,9 @@ export default function ProductForm({
   const loaderData = useLoaderData({ strict: false });
   const { brands, categories, product } = loaderData;
   const { lang } = useI18n();
+
+  const productColors = isEditMode ? loaderData?.productColors : [];
+  const initialProductInfoDetails = isEditMode ? loaderData?.productInfoDetails : [];
 
   /* =========================
      State initialization
@@ -40,6 +45,18 @@ export default function ProductForm({
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  const [productInfoDetails, setProductInfoDetails] = useState(
+    initialProductInfoDetails.map((d) => ({
+      productDetailId: d.productDetailId,
+      colorId: d.colorId,
+      colorCode: d.colorCode,
+      size: d.size,
+      quantity: d.quantity,
+    }))
+  );
+
+  const [saveDetailSuccess, setStateDetailSuccess] = useState(false);
+
   /* ---------- Categories ---------- */
   const addCategory = (categoryId) => {
     if (!selectedCategories.includes(categoryId)) {
@@ -54,8 +71,11 @@ export default function ProductForm({
   /* ---------- Images ---------- */
   const addImages = (files) => {
     const newImages = Array.from(files).map((file) => ({
+      tempId: crypto.randomUUID(),
       imageFile: file,
+      preview: URL.createObjectURL(file),
     }));
+
     setImages((prev) => [...prev, ...newImages]);
   };
 
@@ -109,6 +129,59 @@ export default function ProductForm({
 
     navigate({ to: "/products" });
   };
+
+  /* =========================
+  Product Info Details
+  ========================= */
+  const addRowDetail = () => {
+    setProductInfoDetails((prev) => [
+      ...prev,
+      {
+        productDetailId: null,
+        colorId: "",
+        size: "",
+        quantity: 0,
+      },
+    ]);
+  };
+
+  const updateRowDetail = (index, field, value) => {
+    setProductInfoDetails((prev) => prev.map((row, i) => (i === index ? { ...row, [field]: value } : row)));
+  };
+
+  const removeRowDetail = (index) => {
+    setProductInfoDetails((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const queryClient = useQueryClient();
+
+  const saveProductDetailMutation = useMutation({
+    mutationFn: () =>
+      managementApi.updateProductDetail(product.id, {
+        dataList: productInfoDetails,
+      }),
+    onSuccess: () => {
+      setStateDetailSuccess(true);
+
+      // optional: refetch product detail if needed
+      queryClient.invalidateQueries({
+        queryKey: ["product-detail", product.id],
+      });
+
+      // auto hide success message
+      setTimeout(() => setStateDetailSuccess(false), 3000);
+    },
+    onError: () => {
+      setStateDetailSuccess(false);
+    },
+  });
+
+  const saveProductDetail = () => {
+    saveProductDetailMutation.mutate();
+  };
+
+  const isSaveDisabled =
+    productInfoDetails.length === 0 || productInfoDetails.some((d) => !d.colorId || !d.size || d.quantity < 0);
 
   /* =========================
      Render
@@ -197,6 +270,52 @@ export default function ProductForm({
           })}
         </div>
       </div>
+      {/* Product Info Detail */}
+      {isEditMode && (
+        <div className="space-y-6 rounded border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-600">Product Detail</h2>
+              <p className="text-sm text-gray-500">Manage color, size and stock quantity</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={addRowDetail}
+              className="rounded bg-indigo-500 px-3 py-1 text-sm text-white hover:bg-indigo-600">
+              + Add
+            </button>
+          </div>
+
+          <ProductInfo
+            rows={productInfoDetails}
+            colors={productColors}
+            onChange={updateRowDetail}
+            onRemove={removeRowDetail}
+          />
+
+          <div className="flex justify-end border-t pt-4">
+            {/* Status */}
+            <div className="ml-3 text-sm">
+              {saveProductDetailMutation.isPending && <span className="text-gray-500">Saving...</span>}
+
+              {saveProductDetailMutation.isSuccess && saveDetailSuccess && (
+                <span className="text-gray-900">✓ Product detail saved successfully</span>
+              )}
+
+              {saveProductDetailMutation.isError && <span className="text-red-600">Failed to save product detail</span>}
+            </div>
+
+            <button
+              type="button"
+              onClick={saveProductDetail}
+              disabled={isSaveDisabled}
+              className="cursor-pointer rounded bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-50">
+              {saveProductDetailMutation.isPending ? "Saving..." : "Save Product Detail"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Images */}
       <div className="space-y-4 rounded border border-gray-200 p-6">
@@ -218,26 +337,22 @@ export default function ProductForm({
         {images.length === 0 && <p className="text-sm text-gray-500">No images added</p>}
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {images.map((img, index) => {
-            const preview = img.imageFile ? URL.createObjectURL(img.imageFile) : img.imageLink;
+          {images.map((img) => (
+            <div key={img.id ?? img.tempId} className="relative rounded border p-2">
+              {img.preview || img.imageLink ? (
+                <img src={img.preview ?? img.imageLink} className="h-32 w-full object-contain" alt="Product" />
+              ) : (
+                <div className="flex h-32 items-center justify-center text-sm text-gray-400">No image</div>
+              )}
 
-            return (
-              <div key={img.id ?? index} className="relative rounded border p-2">
-                {preview ? (
-                  <img src={preview} className="h-32 w-full object-contain" />
-                ) : (
-                  <div className="flex h-32 items-center justify-center text-sm text-gray-400">No image</div>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="absolute top-1 right-1 cursor-pointer text-xs text-red-600">
-                  <CloseIcon fontSize="small" />
-                </button>
-              </div>
-            );
-          })}
+              <button
+                type="button"
+                onClick={() => removeImage(images.findIndex((i) => (i.id ?? i.tempId) === (img.id ?? img.tempId)))}
+                className="absolute top-1 right-1 cursor-pointer text-xs text-red-600">
+                <CloseIcon fontSize="small" />
+              </button>
+            </div>
+          ))}
         </div>
       </div>
 

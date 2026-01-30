@@ -43,7 +43,7 @@ public class ProductDetail {
     @Column(nullable = false)
     private Integer size;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "color_id", nullable = false)
     private ProductColor color;
 

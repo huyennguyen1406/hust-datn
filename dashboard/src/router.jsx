@@ -177,16 +177,20 @@ export const productEditRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/products/$id/edit",
   loader: async ({ params }) => {
-    const [product, brandsRes, categoriesRes] = await Promise.all([
+    const [product, brandsRes, categoriesRes, productColors, productInfoDetails] = await Promise.all([
       managementApi.getProductsById(params.id),
       managementApi.getBrandsMinimized(),
       managementApi.getCategoriesMinimized(),
+      managementApi.getProductColors(),
+      managementApi.getProductDetail(params.id),
     ]);
 
     return {
       product: product,
       brands: brandsRes.data,
       categories: categoriesRes.data,
+      productColors: productColors.data,
+      productInfoDetails: productInfoDetails.data,
     };
   },
   gcTime: 0,

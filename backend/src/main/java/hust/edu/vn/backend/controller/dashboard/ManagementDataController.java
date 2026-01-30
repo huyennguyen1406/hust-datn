@@ -4,13 +4,16 @@ import hust.edu.vn.backend.dto.admin.request.BrandCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.BrandUpdateRequest;
 import hust.edu.vn.backend.dto.admin.request.CategoryCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductCreateRequest;
+import hust.edu.vn.backend.dto.admin.request.ProductInfoDetailUpdateRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductUpdateRequest;
 import hust.edu.vn.backend.dto.admin.response.BrandMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.BrandResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryResponse;
+import hust.edu.vn.backend.dto.admin.response.ProductColorResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductDetailResponse;
+import hust.edu.vn.backend.dto.admin.response.ProductInfoDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductResponse;
 import hust.edu.vn.backend.dto.common.response.PaginationResponse;
 import hust.edu.vn.backend.service.dashboard.ManagementDataService;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -227,6 +231,22 @@ public class ManagementDataController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<List<ProductColorResponse>> getAllProductColors() {
         List<ProductColorResponse> response = managementProductService.getAllProductColors();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/products/{id}/details")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<List<ProductInfoDetailResponse>> getProductInfoDetails(@PathVariable String id) {
+        List<ProductInfoDetailResponse> response = managementProductService.getProductInfoDetails(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/products/{id}/details")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<List<ProductInfoDetailResponse>> updateProductInfoDetail(
+            @PathVariable String id,
+            @RequestBody ProductInfoDetailUpdateRequest request) {
+        List<ProductInfoDetailResponse> response = managementProductService.updateProductInfoDetail(id, request);
         return ResponseEntity.ok(response);
     }
 }
