@@ -14,6 +14,8 @@ import NotFound from "./page/notfound/NotFound.jsx";
 import Product from "./page/product/Product.jsx";
 import ProductForm from "./page/product/ProductForm.jsx";
 import SaleStatistic from "./page/saleStatistic/SaleStatistic.jsx";
+import Voucher from "./page/voucher/Voucher.jsx";
+import VoucherForm from "./page/voucher/VoucherForm.jsx";
 import { MOCK_DATA_PROVINCE } from "./router_mock_data.js";
 
 export const rootRoute = createRootRoute({
@@ -212,7 +214,23 @@ export const productEditRoute = createRoute({
 export const vouchersRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/vouchers",
-  component: () => <Management title={"Vouchers"} description={"Manage all vouchers"} />,
+  component: () => <Voucher />,
+});
+
+export const vouchersCreateRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/vouchers/create",
+  component: () => <VoucherForm mode="create" />,
+});
+
+export const vouchersEditRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/vouchers/$id/edit",
+  loader: async ({ params }) => {
+    return managementApi.getVoucherById(params.id);
+  },
+  gcTime: 0,
+  component: () => <VoucherForm mode="edit" />,
 });
 
 // User data routes
@@ -270,6 +288,8 @@ const routeTree = rootRoute.addChildren([
     // bannersRoute,
     // saleOffersRoute,
     vouchersRoute,
+    vouchersCreateRoute,
+    vouchersEditRoute,
     usersRoute,
     // ordersRoute,
     // reviewsRoute,

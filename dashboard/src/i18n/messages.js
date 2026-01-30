@@ -10,6 +10,7 @@ export const messages = {
     delete: "Delete",
     nameEn: "Name (English)",
     nameVi: "Name (Vietnamese)",
+    modifiedAt: "Modified At",
 
     // Sidebar
     sidebar_title: "Admin Panel",
@@ -53,6 +54,14 @@ export const messages = {
     productNameEn: "Product Name (English)",
     productNameVi: "Product Name (Vietnamese)",
 
+    // Voucher Screen
+    code: "Code",
+    startTime: "Start Time",
+    endTime: "End Time",
+    discountAmount: "Discount Amount",
+    voucherAmount: "Voucher Amount",
+    newVoucher: "New Voucher",
+
     // Statistic Sidebar Items
     user_statistic: "User Statistic",
     sales_statistic: "Sales Statistic",
@@ -82,6 +91,7 @@ export const messages = {
     delete: "Xoá",
     nameEn: "Tiếng Anh",
     nameVi: "Tiếng Việt",
+    modifiedAt: "Ngày cập nhật",
 
     // Sidebar
     sidebar_title: "Trang Quản Trị",
@@ -132,6 +142,14 @@ export const messages = {
     newProduct: "Thêm sản phẩm",
     productNameEn: "Tên sản phẩm (Tiếng Anh)",
     productNameVi: "Tên sản phẩm (Tiếng Việt)",
+
+    // Voucher Screen
+    code: "Mã voucher",
+    startTime: "Thời gian bắt đầu",
+    endTime: "Thời gian kết thúc",
+    discountAmount: "Số tiền giảm giá",
+    voucherAmount: "Sô lượng voucher",
+    newVoucher: "Thêm Voucher",
 
     //Sale statistic:
     sale_total_revenue: "Tổng doanh thu trong kỳ",

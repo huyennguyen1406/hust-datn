@@ -6,6 +6,7 @@ import hust.edu.vn.backend.dto.admin.request.CategoryCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductInfoDetailUpdateRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductUpdateRequest;
+import hust.edu.vn.backend.dto.admin.request.VoucherCreateRequest;
 import hust.edu.vn.backend.dto.admin.response.BrandMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.BrandResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryDetailResponse;
@@ -15,6 +16,7 @@ import hust.edu.vn.backend.dto.admin.response.ProductColorResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductInfoDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductResponse;
+import hust.edu.vn.backend.dto.admin.response.VoucherResponse;
 import hust.edu.vn.backend.dto.common.response.PaginationResponse;
 import hust.edu.vn.backend.service.dashboard.ManagementDataService;
 import hust.edu.vn.backend.service.dashboard.ManagementProductService;
@@ -248,5 +250,43 @@ public class ManagementDataController {
             @RequestBody ProductInfoDetailUpdateRequest request) {
         List<ProductInfoDetailResponse> response = managementProductService.updateProductInfoDetail(id, request);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/vouchers")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<PaginationResponse<VoucherResponse>> getAllVouchers(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "fields", required = false) List<String> fields,
+            @RequestParam(value = "operations", required = false) List<String> operations,
+            @RequestParam(value = "values", required = false) List<String> values,
+            @RequestParam(value = "combination", defaultValue = "AND") String combination
+    ) {
+        PaginationResponse<VoucherResponse> response = managementDataService.getAllVouchers(page, pageSize, fields, operations, values, combination);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/vouchers/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<VoucherResponse> getVoucherById(
+            @PathVariable String id) {
+        VoucherResponse response = managementDataService.getVoucherById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/vouchers")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<VoucherResponse> createUpdateVoucher(
+            @RequestBody VoucherCreateRequest request
+    ) {
+        VoucherResponse response = managementDataService.createOrUpdateVoucher(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @DeleteMapping("/vouchers/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteVoucher(@PathVariable String id) {
+        managementDataService.deleteVoucher(id);
+        return ResponseEntity.noContent().build();
     }
 }

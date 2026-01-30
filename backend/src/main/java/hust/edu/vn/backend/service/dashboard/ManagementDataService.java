@@ -6,21 +6,26 @@ import hust.edu.vn.backend.dto.admin.request.BrandUpdateRequest;
 import hust.edu.vn.backend.dto.admin.request.CategoryBannerRequest;
 import hust.edu.vn.backend.dto.admin.request.CategoryCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.FilterRequest;
+import hust.edu.vn.backend.dto.admin.request.VoucherCreateRequest;
 import hust.edu.vn.backend.dto.admin.response.BrandMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.BrandResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryBannerResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryResponse;
+import hust.edu.vn.backend.dto.admin.response.VoucherResponse;
 import hust.edu.vn.backend.dto.common.response.PaginationResponse;
 import hust.edu.vn.backend.entity.Brand;
 import hust.edu.vn.backend.entity.Category;
 import hust.edu.vn.backend.entity.CategoryBanner;
+import hust.edu.vn.backend.entity.Voucher;
 import hust.edu.vn.backend.exception.ApiStatusException;
 import hust.edu.vn.backend.repository.BrandRepository;
 import hust.edu.vn.backend.repository.CategoryRepository;
+import hust.edu.vn.backend.repository.VoucherRepository;
 import hust.edu.vn.backend.repository.specification.BrandSpecification;
 import hust.edu.vn.backend.repository.specification.CategorySpecification;
+import hust.edu.vn.backend.repository.specification.VoucherSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +57,9 @@ public class ManagementDataService {
 
     private final CategoryRepository categoryRepository;
     private final CategorySpecification categorySpecification;
+
+    private final VoucherRepository voucherRepository;
+    private final VoucherSpecification voucherSpecification;
 
     private List<FilterRequest> buildFilters(List<String> fields, List<String> operations, List<String> values) {
         List<FilterRequest> filters = new ArrayList<>();
@@ -367,5 +375,63 @@ public class ManagementDataService {
                         .setNameVi(c.getNameVi())
                 )
                 .toList();
+    }
+
+    public PaginationResponse<VoucherResponse> getAllVouchers(int page, int pageSize, List<String> fields, List<String> operations, List<String> values, String combination) {
+        int pageIndex = Math.max(page - 1, 0);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        List<FilterRequest> filters = buildFilters(fields, operations, values);
+        Specification<Voucher> specification = filters.isEmpty() ? null : voucherSpecification.buildSpecification(filters, combination);
+
+        Page<Voucher> brandPage = specification == null ?
+                voucherRepository.findAll(pageable) :
+                voucherRepository.findAll(specification, pageable);
+
+
+        // 5️⃣ Map entity → response DTO
+        List<VoucherResponse> data = brandPage
+                .getContent()
+                .stream()
+                .map(VoucherResponse::fromEntity)
+                .toList();
+
+
+        // 6️⃣ Build pagination response
+        return new PaginationResponse<VoucherResponse>()
+                .setData(data)
+                .setPage(page)
+                .setPageSize(pageSize)
+                .setTotalPages(brandPage.getTotalPages())
+                .setTotalItems(brandPage.getTotalElements());
+
+    }
+
+    public VoucherResponse getVoucherById(String id) {
+        Voucher voucher = voucherRepository.findById(id)
+                .orElseThrow(() -> ApiStatusException.notFound(ErrorConstant.ERROR_MESSAGE_VOUCHER_NOT_FOUND, ErrorConstant.ERROR_CODE_VOUCHER_NOT_FOUND));
+        return VoucherResponse.fromEntity(voucher);
+    }
+
+    public VoucherResponse createOrUpdateVoucher(VoucherCreateRequest request) {
+        Voucher voucher = voucherRepository
+                .findById(request.getCode())
+                .orElseGet(Voucher::new);
+
+        voucher.setCode(request.getCode());
+        voucher.setStartTime(request.getStartTime());
+        voucher.setEndTime(request.getEndTime());
+        voucher.setDiscountAmount(request.getDiscountAmount());
+        voucher.setVoucherAmount(request.getVoucherAmount());
+
+        Voucher saved = voucherRepository.save(voucher);
+        return VoucherResponse.fromEntity(saved);
+    }
+
+    public void deleteVoucher(String id) {
+        Voucher voucher = voucherRepository.findById(id)
+                .orElseThrow(() -> ApiStatusException.notFound(ErrorConstant.ERROR_MESSAGE_VOUCHER_NOT_FOUND, ErrorConstant.ERROR_CODE_VOUCHER_NOT_FOUND));
+
+        voucherRepository.delete(voucher);
     }
 }

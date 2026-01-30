@@ -94,4 +94,16 @@ export const managementApi = {
   updateProductDetail: async (productId, payload) => {
     return axiosClient.post(`/dashboard/management-data/products/${productId}/details`, payload);
   },
+
+  getVouchers: async (params) => {
+    const { data } = await axiosClient.get("/dashboard/management-data/vouchers", { params });
+    return data;
+  },
+
+  getVoucherById: (id) => axiosClient.get(`/dashboard/management-data/vouchers/${id}`).then((res) => res.data),
+
+  createOrUpdateVoucher: (payload) =>
+    axiosClient.post("/dashboard/management-data/vouchers", payload).then((res) => res.data),
+
+  deleteVoucher: (id) => axiosClient.delete(`/dashboard/management-data/vouchers/${id}`),
 };

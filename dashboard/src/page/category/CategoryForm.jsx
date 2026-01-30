@@ -10,7 +10,6 @@ export default function CategoryForm({
   const isEditMode = mode === "edit";
   const loaderData = useLoaderData({ strict: false });
   const category = isEditMode ? loaderData : null;
-  console.log("Load data", loaderData);
 
   /* =========================
      State initialization

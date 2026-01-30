@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="009-create-voucher" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="voucher" />
+                </not>
+            </and>
+        </preConditions>
+        <createTable tableName="voucher">
+            <column name="code" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="start_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="end_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="discount_amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="voucher_amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="modified_at" type="timestamp"/>
+
+            <column name="modified_by" type="uuid"/>
+        </createTable>
+
+        <createIndex indexName="idx_voucher_start_time" tableName="voucher">
+            <column name="start_time"/>
+        </createIndex>
+
+        <createIndex indexName="idx_voucher_end_time" tableName="voucher">
+            <column name="end_time"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

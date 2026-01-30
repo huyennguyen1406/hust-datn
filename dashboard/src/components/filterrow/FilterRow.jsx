@@ -30,6 +30,8 @@ const FilterRow = ({ filter, onChange, onRemove, columnList }) => {
         className="h-10 min-w-[120px] rounded-lg border border-gray-300 bg-white px-3 text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
         <option value="equals">{t("equals")}</option>
         <option value="contains">{t("contains")}</option>
+        <option value="greater_than_or_equals">{">="}</option>
+        <option value="less_than_or_equals">{"<="}</option>
       </select>
 
       {/* Value */}
