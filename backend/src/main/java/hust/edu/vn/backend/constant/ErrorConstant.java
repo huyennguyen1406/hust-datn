@@ -6,9 +6,11 @@ public class ErrorConstant {
     public static final String ERROR_MESSAGE_CSV_FILE_FORMAT_WRONG = "File did not match expected format";
     public static final String ERROR_MESSAGE_CSV_FILE_READING = "Error while reading CSV file";
     public static final String ERROR_MESSAGE_BRAND_NOT_FOUND = "Brand not found";
+    public static final String ERROR_MESSAGE_PRODUCT_NOT_FOUND = "Product not found";
 
 
     public static final String ERROR_CODE_CSV_FILE_FORMAT_WRONG = "ERR_CSV_FORMAT_WRONG";
     public static final String ERROR_CODE_CSV_FILE_READING = "ERR_CSV_FILE_READING";
     public static final String ERROR_CODE_BRAND_NOT_FOUND = "ERR_BRAND_NOT_FOUND";
+    public static final String ERROR_CODE_PRODUCT_NOT_FOUND = "ERR_PRODUCT_NOT_FOUND";
 }

@@ -3,11 +3,18 @@ package hust.edu.vn.backend.controller.dashboard;
 import hust.edu.vn.backend.dto.admin.request.BrandCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.BrandUpdateRequest;
 import hust.edu.vn.backend.dto.admin.request.CategoryCreateRequest;
+import hust.edu.vn.backend.dto.admin.request.ProductCreateRequest;
+import hust.edu.vn.backend.dto.admin.request.ProductUpdateRequest;
+import hust.edu.vn.backend.dto.admin.response.BrandMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.BrandResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryDetailResponse;
+import hust.edu.vn.backend.dto.admin.response.CategoryMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryResponse;
+import hust.edu.vn.backend.dto.admin.response.ProductDetailResponse;
+import hust.edu.vn.backend.dto.admin.response.ProductResponse;
 import hust.edu.vn.backend.dto.common.response.PaginationResponse;
 import hust.edu.vn.backend.service.dashboard.ManagementDataService;
+import hust.edu.vn.backend.service.dashboard.ManagementProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +38,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ManagementDataController {
     private final ManagementDataService managementDataService;
+    private final ManagementProductService managementProductService;
 
     @GetMapping("/brands")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
@@ -94,6 +102,13 @@ public class ManagementDataController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/brands-minimized")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<List<BrandMinimizedResponse>> getAllBrandsMinimized() {
+        List<BrandMinimizedResponse> response = managementDataService.getAllBrandsMinimized();
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/categories")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<PaginationResponse<CategoryResponse>> getAllCategories(
@@ -148,5 +163,70 @@ public class ManagementDataController {
     }
 
 
+    @GetMapping("/categories-minimized")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<List<CategoryMinimizedResponse>> getAllCategoriesMinimized() {
+        List<CategoryMinimizedResponse> response = managementDataService.getAllCategoriesMinimized();
+        return ResponseEntity.ok(response);
+    }
 
+    @GetMapping("/products")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<PaginationResponse<ProductResponse>> getAllProducts(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "fields", required = false) List<String> fields,
+            @RequestParam(value = "operations", required = false) List<String> operations,
+            @RequestParam(value = "values", required = false) List<String> values,
+            @RequestParam(value = "combination", defaultValue = "AND") String combination
+    ) {
+        PaginationResponse<ProductResponse> response = managementProductService.getAllProducts(page, pageSize, fields, operations, values, combination);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/products/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<ProductDetailResponse> getProductById(@PathVariable String id) {
+        ProductDetailResponse response = managementProductService.getProductById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/products", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<ProductDetailResponse> createProduct(
+            @RequestPart("product") ProductCreateRequest request,
+            @RequestPart(value = "productImages", required = false) List<MultipartFile> productImages
+    ) {
+
+        ProductDetailResponse response = managementProductService.createProduct(request, productImages);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PatchMapping(
+            path = "/products/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<ProductDetailResponse> updateProduct(
+            @PathVariable String id,
+            @RequestPart("product") ProductUpdateRequest product,
+            @RequestPart(value = "productImages", required = false) List<MultipartFile> productImages
+    ) {
+        ProductDetailResponse response = managementProductService.updateProduct(id, product, productImages);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/products/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+        managementProductService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/products-color")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<List<ProductColorResponse>> getAllProductColors() {
+        List<ProductColorResponse> response = managementProductService.getAllProductColors();
+        return ResponseEntity.ok(response);
+    }
 }

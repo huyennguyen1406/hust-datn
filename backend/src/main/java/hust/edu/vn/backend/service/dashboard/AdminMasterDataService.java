@@ -60,7 +60,7 @@ public class AdminMasterDataService {
             throw ApiStatusException.badRequest("Admin user already exists", "ERR_ADMIN_EXISTS");
         }
 
-        Role adminRole = roleRepository.findByName("dashboard")
+        Role adminRole = roleRepository.findByName("admin")
                 .orElseThrow(() -> ApiStatusException.internalServerError("Admin role not found", "ERR_ROLE_NOT_FOUND"));
 
         AppUser appUser = new AppUser()

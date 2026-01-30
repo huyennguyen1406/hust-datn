@@ -37,7 +37,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="modified_at" type="timestamp"/>
-            <column name="modified_by" type="uuid"/>
+            <column name="modified_by" type="UUID"/>
         </createTable>
 
         <createTable tableName="product_detail">
@@ -60,7 +60,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="modified_at" type="timestamp"/>
-            <column name="modified_by" type="uuid"/>
+            <column name="modified_by" type="UUID"/>
         </createTable>
 
         <addDefaultValue

@@ -51,7 +51,7 @@
 
             <column name="modified_at" type="timestamp"/>
 
-            <column name="modified_by" type="uuid"/>
+            <column name="modified_by" type="UUID"/>
         </createTable>
         <createTable tableName="user_authentication">
             <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">

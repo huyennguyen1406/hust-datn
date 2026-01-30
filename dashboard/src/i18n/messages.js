@@ -48,6 +48,11 @@ export const messages = {
     //Category Screen
     newCategory: "New Category",
 
+    //Product Screen
+    newProduct: "New Product",
+    productNameEn: "Product Name (English)",
+    productNameVi: "Product Name (Vietnamese)",
+
     // Statistic Sidebar Items
     user_statistic: "User Statistic",
     sales_statistic: "Sales Statistic",
@@ -122,6 +127,11 @@ export const messages = {
 
     //Category Screen
     newCategory: "Thêm phân loại",
+
+    //Product Screen
+    newProduct: "Thêm sản phẩm",
+    productNameEn: "Tên sản phẩm (Tiếng Anh)",
+    productNameVi: "Tên sản phẩm (Tiếng Việt)",
 
     //Sale statistic:
     sale_total_revenue: "Tổng doanh thu trong kỳ",

@@ -8,14 +8,14 @@ import { managementApi } from "../../api/managementApi";
 import FilterRow from "../../components/filterRow/FilterRow";
 import Pagination from "../../components/pagination/Pagination";
 import { useI18n } from "../../i18n/useI18n";
-import { extractDate } from "../../utility/format";
+import { extractDate, formatPrice } from "../../utility/format";
 import { buildBrandQueryParams } from "./helper";
 
 /* ------------------ constants ------------------ */
 
-const CATEGORY_COLUMNS = ["nameEn", "nameVi", "modifiedDate"];
+const PRODUCT_COLUMNS = ["productNameEn", "productNameVi", "brandName", "price", "modifiedDate"];
 
-const CATEGORY_FILTER = [{ value: "nameEn" }, { value: "nameVi" }];
+const CATEGORY_FILTER = [{ value: "nameEn" }, { value: "nameVi" }, { value: "brandName" }];
 
 const createFilter = () => ({
   id: crypto.randomUUID(),
@@ -31,7 +31,7 @@ const COMBINATION_TYPE = [
 
 /* ------------------ component ------------------ */
 
-export default function Category() {
+export default function Brand() {
   const { t } = useI18n();
   const navigate = useNavigate();
 
@@ -60,12 +60,12 @@ export default function Category() {
   /* ------------------ query ------------------ */
 
   const { data, isLoading } = useQuery({
-    queryKey: ["categories", queryParams],
-    queryFn: () => managementApi.getCategories(queryParams),
+    queryKey: ["products", queryParams],
+    queryFn: () => managementApi.getProducts(queryParams),
     keepPreviousData: true,
   });
 
-  const categories = data?.data ?? [];
+  const products = data?.data ?? [];
 
   /* ------------------ filter handlers ------------------ */
 
@@ -96,14 +96,14 @@ export default function Category() {
       combination: e.target.value,
     }));
 
-  const handleNewBrandClick = (e) => {
+  const handleNewProductClick = (e) => {
     e.preventDefault();
-    navigate({ to: "/categories/create" });
+    navigate({ to: "/products/create" });
   };
 
   const handleEditClick = (id) => {
     navigate({
-      to: "/categories/$id/edit",
+      to: "/products/$id/edit",
       params: { id },
     });
   };
@@ -111,18 +111,18 @@ export default function Category() {
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => managementApi.deleteBrand(id),
+    mutationFn: (id) => managementApi.deleteProduct(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
     onError: (error) => {
       console.error("Delete failed:", error);
-      alert("Failed to delete brand");
+      alert("Failed to delete products");
     },
   });
 
   const handleDeleteClick = (id) => {
-    const confirmed = window.confirm("Are you sure you want to delete this brand?");
+    const confirmed = window.confirm("Are you sure you want to delete this product?");
     if (!confirmed) return;
 
     deleteMutation.mutate(id);
@@ -135,15 +135,15 @@ export default function Category() {
       {/* ---------- header ---------- */}
       <header className="flex items-center justify-between p-8 pb-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Category</h1>
-          <p className="mt-1 text-gray-600">Category Management</p>
+          <h1 className="text-3xl font-bold text-gray-900">Product</h1>
+          <p className="mt-1 text-gray-600">Product Management</p>
         </div>
 
         <button
-          onClick={(e) => handleNewBrandClick(e)}
+          onClick={(e) => handleNewProductClick(e)}
           className="flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 shadow-sm hover:bg-indigo-700">
           <AddCircleIcon className="text-white" />
-          <span className="font-semibold text-white">{t("newCategory")}</span>
+          <span className="font-semibold text-white">{t("newProduct")}</span>
         </button>
       </header>
 
@@ -199,12 +199,13 @@ export default function Category() {
               </button>
             </div>
           </div>
+
           {/* ---------- table ---------- */}
           <TableContainer component={Box}>
             <Table className="min-w-full text-sm text-gray-600">
               <TableHead>
                 <TableRow className="bg-gray-50 text-xs text-gray-700 uppercase">
-                  {CATEGORY_COLUMNS.map((col) => (
+                  {PRODUCT_COLUMNS.map((col) => (
                     <TableCell key={col} className="px-6 py-3">
                       {t(col)}
                     </TableCell>
@@ -215,20 +216,21 @@ export default function Category() {
 
               <TableBody>
                 {/* ---------- empty state ---------- */}
-                {!isLoading && categories.length === 0 && (
+                {!isLoading && products.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={CATEGORY_COLUMNS.length + 1} className="px-6 py-6 text-center text-gray-500">
+                    <TableCell colSpan={PRODUCT_COLUMNS.length + 1} className="px-6 py-6 text-center text-gray-500">
                       No record found
                     </TableCell>
                   </TableRow>
                 )}
 
                 {/* ---------- data rows ---------- */}
-                {categories.map((row, idx) => (
-                  <TableRow key={row.id} hover className={idx !== categories.length - 1 ? "border-b" : ""}>
-                    <TableCell className="px-6 py-4">{row.nameEn}</TableCell>
-                    <TableCell className="px-6 py-4">{row.nameVi}</TableCell>
-
+                {products.map((row, idx) => (
+                  <TableRow key={row.id} hover className={idx !== products.length - 1 ? "border-b" : ""}>
+                    <TableCell className="px-6 py-4">{row.productNameEn}</TableCell>
+                    <TableCell className="px-6 py-4">{row.productNameVi}</TableCell>
+                    <TableCell className="px-6 py-4">{row.brandName}</TableCell>
+                    <TableCell className="px-6 py-4">{formatPrice(row.price)}</TableCell>
                     <TableCell className="px-6 py-4">{extractDate(row.modifiedAt)}</TableCell>
 
                     <TableCell className="px-6 py-4 text-right">

@@ -38,7 +38,7 @@
             </column>
 
             <column name="modified_at" type="timestamp"/>
-            <column name="modified_by" type="nvarchar(255)"/>
+            <column name="modified_by" type="UUID"/>
         </createTable>
 
         <createTable tableName="category_product">
@@ -98,7 +98,7 @@
             </column>
 
             <column name="modified_at" type="timestamp"/>
-            <column name="modified_by" type="nvarchar(255)"/>
+            <column name="modified_by" type="UUID"/>
         </createTable>
 
         <addForeignKeyConstraint

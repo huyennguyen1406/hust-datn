@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class BrandSpecification {
+public class BrandSpecification implements EntitySpecification<Brand> {
 
     private static final String BRAND_NAME = "brandName";
 
+    @Override
     public Specification<Brand> buildSpecification(List<FilterRequest> filters, String combination) {
 
         return (root, query, cb) -> {

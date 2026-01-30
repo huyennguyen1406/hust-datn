@@ -15,6 +15,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
@@ -47,12 +50,15 @@ public class ProductDetail {
     @Column(nullable = false)
     private Integer quantity;
 
+    @CreatedDate
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    @LastModifiedDate
     @Column(name = "modified_at")
     private Instant modifiedAt;
 
+    @LastModifiedBy
     @Column(name = "modified_by", columnDefinition = "uuid")
     private UUID modifiedBy;
 

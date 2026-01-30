@@ -14,10 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CategorySpecification {
+public class CategorySpecification implements EntitySpecification<Category> {
     private static final String NAME_EN = "nameEn";
     private static final String NAME_VI = "nameVi";
 
+    @Override
     public Specification<Category> buildSpecification(List<FilterRequest> filters, String combination) {
 
         return (root, query, cb) -> {

@@ -1,0 +1,57 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+    <changeSet id="d002-insert-color" author="huyennguyen1406">
+        <preConditions>
+            <tableExists tableName="product_color" />
+        </preConditions>
+
+        <insert tableName="product_color">
+            <column name="id" valueComputed="gen_random_uuid()" />
+            <column name="hex_code" value="#000000" />
+            <column name="name_en" value="Black" />
+            <column name="name_vi" value="Đen" />
+        </insert>
+
+        <insert tableName="product_color">
+            <column name="id" valueComputed="gen_random_uuid()" />
+            <column name="hex_code" value="#FFFFFF" />
+            <column name="name_en" value="White" />
+            <column name="name_vi" value="Trắng" />
+        </insert>
+
+        <insert tableName="product_color">
+            <column name="id" valueComputed="gen_random_uuid()" />
+            <column name="hex_code" value="#808080" />
+            <column name="name_en" value="Gray" />
+            <column name="name_vi" value="Xám" />
+        </insert>
+
+        <insert tableName="product_color">
+            <column name="id" valueComputed="gen_random_uuid()" />
+            <column name="hex_code" value="#0000FF" />
+            <column name="name_en" value="Blue" />
+            <column name="name_vi" value="Xanh dương" />
+        </insert>
+
+        <insert tableName="product_color">
+            <column name="id" valueComputed="gen_random_uuid()" />
+            <column name="hex_code" value="#FF0000" />
+            <column name="name_en" value="Red" />
+            <column name="name_vi" value="Đỏ" />
+        </insert>
+
+        <insert tableName="product_color">
+            <column name="id" valueComputed="gen_random_uuid()" />
+            <column name="hex_code" value="#A52A2A" />
+            <column name="name_en" value="Brown" />
+            <column name="name_vi" value="Nâu" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
+
+

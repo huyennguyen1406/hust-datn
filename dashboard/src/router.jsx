@@ -11,6 +11,8 @@ import CategoryForm from "./page/category/CategoryForm.jsx";
 import Login from "./page/login/Login.jsx";
 import Management from "./page/management/Management.jsx";
 import NotFound from "./page/notfound/NotFound.jsx";
+import Product from "./page/product/Product.jsx";
+import ProductForm from "./page/product/ProductForm.jsx";
 import SaleStatistic from "./page/saleStatistic/SaleStatistic.jsx";
 import { MOCK_DATA_PROVINCE } from "./router_mock_data.js";
 
@@ -138,7 +140,6 @@ export const categoryCreateRoute = createRoute({
   component: () => <CategoryForm mode="create" />,
 });
 
-// Brand edit
 export const categoryEditRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/categories/$id/edit",
@@ -151,7 +152,45 @@ export const categoryEditRoute = createRoute({
 export const productsRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/products",
-  component: () => <Management title={"Products"} description={"Manage all products"} />,
+  component: () => <Product />,
+});
+
+export const productCreateRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/products/create",
+  loader: async () => {
+    const [brandsRes, categoriesRes] = await Promise.all([
+      managementApi.getBrandsMinimized(),
+      managementApi.getCategoriesMinimized(),
+    ]);
+
+    return {
+      brands: brandsRes.data,
+      categories: categoriesRes.data,
+    };
+  },
+
+  component: () => <ProductForm mode="create" />,
+});
+
+export const productEditRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/products/$id/edit",
+  loader: async ({ params }) => {
+    const [product, brandsRes, categoriesRes] = await Promise.all([
+      managementApi.getProductsById(params.id),
+      managementApi.getBrandsMinimized(),
+      managementApi.getCategoriesMinimized(),
+    ]);
+
+    return {
+      product: product,
+      brands: brandsRes.data,
+      categories: categoriesRes.data,
+    };
+  },
+  gcTime: 0,
+  component: () => <ProductForm mode="edit" />,
 });
 
 // export const bannersRoute = createRoute({
@@ -222,6 +261,8 @@ const routeTree = rootRoute.addChildren([
     categoryCreateRoute,
     categoryEditRoute,
     productsRoute,
+    productCreateRoute,
+    productEditRoute,
     // bannersRoute,
     // saleOffersRoute,
     vouchersRoute,

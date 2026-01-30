@@ -6,9 +6,11 @@ import hust.edu.vn.backend.dto.admin.request.BrandUpdateRequest;
 import hust.edu.vn.backend.dto.admin.request.CategoryBannerRequest;
 import hust.edu.vn.backend.dto.admin.request.CategoryCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.FilterRequest;
+import hust.edu.vn.backend.dto.admin.response.BrandMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.BrandResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryBannerResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryDetailResponse;
+import hust.edu.vn.backend.dto.admin.response.CategoryMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryResponse;
 import hust.edu.vn.backend.dto.common.response.PaginationResponse;
 import hust.edu.vn.backend.entity.Brand;
@@ -342,5 +344,28 @@ public class ManagementDataService {
 
         categoryRepository.delete(category);
 
+    }
+
+    public List<BrandMinimizedResponse> getAllBrandsMinimized() {
+        List<Brand> brands = brandRepository.findAll();
+
+        return brands.stream()
+                .map(b -> new BrandMinimizedResponse()
+                        .setId(b.getId().toString())
+                        .setBrandName(b.getBrandName())
+                )
+                .toList();
+    }
+
+    public List<CategoryMinimizedResponse> getAllCategoriesMinimized() {
+        List<Category> categories = categoryRepository.findAll();
+
+        return categories.stream()
+                .map(c -> new CategoryMinimizedResponse()
+                        .setId(c.getId().toString())
+                        .setNameEn(c.getNameEn())
+                        .setNameVi(c.getNameVi())
+                )
+                .toList();
     }
 }
