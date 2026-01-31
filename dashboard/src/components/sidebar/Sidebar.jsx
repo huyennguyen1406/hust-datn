@@ -1,12 +1,11 @@
 // src/Sidebar.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import FolderIcon from "@mui/icons-material/Folder";
 import IncompleteCircleIcon from "@mui/icons-material/IncompleteCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Link, useRouterState } from "@tanstack/react-router";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import "../../api/authApi";
 import { logout } from "../../api/authApi";
 import { getUserInfo } from "../../api/userApi";
@@ -49,8 +48,8 @@ export default function Sidebar() {
       stateHook: setMasterOpen,
       paths: masterPaths,
       children: [
-        { label: "districts", to: "/districts", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
         { label: "provinces", to: "/provinces", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
+        { label: "districts", to: "/districts", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
         // {
         //   label: "delivery_methods",
         //   to: "/delivery-methods",

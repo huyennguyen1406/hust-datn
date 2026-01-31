@@ -1,5 +1,5 @@
-import React from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { logoutApi } from "../../api/authenticationApi";
 import { logout } from "../../auth";
 import Deliver from "./component/Deliver";
 import Order from "./component/Order";
@@ -8,10 +8,16 @@ import Personal from "./component/Personal";
 const Account = () => {
   const navigate = useNavigate();
 
-  const onLogoutButtonClick = (e) => {
+  const onLogoutButtonClick = async (e) => {
     e.preventDefault();
-    logout();
-    navigate({ to: "/login" });
+    try {
+      await logoutApi();
+    } catch (error) {
+      console.error("Logout API call failed:", error);
+    } finally {
+      logout();
+      navigate({ to: "/login" });
+    }
   };
 
   return (

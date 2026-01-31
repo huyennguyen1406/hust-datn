@@ -1,7 +1,10 @@
 package hust.edu.vn.backend.controller.dashboard;
 
+import hust.edu.vn.backend.dto.admin.response.DistrictResponse;
+import hust.edu.vn.backend.dto.admin.response.ProvinceResponse;
 import hust.edu.vn.backend.dto.common.response.Message;
 import hust.edu.vn.backend.dto.admin.request.CreateAdminRequest;
+import hust.edu.vn.backend.dto.common.response.PaginationResponse;
 import hust.edu.vn.backend.service.dashboard.AdminMasterDataService;
 import hust.edu.vn.backend.service.dashboard.CsvService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -78,6 +81,47 @@ public class AdminMasterDataController {
     public ResponseEntity<Message> importDistrict(@RequestParam("file") MultipartFile file) {
         Message message = adminMasterDataService.importDistrictCsv(file);
         return ResponseEntity.ok(message);
+    }
+
+    @GetMapping("/provinces")
+    public ResponseEntity<PaginationResponse<ProvinceResponse>> getAllProvinces(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "fields", required = false) List<String> fields,
+            @RequestParam(value = "operations", required = false) List<String> operations,
+            @RequestParam(value = "values", required = false) List<String> values,
+            @RequestParam(value = "combination", defaultValue = "AND") String combination
+    ){
+        PaginationResponse<ProvinceResponse> response = adminMasterDataService.getAllProvinces(
+                page,
+                pageSize,
+                fields,
+                operations,
+                values,
+                combination
+        );
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/districts")
+    public ResponseEntity<PaginationResponse<DistrictResponse>> getAllDistrict(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "fields", required = false) List<String> fields,
+            @RequestParam(value = "operations", required = false) List<String> operations,
+            @RequestParam(value = "values", required = false) List<String> values,
+            @RequestParam(value = "combination", defaultValue = "AND") String combination
+    ){
+        PaginationResponse<DistrictResponse> response = adminMasterDataService.getAllDistrict(
+                page,
+                pageSize,
+                fields,
+                operations,
+                values,
+                combination
+        );
+        return ResponseEntity.ok(response);
     }
 
 

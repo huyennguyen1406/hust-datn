@@ -158,7 +158,7 @@ export default function Brand() {
 
               <div className="mb-2 space-y-3">
                 <select
-                  value={queryParams.combination}
+                  value={queryState.combination}
                   onChange={handleCombinationSelect}
                   className="h-10 min-w-[140px] rounded-lg border border-gray-300 bg-white px-3 text-gray-700 focus:border-indigo-500 focus:ring-indigo-500">
                   {COMBINATION_TYPE.map((op) => (

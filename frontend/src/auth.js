@@ -6,4 +6,5 @@ export function isAuthenticated() {
 
 export function logout() {
   localStorage.removeItem(TOKEN_STORAGE);
+  localStorage.removeItem("store_refresh_token");
 }

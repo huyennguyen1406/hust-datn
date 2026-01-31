@@ -9,18 +9,18 @@ import Brand from "./page/brand/Brand.jsx";
 import BrandForm from "./page/brand/BrandForm.jsx";
 import Category from "./page/category/Category.jsx";
 import CategoryForm from "./page/category/CategoryForm.jsx";
+import District from "./page/district/District.jsx";
 import Login from "./page/login/Login.jsx";
-import Management from "./page/management/Management.jsx";
 import NotFound from "./page/notfound/NotFound.jsx";
 import CreateOrder from "./page/order/CreateOrder.jsx";
 import Product from "./page/product/Product.jsx";
 import ProductForm from "./page/product/ProductForm.jsx";
+import Province from "./page/province/Province.jsx";
 import SaleStatistic from "./page/saleStatistic/SaleStatistic.jsx";
 import UserInfo from "./page/userInfo/UserInfo.jsx";
 import UserInfoForm from "./page/userInfo/UserInfoForm.jsx";
 import Voucher from "./page/voucher/Voucher.jsx";
 import VoucherForm from "./page/voucher/VoucherForm.jsx";
-import { MOCK_DATA_PROVINCE } from "./router_mock_data.js";
 
 export const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -54,20 +54,13 @@ export const loginRoute = createRoute({
 export const districtsRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/districts",
-  component: () => <Management title={"Districts"} description={"Manage all districts"} />,
+  component: () => <District />,
 });
 
 export const provincesRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/provinces",
-  component: () => (
-    <Management
-      title={"Provinces"}
-      description={"Manage all provinces"}
-      columns={MOCK_DATA_PROVINCE.columns}
-      data={MOCK_DATA_PROVINCE.data}
-    />
-  ),
+  component: () => <Province />,
 });
 
 // export const deliveryMethodsRoute = createRoute({

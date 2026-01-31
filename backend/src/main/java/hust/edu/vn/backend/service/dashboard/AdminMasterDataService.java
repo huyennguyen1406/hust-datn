@@ -1,10 +1,18 @@
 package hust.edu.vn.backend.service.dashboard;
 
 import hust.edu.vn.backend.constant.ErrorConstant;
+import hust.edu.vn.backend.dto.admin.request.FilterRequest;
+import hust.edu.vn.backend.dto.admin.response.BrandResponse;
+import hust.edu.vn.backend.dto.admin.response.DistrictResponse;
+import hust.edu.vn.backend.dto.admin.response.ProvinceResponse;
+import hust.edu.vn.backend.dto.common.response.PaginationResponse;
+import hust.edu.vn.backend.entity.Brand;
 import hust.edu.vn.backend.entity.District;
 import hust.edu.vn.backend.entity.Province;
 import hust.edu.vn.backend.repository.DistrictRepository;
 import hust.edu.vn.backend.repository.ProvinceRepository;
+import hust.edu.vn.backend.repository.specification.DistrictSpecification;
+import hust.edu.vn.backend.repository.specification.ProvinceSpecification;
 import hust.edu.vn.backend.security.constant.SecurityConstant;
 import hust.edu.vn.backend.dto.common.response.Message;
 import hust.edu.vn.backend.dto.admin.request.CreateAdminRequest;
@@ -17,6 +25,10 @@ import hust.edu.vn.backend.repository.RoleRepository;
 import hust.edu.vn.backend.repository.UserAuthenticationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +55,9 @@ public class AdminMasterDataService {
     private final ProvinceRepository provinceRepository;
     private final DistrictRepository districtRepository;
     private final CsvService csvService;
+
+    private final ProvinceSpecification provinceSpecification;
+    private final DistrictSpecification districtSpecification;
 
     private static final List<String> PROVINCE_HEADERS = List.of(
             "Mã TP",
@@ -245,4 +260,83 @@ public class AdminMasterDataService {
 
         return new Message("Districts imported successfully", "DISTRICTS_IMPORTED");
     }
+
+    @SuppressWarnings("DuplicatedCode")
+    public PaginationResponse<ProvinceResponse> getAllProvinces(int page, int pageSize, List<String> fields, List<String> operations, List<String> values, String combination) {
+        int pageIndex = Math.max(page - 1, 0);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        List<FilterRequest> filters = buildFilters(fields, operations, values);
+        Specification<Province> specification = filters.isEmpty() ? null : provinceSpecification.buildSpecification(filters, combination);
+
+        Page<Province> brandPage = specification == null ?
+                provinceRepository.findAll(pageable) :
+                provinceRepository.findAll(specification, pageable);
+
+        List<ProvinceResponse> data = brandPage
+                .getContent()
+                .stream()
+                .map(ProvinceResponse::fromEntity)
+                .toList();
+
+        return new PaginationResponse<ProvinceResponse>()
+                .setData(data)
+                .setPage(page)
+                .setPageSize(pageSize)
+                .setTotalPages(brandPage.getTotalPages())
+                .setTotalItems(brandPage.getTotalElements());
+
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    public PaginationResponse<DistrictResponse> getAllDistrict(int page, int pageSize, List<String> fields, List<String> operations, List<String> values, String combination) {
+        int pageIndex = Math.max(page - 1, 0);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        List<FilterRequest> filters = buildFilters(fields, operations, values);
+        Specification<District> specification = filters.isEmpty() ? null : districtSpecification.buildSpecification(filters, combination);
+
+        Page<District> brandPage = specification == null ?
+                districtRepository.findAll(pageable) :
+                districtRepository.findAll(specification, pageable);
+
+
+        List<DistrictResponse> data = brandPage
+                .getContent()
+                .stream()
+                .map(DistrictResponse::fromEntity)
+                .toList();
+
+
+        // 6️⃣ Build pagination response
+        return new PaginationResponse<DistrictResponse>()
+                .setData(data)
+                .setPage(page)
+                .setPageSize(pageSize)
+                .setTotalPages(brandPage.getTotalPages())
+                .setTotalItems(brandPage.getTotalElements());
+
+    }
+
+    @SuppressWarnings("DuplicatedCode")
+    private List<FilterRequest> buildFilters(List<String> fields, List<String> operations, List<String> values) {
+        List<FilterRequest> filters = new ArrayList<>();
+
+        if (fields != null && operations != null && values != null) {
+            if (fields.size() != operations.size() || fields.size() != values.size()) {
+                throw ApiStatusException.badRequest("Filter parameters size mismatch", "ERR_FILTER_SIZE_MISMATCH");
+            }
+
+            for (int i = 0; i < fields.size(); i++) {
+                filters.add(new FilterRequest()
+                        .setField(fields.get(i))
+                        .setOperation(operations.get(i))
+                        .setValue(values.get(i))
+                );
+            }
+        }
+
+        return filters;
+    }
+
 }

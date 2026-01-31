@@ -12,6 +12,12 @@ export const messages = {
     nameVi: "Name (Vietnamese)",
     modifiedAt: "Modified At",
 
+    //Master Data
+    downloadTemplate: "Download Template",
+    uploadFile: "Upload File",
+    provinceNameEn: "Province Name (English)",
+    provinceNameVi: "Province Name (Vietnamese)",
+
     // Sidebar
     sidebar_title: "Admin Panel",
     master_data: "Master Data",
@@ -99,6 +105,12 @@ export const messages = {
     nameEn: "Tiếng Anh",
     nameVi: "Tiếng Việt",
     modifiedAt: "Ngày cập nhật",
+
+    //Master Data
+    downloadTemplate: "Tải về mẫu",
+    uploadFile: "Tải lên tệp",
+    provinceNameEn: "Tỉnh/Thành phố (Tiếng Anh)",
+    provinceNameVi: "Tỉnh/Thành phố (Tiếng Việt)",
 
     // Sidebar
     sidebar_title: "Trang Quản Trị",
