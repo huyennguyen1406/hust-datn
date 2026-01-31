@@ -111,18 +111,18 @@ export default function Category() {
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => managementApi.deleteBrand(id),
+    mutationFn: (id) => managementApi.deleteCategory(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
     onError: (error) => {
       console.error("Delete failed:", error);
-      alert("Failed to delete brand");
+      alert("Failed to delete category. Please try again.");
     },
   });
 
   const handleDeleteClick = (id) => {
-    const confirmed = window.confirm("Are you sure you want to delete this brand?");
+    const confirmed = window.confirm("Are you sure you want to delete this categories?");
     if (!confirmed) return;
 
     deleteMutation.mutate(id);

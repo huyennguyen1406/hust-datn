@@ -111,7 +111,7 @@ export default function Voucher() {
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => managementApi.deleteBrand(id),
+    mutationFn: (id) => managementApi.deleteVoucher(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vouchers"] });
     },
