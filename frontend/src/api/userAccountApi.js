@@ -23,3 +23,24 @@ export const postAccountInfoApi = async ({ firstName, lastName, avatar }) => {
 
   return response.data;
 };
+
+export const getProvinces = async () => {
+  const res = await axiosClient.get("/api/v1/store/account/provinces");
+  return res.data;
+};
+
+export const getDistrictsByProvince = async (provinceId) => {
+  const res = await axiosClient.get(`/api/v1/store/account/provinces/${provinceId}/districts`);
+  return res.data;
+};
+
+export const getDeliveryInfo = async () => {
+  const res = await axiosClient.get("/api/v1/store/account/deliver-info");
+  return res.data;
+};
+
+export const upsertDeliveryInfo = async (payload) => {
+  console.log("upsertDeliveryInfo payload:", payload);
+  const res = await axiosClient.post("/api/v1/store/account/deliver-info", payload);
+  return res.data;
+};

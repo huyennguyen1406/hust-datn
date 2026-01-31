@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="012-create-user-deliver" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <not>
+                <tableExists tableName="user_deliver_info"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="user_deliver_info">
+            <column name="id" type="UUID" defaultValueComputed="UUID_GENERATE_V4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deliver_name" type="NVARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="phone_number" type="NVARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="NVARCHAR(255)"/>
+
+            <column name="address" type="NVARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="district_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="postal_code" type="NVARCHAR(6)"/>
+
+            <column name="country" type="NVARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="modified_at" type="TIMESTAMP"/>
+
+            <column name="modified_by" type="UUID"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_user_deliver_info_user"
+                baseTableName="user_deliver_info"
+                baseColumnNames="user_id"
+                referencedTableName="app_user"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_user_deliver_info_district"
+                baseTableName="user_deliver_info"
+                baseColumnNames="district_id"
+                referencedTableName="district"
+                referencedColumnNames="id"/>
+
+    </changeSet>
+
+</databaseChangeLog>
