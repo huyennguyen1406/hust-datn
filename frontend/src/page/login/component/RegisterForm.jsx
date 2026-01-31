@@ -1,17 +1,54 @@
-import React, { useState } from "react";
+import { useRef, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { login } from "../../../auth";
+import { registerApi } from "../../../api/authenticationApi";
 
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState(null);
+
   const navigate = useNavigate();
+
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailRef = useRef(null);
+  const phoneNumberRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const registerMutation = useMutation({
+    mutationFn: registerApi,
+    onSuccess: (data) => {
+      localStorage.setItem("store_access_token", data.accessToken);
+      localStorage.setItem("store_refresh_token", data.refreshToken);
+
+      navigate({ to: "/account" });
+    },
+
+    onError: (error) => {
+      const response = error?.response;
+
+      if (response?.status === 400) {
+        setApiError(response.data?.detail || "Bad request");
+        return;
+      }
+
+      setApiError("Something went wrong. Please try again.");
+    },
+  });
 
   const onRegisterButtonClick = (e) => {
     e.preventDefault();
-    login();
-    navigate({ to: "/account" });
+    const payload = {
+      firstName: firstNameRef.current.value,
+      lastName: lastNameRef.current.value,
+      email: emailRef.current.value,
+      phoneNumber: phoneNumberRef.current.value,
+      password: passwordRef.current.value,
+    };
+
+    registerMutation.mutate(payload);
   };
 
   return (
@@ -28,6 +65,7 @@ const RegisterForm = () => {
               First Name
             </label>
             <input
+              ref={firstNameRef}
               id="first-name"
               name="first-name"
               type="text"
@@ -41,6 +79,7 @@ const RegisterForm = () => {
               Last Name
             </label>
             <input
+              ref={lastNameRef}
               id="last-name"
               name="last-name"
               type="text"
@@ -55,10 +94,25 @@ const RegisterForm = () => {
             Email
           </label>
           <input
+            ref={emailRef}
             id="email"
             name="email"
             type="email"
             placeholder="you@example.com"
+            className="focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg transition-colors focus:ring"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="phoneNumber" className="text-sm font-medium">
+            Phone number
+          </label>
+          <input
+            ref={phoneNumberRef}
+            id="phoneNumber"
+            name="phoneNumber"
+            type="text"
+            placeholder="0912345678"
             className="focus:border-primary focus:ring-primary/20 mt-1 block w-full rounded-lg transition-colors focus:ring"
           />
         </div>
@@ -69,6 +123,7 @@ const RegisterForm = () => {
           </label>
           <div className="relative">
             <input
+              ref={passwordRef}
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
@@ -86,30 +141,7 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        <div className="flex items-start gap-2 text-sm">
-          <input
-            id="subscribe"
-            name="subscribe"
-            type="checkbox"
-            className="text-primary focus:ring-primary/50 mt-0.5 h-4 w-4 rounded"
-          />
-          <label htmlFor="subscribe">Subscribe to email updates</label>
-        </div>
-
-        <div className="flex items-start gap-2 text-sm">
-          <input
-            id="terms"
-            name="terms"
-            type="checkbox"
-            className="text-primary focus:ring-primary/50 mt-0.5 h-4 w-4 rounded"
-          />
-          <label htmlFor="terms">
-            I agree with the{" "}
-            <a href="#" className="text-primary font-medium hover:underline">
-              Terms and Conditions
-            </a>
-          </label>
-        </div>
+        {apiError && <p className="text-sm text-red-500">{apiError}</p>}
 
         <button
           type="submit"

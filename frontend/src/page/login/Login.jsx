@@ -63,7 +63,7 @@ const Login = () => {
 
             {currentForm === "login" ? <LoginForm /> : <RegisterForm />}
 
-            <SocialLogin />
+            {/* <SocialLogin /> */}
           </div>
         </div>
       </div>

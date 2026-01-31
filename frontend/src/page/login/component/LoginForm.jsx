@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import { useRef, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { login } from "../../../auth";
+import { loginApi } from "../../../api/authenticationApi";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const loginMutation = useMutation({
+    mutationFn: loginApi,
+    onSuccess: (data) => {
+      localStorage.setItem("store_access_token", data.accessToken);
+      localStorage.setItem("store_refresh_token", data.refreshToken);
+
+      navigate({ to: "/account" });
+    },
+    onError: (error) => {
+      setErrorMessage(error?.response?.data?.detail || "Login failed");
+    },
+  });
+
   const onLoginButtonClick = (e) => {
-    console.log("Trigger");
     e.preventDefault();
-    login();
-    navigate({ to: "/account" });
+    setErrorMessage("");
+
+    loginMutation.mutate({
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    });
   };
 
   return (
@@ -30,6 +52,7 @@ const LoginForm = () => {
             Email
           </label>
           <input
+            ref={emailRef}
             id="email"
             type="email"
             placeholder="you@example.com"
@@ -43,6 +66,7 @@ const LoginForm = () => {
           </label>
           <div className="relative">
             <input
+              ref={passwordRef}
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="password"
@@ -69,6 +93,8 @@ const LoginForm = () => {
             Forgot password?
           </a>
         </div>
+
+        {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
 
         <button
           type="submit"

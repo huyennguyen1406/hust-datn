@@ -91,4 +91,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID>, JpaSpec
     Optional<AppUser> findByMobilePhone(@Param("phoneNumber") String phoneNumber);
 
 
+    boolean existsByEmail(String email);
+
+    boolean existsByPhoneNumber(String phoneNumber);
 }

@@ -1,11 +1,7 @@
-const TOKEN_STORAGE = "auth_token";
+const TOKEN_STORAGE = "store_access_token";
 
 export function isAuthenticated() {
-  return !!localStorage.getItem(TOKEN_STORAGE);
-}
-
-export function login() {
-  localStorage.setItem(TOKEN_STORAGE, "mock_token");
+  return localStorage.getItem(TOKEN_STORAGE);
 }
 
 export function logout() {

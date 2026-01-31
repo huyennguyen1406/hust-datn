@@ -3,6 +3,11 @@ package hust.edu.vn.backend.security.constant;
 public class SecurityConstant {
 
 
+    public static final String ERROR_MESSAGE_PHONE_NUMBER_EXISTED = "Phone number is already existed.";
+    public static final String ERROR_CODE_PHONE_NUMBER_EXISTED = "ERR_PHONE_NUMBER_EXISTED";
+    public static final String ERROR_MESSAGE_EMAIL_EXISTED = "Email is already existed.";
+    public static final String ERROR_CODE_EMAIL_EXISTED = "ERR_EMAIL_EXISTED";
+
     private SecurityConstant() {}
 
     public static final String LOCAL = "local";

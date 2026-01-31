@@ -45,13 +45,22 @@ public class StoreLoginService {
 
     @Transactional
     public LoginResponse register(RegisterRequest request) {
+        if (appUserRepository.existsByEmail(request.getEmail())) {
+            throw ApiStatusException.badRequest(SecurityConstant.ERROR_MESSAGE_EMAIL_EXISTED, SecurityConstant.ERROR_CODE_EMAIL_EXISTED);
+        }
+
+        if (appUserRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw ApiStatusException.badRequest(SecurityConstant.ERROR_MESSAGE_PHONE_NUMBER_EXISTED, SecurityConstant.ERROR_CODE_PHONE_NUMBER_EXISTED);
+        }
+
         Role userRole = roleRepository.findByName(USER)
                 .orElseThrow(() -> ApiStatusException.internalServerError("Setup in database error: Role 'user' not found", "ERR_ROLE_NOT_FOUND"));
 
         AppUser appUser = new AppUser()
                 .setEmail(request.getEmail())
                 .setFirstName(request.getFirstName())
-                .setLastName(request.getLastName());
+                .setLastName(request.getLastName())
+                .setPhoneNumber(request.getPhoneNumber());
 
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
