@@ -66,7 +66,8 @@ public class AdminMasterDataService {
         AppUser appUser = new AppUser()
                 .setEmail(request.getEmail())
                 .setFirstName(request.getFirstName())
-                .setLastName(request.getLastName());
+                .setLastName(request.getLastName())
+                .setPhoneNumber(request.getPhoneNumber());
 
         Set<Role> roles = new HashSet<>();
         roles.add(adminRole);

@@ -62,6 +62,11 @@ export const messages = {
     voucherAmount: "Voucher Amount",
     newVoucher: "New Voucher",
 
+    //User Screen
+    newUser: "Thêm Người Dùng",
+    email: "Email",
+    phoneNumber: "Phone",
+
     // Statistic Sidebar Items
     user_statistic: "User Statistic",
     sales_statistic: "Sales Statistic",
@@ -150,6 +155,11 @@ export const messages = {
     discountAmount: "Số tiền giảm giá",
     voucherAmount: "Sô lượng voucher",
     newVoucher: "Thêm Voucher",
+
+    //User Screen
+    newUser: "Thêm Người Dùng",
+    email: "Email",
+    phoneNumber: "Số điện thoại",
 
     //Sale statistic:
     sale_total_revenue: "Tổng doanh thu trong kỳ",

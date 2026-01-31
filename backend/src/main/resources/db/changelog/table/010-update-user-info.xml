@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="010-update-user-info" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <tableExists tableName="app_user"/>
+        </preConditions>
+        <addColumn tableName="app_user">
+            <column name="phone_number" type="nvarchar(20)"/>
+        </addColumn>
+        <addUniqueConstraint tableName="app_user" columnNames="phone_number"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -52,6 +52,9 @@ public class AppUser {
     @Column(name = "image_link", columnDefinition = "nvarchar(2000)")
     private String imageLink;
 
+    @Column(name = "phone_number", columnDefinition = "nvarchar(20)", unique = true)
+    private String phoneNumber;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false,  nullable = false)
     private Instant createdAt;

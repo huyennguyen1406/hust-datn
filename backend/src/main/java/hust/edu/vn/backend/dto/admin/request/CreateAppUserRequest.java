@@ -14,7 +14,9 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @ToString
 @Accessors(chain = true)
-public class CreateAdminRequest {
+public class CreateAppUserRequest {
+    private String id;
+
     @NotBlank(message = "Email must not be blank")
     @Email(message = "Email must be a valid email address")
     private String email;

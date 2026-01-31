@@ -3,6 +3,7 @@ import { Outlet, createRootRoute, createRoute, createRouter } from "@tanstack/re
 import { PublicLayout } from "./PublicLayout.jsx";
 import RequireAuth from "./RequireAuth.jsx";
 import { managementApi } from "./api/managementApi.js";
+import { managementUserApi } from "./api/managementUserApi.js";
 import { AppLayout } from "./layout/AppLayout.jsx";
 import Brand from "./page/brand/Brand.jsx";
 import BrandForm from "./page/brand/BrandForm.jsx";
@@ -14,6 +15,8 @@ import NotFound from "./page/notfound/NotFound.jsx";
 import Product from "./page/product/Product.jsx";
 import ProductForm from "./page/product/ProductForm.jsx";
 import SaleStatistic from "./page/saleStatistic/SaleStatistic.jsx";
+import UserInfo from "./page/userInfo/UserInfo.jsx";
+import UserInfoForm from "./page/userInfo/UserInfoForm.jsx";
 import Voucher from "./page/voucher/Voucher.jsx";
 import VoucherForm from "./page/voucher/VoucherForm.jsx";
 import { MOCK_DATA_PROVINCE } from "./router_mock_data.js";
@@ -238,7 +241,24 @@ export const vouchersEditRoute = createRoute({
 export const usersRoute = createRoute({
   getParentRoute: () => appLayoutRoute,
   path: "/users",
-  component: () => <Management title={"Users"} description={"Manage all users"} />,
+  component: () => <UserInfo />,
+});
+
+export const usersCreateRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/user-infos/create",
+  component: () => <UserInfoForm mode="create" />,
+});
+
+export const usersUpdateRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/user-infos/$id/edit",
+  loader: async ({ params }) => {
+    return managementUserApi.getUserById(params.id);
+  },
+  gcTime: 0,
+
+  component: () => <UserInfoForm mode="edit" />,
 });
 
 // export const ordersRoute = createRoute({
@@ -291,6 +311,8 @@ const routeTree = rootRoute.addChildren([
     vouchersCreateRoute,
     vouchersEditRoute,
     usersRoute,
+    usersCreateRoute,
+    usersUpdateRoute,
     // ordersRoute,
     // reviewsRoute,
     // userStatisticRoute,

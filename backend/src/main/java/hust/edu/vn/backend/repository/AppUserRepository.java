@@ -1,7 +1,10 @@
 package hust.edu.vn.backend.repository;
 
 import hust.edu.vn.backend.entity.AppUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -11,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
+public interface AppUserRepository extends JpaRepository<AppUser, UUID>, JpaSpecificationExecutor<AppUser> {
     @Query("""
         SELECT COUNT(u) > 0
         FROM AppUser u
@@ -43,4 +46,38 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID> {
             String email,
             Collection<String> roleNames
     );
+
+    @Query(
+            value = """
+        SELECT DISTINCT u
+        FROM AppUser u
+        JOIN u.roles r
+        WHERE r.name = :role
+    """,
+            countQuery = """
+        SELECT COUNT(DISTINCT u)
+        FROM AppUser u
+        JOIN u.roles r
+        WHERE r.name = :role
+    """
+    )
+    Page<AppUser> findAllByRole(
+            @Param("role") String role,
+            Pageable pageable
+    );
+
+    @Query("""
+    SELECT u
+    FROM AppUser u
+    WHERE u.id = :id
+      AND EXISTS (
+          SELECT 1
+          FROM u.roles r
+          WHERE r.name = 'user'
+      )
+""")
+    Optional<AppUser> findByIdIfRoleUser(@Param("id") UUID id);
+
+
+
 }
