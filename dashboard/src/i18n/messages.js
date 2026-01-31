@@ -63,9 +63,11 @@ export const messages = {
     newVoucher: "New Voucher",
 
     //User Screen
-    newUser: "Thêm Người Dùng",
+    newUser: "New User",
     email: "Email",
     phoneNumber: "Phone",
+    firstName: "First Name",
+    lastName: "Last Name",
 
     // Statistic Sidebar Items
     user_statistic: "User Statistic",
@@ -160,6 +162,8 @@ export const messages = {
     newUser: "Thêm Người Dùng",
     email: "Email",
     phoneNumber: "Số điện thoại",
+    firstName: "Tên",
+    lastName: "Họ",
 
     //Sale statistic:
     sale_total_revenue: "Tổng doanh thu trong kỳ",

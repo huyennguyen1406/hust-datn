@@ -78,6 +78,17 @@ public interface AppUserRepository extends JpaRepository<AppUser, UUID>, JpaSpec
 """)
     Optional<AppUser> findByIdIfRoleUser(@Param("id") UUID id);
 
+    @Query("""
+    SELECT u
+    FROM AppUser u
+    WHERE u.phoneNumber = :phoneNumber
+      AND EXISTS (
+          SELECT 1
+          FROM u.roles r
+          WHERE r.name = 'user'
+      )
+    """)
+    Optional<AppUser> findByMobilePhone(@Param("phoneNumber") String phoneNumber);
 
 
 }

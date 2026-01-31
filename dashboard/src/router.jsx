@@ -12,6 +12,7 @@ import CategoryForm from "./page/category/CategoryForm.jsx";
 import Login from "./page/login/Login.jsx";
 import Management from "./page/management/Management.jsx";
 import NotFound from "./page/notfound/NotFound.jsx";
+import CreateOrder from "./page/order/CreateOrder.jsx";
 import Product from "./page/product/Product.jsx";
 import ProductForm from "./page/product/ProductForm.jsx";
 import SaleStatistic from "./page/saleStatistic/SaleStatistic.jsx";
@@ -261,11 +262,11 @@ export const usersUpdateRoute = createRoute({
   component: () => <UserInfoForm mode="edit" />,
 });
 
-// export const ordersRoute = createRoute({
-//   getParentRoute: () => appLayoutRoute,
-//   path: "/orders",
-//   component: () => <Management title={"Orders"} description={"Manage all orders"} />,
-// });
+export const ordersRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
+  path: "/orders",
+  component: () => <CreateOrder />,
+});
 
 // export const reviewsRoute = createRoute({
 //   getParentRoute: () => appLayoutRoute,
@@ -313,7 +314,7 @@ const routeTree = rootRoute.addChildren([
     usersRoute,
     usersCreateRoute,
     usersUpdateRoute,
-    // ordersRoute,
+    ordersRoute,
     // reviewsRoute,
     // userStatisticRoute,
     salesStatisticRoute,

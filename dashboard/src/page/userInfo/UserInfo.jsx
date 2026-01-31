@@ -225,7 +225,7 @@ export default function UserInfo() {
 
                 {/* ---------- data rows ---------- */}
                 {vouchers.map((row, idx) => (
-                  <TableRow key={row.code} hover className={idx !== vouchers.length - 1 ? "border-b" : ""}>
+                  <TableRow key={row.id} hover className={idx !== vouchers.length - 1 ? "border-b" : ""}>
                     <TableCell className="px-6 py-4">{row.email}</TableCell>
                     <TableCell className="px-6 py-4">{row.firstName}</TableCell>
                     <TableCell className="px-6 py-4">{row.lastName}</TableCell>

@@ -62,4 +62,12 @@ public class UserDataController {
         managementUserService.removeAppUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/user-info-by-mobile")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<DashboardUserResponse> getAppUserByMobilePhone(
+            @RequestParam String mobilePhone) {
+        DashboardUserResponse response = managementUserService.getAppUserByMobilePhone(mobilePhone);
+        return ResponseEntity.ok(response);
+    }
 }

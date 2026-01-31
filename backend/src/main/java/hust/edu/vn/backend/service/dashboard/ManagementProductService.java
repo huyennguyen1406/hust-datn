@@ -6,6 +6,7 @@ import hust.edu.vn.backend.dto.admin.request.ProductCreateRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductInfoDetailUpdateRequest;
 import hust.edu.vn.backend.dto.admin.request.ProductUpdateRequest;
 import hust.edu.vn.backend.dto.admin.response.ProductColorResponse;
+import hust.edu.vn.backend.dto.admin.response.ProductDetailForOrderResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductInfoDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductResponse;
@@ -374,5 +375,9 @@ public class ManagementProductService {
                 .setQuantity(entity.getQuantity())
         ).toList();
 
+    }
+
+    public List<ProductDetailForOrderResponse> getProductDetailsForOrder(String productName) {
+        return productDetailRepository.findProductDetailByProductName(productName);
     }
 }

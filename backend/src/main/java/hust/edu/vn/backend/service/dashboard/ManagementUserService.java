@@ -138,4 +138,14 @@ public class ManagementUserService {
         userAuthenticationRepository.deleteByUserId(user.getId());
         appUserRepository.delete(user);
     }
+
+    public DashboardUserResponse getAppUserByMobilePhone(String mobilePhone) {
+        AppUser user = appUserRepository
+                .findByMobilePhone(mobilePhone)
+                .orElseThrow(() -> ApiStatusException.notFound(
+                        ErrorConstant.ERROR_MESSAGE_USER_NOT_FOUND,
+                        ErrorConstant.ERROR_CODE_USER_NOT_FOUND
+                ));
+        return DashboardUserResponse.fromEntity(user);
+    }
 }

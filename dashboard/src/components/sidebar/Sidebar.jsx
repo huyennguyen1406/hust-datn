@@ -91,7 +91,7 @@ export default function Sidebar() {
       paths: userPaths,
       children: [
         { label: "users", to: "/users", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
-        // { label: "orders", to: "/orders", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
+        { label: "orders", to: "/orders", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
         // { label: "reviews", to: "/reviews", icon: <FolderIcon fontSize="small" className="text-gray-500" /> },
       ],
     },

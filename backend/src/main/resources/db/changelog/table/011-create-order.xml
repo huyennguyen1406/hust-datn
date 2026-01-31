@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="011-create-order" author="huyennguyen1406" dbms="postgresql">
+        <preConditions>
+            <and>
+                <not>
+                    <tableExists tableName="user_order"/>
+                </not>
+                <not>
+                    <tableExists tableName="order_product_item"/>
+                </not>
+
+            </and>
+        </preConditions>
+        <createTable tableName="user_order">
+            <column name="order_id" type="UUID" defaultValueComputed="UUID_GENERATE_V4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="NVARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="modified_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_user_order_user"
+                baseTableName="user_order"
+                baseColumnNames="user_id"
+                referencedTableName="app_user"
+                referencedColumnNames="id"/>
+
+        <createTable tableName="order_product_item">
+            <column name="id" type="UUID" defaultValueComputed="UUID_GENERATE_V4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="user_order_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="product_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="color_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="unit_price" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="size" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_order_product_item_order"
+                baseTableName="order_product_item"
+                baseColumnNames="user_order_id"
+                referencedTableName="user_order"
+                referencedColumnNames="order_id"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_order_product_item_product"
+                baseTableName="order_product_item"
+                baseColumnNames="product_id"
+                referencedTableName="product"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_order_product_item_color"
+                baseTableName="order_product_item"
+                baseColumnNames="color_id"
+                referencedTableName="product_color"
+                referencedColumnNames="id"/>
+
+    </changeSet>
+
+</databaseChangeLog>

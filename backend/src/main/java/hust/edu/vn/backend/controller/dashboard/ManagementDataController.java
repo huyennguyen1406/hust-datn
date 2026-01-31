@@ -13,6 +13,7 @@ import hust.edu.vn.backend.dto.admin.response.CategoryDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryMinimizedResponse;
 import hust.edu.vn.backend.dto.admin.response.CategoryResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductColorResponse;
+import hust.edu.vn.backend.dto.admin.response.ProductDetailForOrderResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductInfoDetailResponse;
 import hust.edu.vn.backend.dto.admin.response.ProductResponse;
@@ -288,5 +289,14 @@ public class ManagementDataController {
     public ResponseEntity<Void> deleteVoucher(@PathVariable String id) {
         managementDataService.deleteVoucher(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/product-details-for-order")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<List<ProductDetailForOrderResponse>> getProductDetailsForOrder(
+            @RequestParam("productName") String productName
+    ) {
+        List<ProductDetailForOrderResponse> response = managementProductService.getProductDetailsForOrder(productName);
+        return ResponseEntity.ok(response);
     }
 }
