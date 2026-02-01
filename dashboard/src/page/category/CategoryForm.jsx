@@ -17,6 +17,7 @@ export default function CategoryForm({
   const [form, setForm] = useState(() => ({
     nameEn: category?.nameEn ?? "",
     nameVi: category?.nameVi ?? "",
+    keyword: category?.keyword ?? "",
   }));
 
   const [banners, setBanners] = useState(
@@ -99,6 +100,7 @@ export default function CategoryForm({
           JSON.stringify({
             nameEn: form.nameEn,
             nameVi: form.nameVi,
+            keyword: form.keyword,
             banners: bannerPayload,
           }),
         ],
@@ -144,6 +146,16 @@ export default function CategoryForm({
             <input
               value={form.nameVi}
               onChange={(e) => updateForm("nameVi", e.target.value)}
+              className="mt-1 w-full rounded border px-3 py-2 text-gray-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-500">Keyword</label>
+            <input
+              value={form.keyword}
+              onChange={(e) => updateForm("keyword", e.target.value)}
               className="mt-1 w-full rounded border px-3 py-2 text-gray-500"
               required
             />

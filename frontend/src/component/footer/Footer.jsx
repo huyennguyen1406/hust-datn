@@ -10,7 +10,7 @@ const shopSection = {
     { keyLink: "footer_men", link: "/search?category=men" },
     { keyLink: "footer_women", link: "/search?category=women" },
     { keyLink: "footer_kids", link: "/search?category=kids" },
-    { keyLink: "footer_sales", link: "/search?category=sales" },
+    { keyLink: "footer_new", link: "/search?category=new" },
   ],
 };
 

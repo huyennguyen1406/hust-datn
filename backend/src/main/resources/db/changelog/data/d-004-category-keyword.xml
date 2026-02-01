@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="d004-category-keyword" author="huyennguyen1406" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="category"/>
+        </preConditions>
+
+        <!-- 1. Add column -->
+        <addColumn tableName="category">
+            <column name="keyword" type="nvarchar(255)"/>
+        </addColumn>
+
+        <!-- 2. Populate existing data -->
+        <update tableName="category">
+            <column name="keyword" value="men"/>
+            <where>name_en = 'Men Footwear'</where>
+        </update>
+
+        <update tableName="category">
+            <column name="keyword" value="women"/>
+            <where>name_en = 'Women Footwear'</where>
+        </update>
+
+        <update tableName="category">
+            <column name="keyword" value="kids"/>
+            <where>name_en = 'Kids Footwear'</where>
+        </update>
+
+        <update tableName="category">
+            <column name="keyword" value="new"/>
+            <where>name_en = 'New Arrival'</where>
+        </update>
+
+        <!-- 3. Enforce uniqueness AFTER data exists -->
+        <addUniqueConstraint
+                tableName="category"
+                columnNames="keyword"
+                constraintName="uk_category_keyword"/>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -212,6 +212,7 @@ public class ManagementDataService {
                 .setId(category.getId().toString())
                 .setNameEn(category.getNameEn())
                 .setNameVi(category.getNameVi())
+                .setKeyword(category.getKeyword())
                 .setModifiedAt(category.getModifiedAt())
                 .setBanners(banners);
 
@@ -275,6 +276,7 @@ public class ManagementDataService {
 
         category.setNameEn(request.getNameEn());
         category.setNameVi(request.getNameVi());
+        category.setKeyword(request.getKeyword());
         category.setModifiedAt(Instant.now());
 
         Map<String, CategoryBanner> existingBannerMap =

@@ -1,0 +1,47 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+    <changeSet id="d003-insert-category" author="huyennguyen1406">
+        <preConditions>
+            <tableExists tableName="category"/>
+        </preConditions>
+        <insert tableName="category">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name_en" value="Men Footwear"/>
+            <column name="name_vi" value="Giày Nam"/>
+            <column name="created_at" valueDate="NOW()"/>
+            <column name="modified_at" valueDate="NOW()"/>
+        </insert>
+
+        <insert tableName="category">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name_en" value="Women Footwear"/>
+            <column name="name_vi" value="Giày Nữ"/>
+            <column name="created_at" valueDate="NOW()"/>
+            <column name="modified_at" valueDate="NOW()"/>
+        </insert>
+
+        <insert tableName="category">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name_en" value="Kids Footwear"/>
+            <column name="name_vi" value="Giày Trẻ Em"/>
+            <column name="created_at" valueDate="NOW()"/>
+            <column name="modified_at" valueDate="NOW()"/>
+        </insert>
+
+        <insert tableName="category">
+            <column name="id" valueComputed="gen_random_uuid()"/>
+            <column name="name_en" value="New Arrival"/>
+            <column name="name_vi" value="Hàng Mới Về"/>
+            <column name="created_at" valueDate="NOW()"/>
+            <column name="modified_at" valueDate="NOW()"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>
+
+

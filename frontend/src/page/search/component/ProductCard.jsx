@@ -1,18 +1,20 @@
-import React from "react";
 import StarRating from "../../../component/rating/StarRating";
+import { useI18n } from "../../../i18n/useI18n";
 import { formatPrice } from "../../../utility/format";
 
 const ProductCard = ({
   image,
-  brand,
-  productName,
-  description,
+  brandName,
+  productNameEn,
+  productNameVi,
   isSale,
   salePrice,
   normalPrice,
   rating = 0,
   reviewCount = 0,
 }) => {
+  const { locale } = useI18n();
+  const productName = locale === "vi" ? productNameVi : productNameEn;
   return (
     <div className="group flex flex-col gap-4 rounded-xl bg-white p-4">
       <div className="relative w-full overflow-hidden rounded-lg">
@@ -31,11 +33,10 @@ const ProductCard = ({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <p className="text-sm text-black/60">{brand}</p>
+        <p className="text-sm text-black/60">{brandName}</p>
         <h3 className="font-bold">{productName}</h3>
         {rating > 0 && <StarRating rating={rating} reviewCount={reviewCount} />}
 
-        <p className="text-sm text-black/70">{description}</p>
         <div className="mt-2 flex items-baseline gap-2">
           {isSale ? (
             <>

@@ -23,7 +23,7 @@ const SizeSelector = ({ sizes, value, onChange }) => {
 
               {isDisabled && (
                 <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <span className="h-px w-full rotate-[-45deg] bg-gray-400" />
+                  <span className="h-px w-full -rotate-45 bg-gray-400" />
                 </span>
               )}
             </button>

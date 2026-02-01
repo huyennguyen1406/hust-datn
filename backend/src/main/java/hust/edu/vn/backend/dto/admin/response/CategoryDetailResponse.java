@@ -12,6 +12,7 @@ public class CategoryDetailResponse {
     private String id;
     private String nameEn;
     private String nameVi;
+    private String keyword;
     private Instant modifiedAt;
     private List<CategoryBannerResponse> banners;
 }

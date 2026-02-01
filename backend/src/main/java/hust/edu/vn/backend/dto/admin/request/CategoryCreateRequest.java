@@ -10,6 +10,7 @@ import java.util.List;
 public class CategoryCreateRequest {
     private String nameEn;
     private String nameVi;
+    private String keyword;
     private List<CategoryBannerRequest> banners;
 
 }

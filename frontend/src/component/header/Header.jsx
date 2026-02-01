@@ -13,7 +13,7 @@ const linkLeftSide = [
   { key: "header_men", link: "/search?category=men" },
   { key: "header_women", link: "/search?category=women" },
   { key: "header_kids", link: "/search?category=kids" },
-  { key: "header_sale", link: "/search?category=sales" },
+  { key: "header_new", link: "/search?category=new" },
 ];
 
 const linkRightSide = [{ key: "header_about", link: "/about" }];
